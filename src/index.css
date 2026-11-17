@@ -1,0 +1,87 @@
+.ant-pro-card {
+    border-radius: 12px;
+}
+
+.ant-btn-color-primary {
+    box-shadow: none;
+}
+
+.dst.ant-card .ant-card-body {
+    padding: 12px;
+}
+
+.ant-list-split .ant-list-item {
+     border-block-end: 0;
+}
+
+.ant-list-split.ant-list-something-after-last-item .ant-spin-container>.ant-list-items>.ant-list-item:last-child {
+    border-block-end: 0;
+}
+/*.ant-pro-layout .ant-layout-sider.ant-pro-sider {*/
+/*    background: #0D0D0D;*/
+/*}*/
+
+/*.ant-input-outlined {*/
+/*    background: rgba(255, 255, 255, 0.22);*/
+/*    border-width: 0.6px;*/
+/*    border-style: solid;*/
+/*    border-color: #d9d9d9;*/
+/*}*/
+
+/*.ant-select-selector .ant-select-selection-search-input {*/
+/*    background: rgba(255, 255, 255, 0.22);*/
+/*    border-width: 0.6px;*/
+/*    border-style: solid;*/
+/*    border-color: #d9d9d9;*/
+/*}*/
+
+
+/*.ant-input-number .ant-input-number-input {*/
+/*    background: rgba(255, 255, 255, 0.22);*/
+/*    border-width: 0.6px;*/
+/*    border-style: solid;*/
+/*    border-color: #d9d9d9;*/
+/*}*/
+/* ============ 统一滚动条:细圆角半透明,亮暗主题通用 ============ */
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background: rgba(128, 128, 128, 0.45);
+  border-radius: 4px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: rgba(128, 128, 128, 0.7);
+  background-clip: content-box;
+}
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* ===== 动效增强(轻量:只用 opacity/transform) ===== */
+@keyframes dstFadeInUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+@keyframes dstFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+@keyframes dstDotPulse {
+    0%, 100% { box-shadow: 0 0 4px rgba(82, 196, 26, 0.55); }
+    50% { box-shadow: 0 0 10px rgba(82, 196, 26, 0.95); }
+}
+/* 尊重系统"减弱动效"设置 */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

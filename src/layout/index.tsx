@@ -1,0 +1,287 @@
+import {
+    AppstoreOutlined,
+    CloudServerOutlined,
+    LogoutOutlined,
+    UserOutlined,
+} from '@ant-design/icons';
+import type {ProSettings} from '@ant-design/pro-components';
+import {
+    PageContainer,
+    ProCard,
+    ProConfigProvider,
+    ProLayout,
+    // SettingDrawer,
+} from '@ant-design/pro-components';
+import {
+    Typography,
+    ConfigProvider,
+    Dropdown, Avatar, Tag, Space, Skeleton, Breadcrumb, FloatButton
+, Tooltip} from 'antd';
+import {useEffect, useMemo, useState} from 'react';
+import defaultProps from './_defaultProps';
+import {Outlet, useLocation} from "react-router";
+import {useNavigate, useParams} from "react-router-dom";
+import {HomeOutlined} from "@ant-design/icons";
+import {useTranslation} from "react-i18next";
+
+import {http} from '../utils/http';
+import {ToggleLanguage} from "./Language.tsx";
+import ToggleTheme from "./ToggleTheme.tsx";
+
+import {useTheme} from "../hooks/useTheme";
+import {useThemeConfigStore} from "../store/useThemeConfigStore";
+import {useUserStore} from "../store/useUserStore";
+import {Ad} from "../pages/Ad";
+import {getAntdLocale, syncDayjsLocale} from "../locales/antdLocale";
+
+const {Link} = Typography;
+
+declare const __APP_VERSION__: string;
+// 版本号以 package.json 为唯一来源(直接 JSON 导入,不依赖 vite define)
+import { version as APP_VERSION } from '../../package.json';
+
+export default () => {
+
+    const [settings, setSetting] = useState<Partial<ProSettings> | undefined>({
+        fixSiderbar: true,
+        layout: 'mix',
+        splitMenus: false,
+        // "fixSiderbar": true,
+        // "layout": "side",
+        // "splitMenus": false,
+        // "navTheme": "light",
+        // "contentWidth": "Fluid",
+        // "fixedHeader": true
+    });
+    const firstPagePath = '/panel';
+    const location = useLocation()
+    const [pathname, setPathname] = useState(location.pathname);
+    const paddingInlinePageContainerContent = 24;
+    if (typeof document === 'undefined') {
+        return <div/>;
+    }
+
+    const navigate = useNavigate()
+    const {t, i18n} = useTranslation()
+    // 面包屑:菜单是扁平单层,PageContainer 默认推导不出层级——按路径显式生成
+    // (必须位于 t/navigate 声明之后,否则渲染期 TDZ 崩溃)
+    const {cluster} = useParams();
+    const breadcrumbItems = useMemo(() => {
+        const routes = (defaultProps as any).route?.routes || [];
+        const seg = '/' + pathname.split('/')[1];
+        const matched = routes.find((r: any) => r.path === pathname)
+            || routes.find((r: any) => r.path && r.path.startsWith(seg));
+        const items: any[] = [{
+            title: <HomeOutlined style={{cursor: 'pointer'}} onClick={() => navigate('/panel')}/>,
+        }];
+        if (pathname.includes('/panel') && cluster) {
+            items.push({title: t('menu.panel'), onClick: () => navigate('/panel')});
+            items.push({title: cluster});
+        } else {
+            items.push({
+                title: matched ? t(matched.name) : pathname,
+                onClick: matched ? () => navigate(matched.path) : undefined,
+            });
+        }
+        return items;
+    }, [pathname, cluster, t, navigate]);
+
+    // 内置九宫格图标已由 appList={[]} 屏蔽;使用自绘图标(logo)承载版本悬浮/回面板行为
+
+    useEffect(() => {
+        syncDayjsLocale(i18n.resolvedLanguage)
+    }, [i18n.resolvedLanguage])
+
+    const user = useUserStore((state) => state.user)
+    const loading = useUserStore((state) => state.loading)
+    const fetchUser = useUserStore((state) => state.fetchUser)
+    const clearUser = useUserStore((state) => state.clearUser)
+
+    // Fetch user data when layout mounts
+    useEffect(() => {
+        fetchUser()
+    }, [fetchUser])
+
+    const logout = async () => {
+        clearUser()
+        // 清除记住的凭证
+        // localStorage.removeItem('remembered-credentials')
+        localStorage.removeItem('token')
+        localStorage.removeItem('user')
+        const data = await http.get("/api/logout")
+        console.log('logout', data);
+        navigate('/login', {replace: true});
+
+    };
+
+    const {theme} = useTheme()
+    const {themeConfig} = useThemeConfigStore();
+
+    return (
+        <div
+            id="test-pro-layout"
+            style={{
+                overflow: 'auto',
+            }}
+        >
+            <Skeleton loading={loading}>
+            <ProConfigProvider dark={theme == 'dark'}>
+                <ConfigProvider
+                    locale={getAntdLocale(i18n.resolvedLanguage)}
+                    getTargetContainer={() => {
+                        return document.getElementById('test-pro-layout') || document.body;
+                    }}
+                    theme={{
+                        "token": themeConfig
+                    }}
+                >
+                    <ProLayout
+                        {...defaultProps}
+                        appList={[]}
+                        headerContentRender={() => (
+                            <Breadcrumb items={breadcrumbItems} style={{margin: 0}}/>
+                        )}
+                        location={{
+                            pathname,
+                        }}
+                        logo={null}
+                        token={{
+                            bgLayout: theme === 'dark' ? '#000000' : '#F1F2F5',
+                            sider: {
+                                colorMenuBackground: theme === 'dark'? '#000000' : '#FFFFFF',
+                                colorBgMenuItemSelected: theme === 'dark'? '#383838' : '#F1F2F5',
+                            },
+                        }}
+                        // siderMenuType="group"
+                        menu={{
+                            collapsedShowGroupTitle: true,
+                        }}
+                        menuDataRender={menuData => {
+                            return menuData.map(menu => {
+                                return {
+                                    ...menu, name: t(menu.name as string),
+                                    children: menu.children?.map(child => {
+                                        return {
+                                            ...child,
+                                            name: t(child.name as string),
+                                        }
+                                    })
+                                }
+                            })
+                        }}
+                        title="Dst-admin-go"
+                        avatarProps={{
+                            src: user?.photoURL || <Avatar style={{ backgroundColor: themeConfig.colorPrimary }}>{user?.displayName[0]}</Avatar>,
+                            size: 'small',
+                            title: user?.displayName,
+                            render: (_props, dom) => {
+                                return (
+                                    <Dropdown
+                                        menu={{
+                                            items: [
+                                                {
+                                                    key: 'logout',
+                                                    icon: <LogoutOutlined/>,
+                                                    label: t('header.logout'),
+                                                    onClick: () => logout(),
+                                                },
+                                                {
+                                                    key: 'userProfile',
+                                                    icon: <UserOutlined />,
+                                                    label: t('header.userProfile'),
+                                                    onClick: () => navigate('/userProfile'),
+                                                },
+                                            ],
+                                        }}
+                                    >
+                                        {dom}
+                                    </Dropdown>
+                                );
+                            },
+                        }}
+                        actionsRender={(props) => {
+                            if (props.isMobile) return [
+                                <ToggleLanguage/>,
+                                <ToggleTheme/>
+                            ];
+                            if (typeof window === 'undefined') return [];
+                            return [
+                                <ToggleLanguage/>,
+                                <ToggleTheme/>
+                            ];
+                        }}
+                        headerTitleRender={(logo, title, _) => {
+                            const defaultDom = (
+                                <Space wrap>
+                                    {logo}
+                                    {/* 悬浮标题显示版本号 */}
+                                    <Tooltip title={`V${APP_VERSION}`}>
+                                        <span style={{cursor: 'default'}}>{title}</span>
+                                    </Tooltip>
+                                </Space>
+                            );
+                            if (typeof window === 'undefined') return defaultDom;
+                            if (document.body.clientWidth < 1400) {
+                                return defaultDom;
+                            }
+                            if (_.isMobile) return defaultDom;
+                            return (
+                                <>
+                                    {defaultDom}
+                                </>
+                            );
+                        }}
+                        onMenuHeaderClick={(e) => console.log(e)}
+                        menuItemRender={(item, dom) => (
+                            <div
+                                onClick={() => {
+                                    navigate(item.path as string)
+                                    setPathname(item.path || firstPagePath);
+                                }}
+                            >
+                                {dom}
+                            </div>
+                        )}
+                        {...settings}
+                    >
+                        <PageContainer
+                            token={{
+                                paddingInlinePageContainerContent,
+                            }}
+                            title={false}
+                        >
+                            {(location.pathname === firstPagePath
+                                || location.pathname === '/home/clusterIni') && (
+                                <Outlet/>
+                            )}
+                            {(location.pathname !== firstPagePath
+                                && location.pathname !== '/home/clusterIni') && (
+                                <ProCard>
+                                    <Outlet/>
+                                </ProCard>
+                            )}
+                        </PageContainer>
+
+                        {/*
+                         <SettingDrawer
+                            pathname={pathname}
+                            enableDarkTheme
+                            getContainer={(e: any) => {
+                                if (typeof window === 'undefined') return e;
+                                return document.getElementById('test-pro-layout');
+                            }}
+                            settings={settings}
+                            onSettingChange={(changeSetting) => {
+                                setSetting(changeSetting);
+                            }}
+                            disableUrlParams={false}
+                        />
+                        */}
+                    </ProLayout>
+                    <FloatButton.BackTop visibilityHeight={200}/>
+                </ConfigProvider>
+            </ProConfigProvider>
+            </Skeleton>
+        </div>
+    );
+};

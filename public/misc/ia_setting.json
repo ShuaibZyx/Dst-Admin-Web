@@ -1,0 +1,3243 @@
+{
+ "shipwrecked": {
+  "WORLDGEN_GROUP": {
+   "misc": {
+    "order": 4,
+    "text": "杂项",
+    "atlas": {
+     "width": 2048,
+     "height": 1024,
+     "item_size": 128
+    },
+    "items": {
+     "volcanoisland": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.93774414,
+       "y": 0.49951172
+      },
+      "text": "火山岛",
+      "value": "none"
+     },
+     "volcano": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.87524414,
+       "y": 0.49951172
+      },
+      "text": "火山",
+      "value": "default"
+     },
+     "bermudatriangle": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.25024414,
+       "y": 0.0
+      },
+      "text": "电光三角",
+      "value": "default"
+     },
+     "task_set": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "生物群系",
+      "value": "shipwrecked",
+      "text_en": "Biomes"
+     },
+     "start_location": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "出生点",
+      "value": "shipwrecked_default",
+      "text_en": "Spawn Area"
+     },
+     "world_size": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.43774414,
+       "y": 0.62451172
+      },
+      "text": "世界大小",
+      "value": "default",
+      "text_en": "World Size"
+     },
+     "touchstone": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "试金石",
+      "value": "default",
+      "text_en": "Touch Stones"
+     },
+     "boons": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "失败的冒险家",
+      "value": "default",
+      "text_en": "Failed Survivors"
+     },
+     "balatro": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "小丑",
+      "value": "default",
+      "text_en": "JIMBO"
+     },
+     "terrariumchest": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "盒中泰拉",
+      "value": "default",
+      "text_en": "Terrarium"
+     }
+    }
+   },
+   "resources": {
+    "order": 4,
+    "text": "资源",
+    "atlas": {
+     "width": 2048,
+     "height": 1024,
+     "item_size": 128
+    },
+    "items": {
+     "tar_pool": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.43774414,
+       "y": 0.49951172
+      },
+      "text": "焦油",
+      "value": "default"
+     },
+     "poisonhole": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.25024414,
+       "y": 0.37451172
+      },
+      "text": "毒穴",
+      "value": "default"
+     },
+     "crate": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.12524414,
+       "y": 0.12451172
+      },
+      "text": "板条箱",
+      "value": "default"
+     },
+     "limpets": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.37524414,
+       "y": 0.24951172
+      },
+      "text": "帽贝岩",
+      "value": "default"
+     },
+     "bamboo": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.18774414,
+       "y": 0.0
+      },
+      "text": "竹子",
+      "value": "default"
+     },
+     "shipwreck": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.50024414,
+       "y": 0.62451172
+      },
+      "text": "沉船",
+      "value": "default"
+     },
+     "magma_rocks": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.56274414,
+       "y": 0.24951172
+      },
+      "text": "熔岩矿堆",
+      "value": "default"
+     },
+     "sweet_potato": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.31274414,
+       "y": 0.49951172
+      },
+      "text": "甘薯",
+      "value": "default"
+     },
+     "mussel_farm": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.062744141,
+       "y": 0.37451172
+      },
+      "text": "贻贝",
+      "value": "default"
+     },
+     "seashell": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.75024414,
+       "y": 0.37451172
+      },
+      "text": "贝壳",
+      "value": "default"
+     },
+     "coral_brain_rock": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.68774414,
+       "y": 0.0
+      },
+      "text": "智慧树",
+      "value": "default"
+     },
+     "sandhill": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.62524414,
+       "y": 0.37451172
+      },
+      "text": "沙堆",
+      "value": "default"
+     },
+     "coral": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.93774414,
+       "y": 0.0
+      },
+      "text": "珊瑚",
+      "value": "default"
+     },
+     "shipwrecked_trees": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.68774414,
+       "y": 0.49951172
+      },
+      "text": "岛屿树木（所有）",
+      "value": "default"
+     },
+     "seaweed": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.87524414,
+       "y": 0.37451172
+      },
+      "text": "海带",
+      "value": "default"
+     },
+     "bioluminescence": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.37524414,
+       "y": 0.0
+      },
+      "text": "荧光生物",
+      "value": "default"
+     },
+     "waterygrave": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.12524414,
+       "y": 0.62451172
+      },
+      "text": "水墓",
+      "value": "default"
+     },
+     "bush_vine": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.81274414,
+       "y": 0.49951172
+      },
+      "text": "藤蔓根",
+      "value": "default"
+     },
+     "tidalpool": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.50024414,
+       "y": 0.49951172
+      },
+      "text": "潮汐池",
+      "value": "default"
+     },
+     "grass": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.00024414062,
+       "y": 0.24951172
+      },
+      "text": "草",
+      "value": "default",
+      "text_en": "Grass"
+     },
+     "sapling": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "树苗",
+      "value": "default",
+      "text_en": "Saplings"
+     },
+     "flowers": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "花，邪恶花",
+      "value": "default",
+      "text_en": "Flowers, Evil Flowers"
+     },
+     "marshbush": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "尖刺灌木",
+      "value": "default",
+      "text_en": "Spiky Bushes"
+     },
+     "reeds": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "芦苇",
+      "value": "default",
+      "text_en": "Reeds"
+     },
+     "flint": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "燧石",
+      "value": "default",
+      "text_en": "Flint"
+     },
+     "rock": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "巨石",
+      "value": "default",
+      "text_en": "Boulders"
+     },
+     "berrybush": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.31274414,
+       "y": 0.0
+      },
+      "text": "浆果丛",
+      "value": "default",
+      "text_en": "Berry Bushes"
+     },
+     "mushroom": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "蘑菇",
+      "value": "default",
+      "text_en": "Mushrooms"
+     }
+    }
+   },
+   "animals": {
+    "order": 4,
+    "text": "生物以及刷新点",
+    "atlas": {
+     "width": 2048,
+     "height": 1024,
+     "item_size": 128
+    },
+    "items": {
+     "doydoy": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.37524414,
+       "y": 0.12451172
+      },
+      "text": "渡渡鸟",
+      "value": "default"
+     },
+     "fishinhole": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.062744141,
+       "y": 0.49951172
+      },
+      "text": "鱼群",
+      "value": "default"
+     },
+     "lobster": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.43774414,
+       "y": 0.24951172
+      },
+      "text": "龙虾",
+      "value": "default"
+     },
+     "ox": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.12524414,
+       "y": 0.37451172
+      },
+      "text": "水牛",
+      "value": "default"
+     },
+     "seagull": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.68774414,
+       "y": 0.37451172
+      },
+      "text": "海鸥",
+      "value": "default"
+     },
+     "rainbowjellyfish": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.37524414,
+       "y": 0.37451172
+      },
+      "text": "彩虹水母",
+      "value": "default"
+     },
+     "solofish": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.31274414,
+       "y": 0.12451172
+      },
+      "text": "狗鱼",
+      "value": "default"
+     },
+     "wildbores": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.31274414,
+       "y": 0.62451172
+      },
+      "text": "野猪舍",
+      "value": "default"
+     },
+     "fishermerm": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.81274414,
+       "y": 0.12451172
+      },
+      "text": "渔人小屋",
+      "value": "default"
+     },
+     "primeape": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.31274414,
+       "y": 0.37451172
+      },
+      "text": "猿猴小窝",
+      "value": "default"
+     },
+     "ballphin": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.062744141,
+       "y": 0.0
+      },
+      "text": "海豚宫殿",
+      "value": "default"
+     },
+     "jellyfish": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.12524414,
+       "y": 0.24951172
+      },
+      "text": "水母",
+      "value": "default"
+     },
+     "crabhole": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.00024414062,
+       "y": 0.12451172
+      },
+      "text": "兔蟹洞",
+      "value": "default"
+     },
+     "bees": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "蜜蜂蜂窝",
+      "value": "default",
+      "text_en": "Bee Hives"
+     }
+    }
+   },
+   "monsters": {
+    "order": 4,
+    "text": "敌对生物以及刷新点",
+    "atlas": {
+     "width": 2048,
+     "height": 1024,
+     "item_size": 128
+    },
+    "items": {
+     "swordfish": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.37524414,
+       "y": 0.49951172
+      },
+      "text": "剑鱼",
+      "value": "default"
+     },
+     "flup": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.93774414,
+       "y": 0.12451172
+      },
+      "text": "独眼弹涂鱼",
+      "value": "default"
+     },
+     "snake": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.12524414,
+       "y": 0.49951172
+      },
+      "text": "蛇窝",
+      "value": "default"
+     },
+     "stungray": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.25024414,
+       "y": 0.49951172
+      },
+      "text": "恶臭蝠鲼",
+      "value": "default"
+     },
+     "spiders": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "蜘蛛巢",
+      "value": "default",
+      "text_en": "Spider Dens"
+     },
+     "merm": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "漏雨的小屋",
+      "value": "default",
+      "text_en": "Leaky Shack"
+     },
+     "angrybees": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "杀人蜂蜂窝",
+      "value": "default",
+      "text_en": "Killer Bee Hives"
+     },
+     "tallbirds": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "高脚鸟",
+      "value": "default",
+      "text_en": "Tallbirds"
+     }
+    }
+   }
+  },
+  "WORLDSETTINGS_GROUP": {
+   "misc": {
+    "order": 4,
+    "text": "杂项",
+    "atlas": {
+     "width": 2048,
+     "height": 1024,
+     "item_size": 128
+    },
+    "items": {
+     "dst_boats": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "DST船",
+      "value": "always"
+     },
+     "ia_boats": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "IA船",
+      "value": "none"
+     },
+     "ia_drowning": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "溺死",
+      "value": "none"
+     },
+     "floods": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.87524414,
+       "y": 0.12451172
+      },
+      "text": "洪水",
+      "value": "default"
+     },
+     "oceanwaves": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.18774414,
+       "y": 0.62451172
+      },
+      "text": "海浪",
+      "value": "default"
+     },
+     "tides": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.56274414,
+       "y": 0.49951172
+      },
+      "text": "潮汐",
+      "value": "default"
+     },
+     "waterencounters": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.062744141,
+       "y": 0.62451172
+      },
+      "text": "随机海洋奇遇",
+      "value": "default"
+     },
+     "whalehunt": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.25024414,
+       "y": 0.62451172
+      },
+      "text": "捕鲸",
+      "value": "default"
+     },
+     "dragoonegg": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.50024414,
+       "y": 0.12451172
+      },
+      "text": "火山爆发",
+      "value": "default"
+     },
+     "alternatewhalehunt": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.00024414062,
+       "y": 0.0
+      },
+      "text": "追鲸惊喜",
+      "value": "default"
+     },
+     "crocodog": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.18774414,
+       "y": 0.12451172
+      },
+      "text": "鳄狗袭击",
+      "value": "default"
+     },
+     "yellowcrocodog": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.68774414,
+       "y": 0.12451172
+      },
+      "text": "黄色鳄狗袭击",
+      "value": "default"
+     },
+     "bluecrocodog": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.93774414,
+       "y": 0.24951172
+      },
+      "text": "蓝色鳄狗袭击",
+      "value": "default"
+     },
+     "lightning": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "闪电",
+      "value": "default",
+      "text_en": "Lightning"
+     },
+     "weather": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "雨",
+      "value": "default",
+      "text_en": "Rain"
+     }
+    }
+   },
+   "animals": {
+    "order": 4,
+    "text": "生物以及刷新点",
+    "atlas": {
+     "width": 2048,
+     "height": 1024,
+     "item_size": 128
+    },
+    "items": {
+     "wildbores_setting": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.37524414,
+       "y": 0.62451172
+      },
+      "text": "野猪",
+      "value": "default"
+     },
+     "fishermerm_setting": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.75024414,
+       "y": 0.24951172
+      },
+      "text": "渔人",
+      "value": "default"
+     },
+     "ballphin_setting": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.12524414,
+       "y": 0.0
+      },
+      "text": "海豚",
+      "value": "default"
+     },
+     "primeape_setting": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "猿猴",
+      "value": "default"
+     },
+     "lobster_setting": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.50024414,
+       "y": 0.24951172
+      },
+      "text": "龙虾",
+      "value": "default"
+     },
+     "solofish_setting": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.31274414,
+       "y": 0.12451172
+      },
+      "text": "狗鱼",
+      "value": "default"
+     },
+     "crab_setting": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.062744141,
+       "y": 0.12451172
+      },
+      "text": "兔蟹",
+      "value": "default"
+     },
+     "rainbowjellyfish_setting": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.37524414,
+       "y": 0.37451172
+      },
+      "text": "彩虹水母",
+      "value": "default"
+     },
+     "sharkitten_setting": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.93774414,
+       "y": 0.37451172
+      },
+      "text": "猫鲨",
+      "value": "default"
+     },
+     "jellyfish_setting": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.12524414,
+       "y": 0.24951172
+      },
+      "text": "水母",
+      "value": "default"
+     },
+     "butterfly": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.75024414,
+       "y": 0.0
+      },
+      "text": "蝴蝶",
+      "value": "default",
+      "text_en": "Butterflies"
+     },
+     "birds": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.43774414,
+       "y": 0.0
+      },
+      "text": "鸟",
+      "value": "default",
+      "text_en": "Birds"
+     },
+     "bees_setting": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "蜜蜂",
+      "value": "default",
+      "text_en": "Bees"
+     },
+     "pigs_setting": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "猪",
+      "value": "default",
+      "text_en": "Pigs"
+     },
+     "bunnymen_setting": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "兔人",
+      "value": "default",
+      "text_en": "Bunnymen"
+     },
+     "grassgekkos": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "草壁虎转化",
+      "value": "default",
+      "text_en": "Grass Gekko Morphing"
+     },
+     "moles_setting": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "鼹鼠",
+      "value": "default",
+      "text_en": "Moles"
+     }
+    }
+   },
+   "monsters": {
+    "order": 4,
+    "text": "敌对生物以及刷新点",
+    "atlas": {
+     "width": 2048,
+     "height": 1024,
+     "item_size": 128
+    },
+    "items": {
+     "dragoon_setting": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.56274414,
+       "y": 0.12451172
+      },
+      "text": "呆龙",
+      "value": "default"
+     },
+     "snake_setting": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.18774414,
+       "y": 0.49951172
+      },
+      "text": "蛇",
+      "value": "default"
+     },
+     "mosquito": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.00024414062,
+       "y": 0.37451172
+      },
+      "text": "毒蚊子",
+      "value": "default"
+     },
+     "chessnavy_setting": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.81274414,
+       "y": 0.0
+      },
+      "text": "浮船骑士",
+      "value": "default"
+     },
+     "swordfish_setting": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.37524414,
+       "y": 0.49951172
+      },
+      "text": "剑鱼",
+      "value": "default"
+     },
+     "stungray_setting": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.25024414,
+       "y": 0.49951172
+      },
+      "text": "恶臭蝠鲼",
+      "value": "default"
+     },
+     "lureplants": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "食人花",
+      "value": "default",
+      "text_en": "Lureplants"
+     },
+     "wasps": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "杀人蜂",
+      "value": "default",
+      "text_en": "Killer Bees"
+     },
+     "merms": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.75024414,
+       "y": 0.24951172
+      },
+      "text": "鱼人",
+      "value": "default",
+      "text_en": "Merms"
+     },
+     "spiders_setting": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "蜘蛛",
+      "value": "default",
+      "text_en": "Spiders"
+     },
+     "spider_warriors": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "蜘蛛战士",
+      "value": "default",
+      "text_en": "Spider Warriors"
+     }
+    }
+   },
+   "resources": {
+    "order": 4,
+    "text": "资源",
+    "atlas": {
+     "width": 2048,
+     "height": 1024,
+     "item_size": 128
+    },
+    "items": {
+     "mangrovetree_regrowth": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.68774414,
+       "y": 0.24951172
+      },
+      "text": "红树林",
+      "value": "default"
+     },
+     "sweet_potato_regrowth": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.31274414,
+       "y": 0.49951172
+      },
+      "text": "甘薯",
+      "value": "default"
+     },
+     "bioluminescence_regrowth": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.37524414,
+       "y": 0.0
+      },
+      "text": "荧光生物",
+      "value": "default"
+     },
+     "sandhill_regrowth": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.62524414,
+       "y": 0.37451172
+      },
+      "text": "沙堆",
+      "value": "default"
+     },
+     "coral_brain_rock_regrowth": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.68774414,
+       "y": 0.0
+      },
+      "text": "智慧树",
+      "value": "default"
+     },
+     "seashell_regrowth": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.75024414,
+       "y": 0.37451172
+      },
+      "text": "贝壳",
+      "value": "default"
+     },
+     "jungletree_regrowth": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.18774414,
+       "y": 0.24951172
+      },
+      "text": "丛林树",
+      "value": "default"
+     },
+     "palmtree_regrowth": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.68774414,
+       "y": 0.49951172
+      },
+      "text": "椰树",
+      "value": "default"
+     },
+     "regrowth": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "再生速度",
+      "value": "default",
+      "text_en": "Regrowth Multiplier"
+     },
+     "flowers_regrowth": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "花",
+      "value": "default",
+      "text_en": "Flowers"
+     },
+     "reeds_regrowth": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "芦苇",
+      "value": "default",
+      "text_en": "Reeds"
+     }
+    }
+   },
+   "giants": {
+    "order": 4,
+    "text": "giants",
+    "atlas": {
+     "width": 2048,
+     "height": 1024,
+     "item_size": 128
+    },
+    "items": {
+     "kraken": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.25024414,
+       "y": 0.24951172
+      },
+      "text": "海妖",
+      "value": "default"
+     },
+     "tigershark": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.62524414,
+       "y": 0.49951172
+      },
+      "text": "虎鲨",
+      "value": "default"
+     },
+     "twister": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.75024414,
+       "y": 0.49951172
+      },
+      "text": "豹卷风",
+      "value": "default"
+     },
+     "liefs": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "树精守卫",
+      "value": "default",
+      "text_en": "Treeguards"
+     },
+     "beequeen": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "蜂王",
+      "value": "default",
+      "text_en": "Bee Queen"
+     },
+     "fruitfly": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "果蝇王",
+      "value": "default",
+      "text_en": "Lord of the Fruit Flies"
+     },
+     "klaus": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "克劳斯",
+      "value": "default",
+      "text_en": "Klaus"
+     },
+     "spiderqueen": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "蜘蛛女王",
+      "value": "default",
+      "text_en": "Spider Queen"
+     },
+     "eyeofterror": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "恐怖之眼",
+      "value": "default",
+      "text_en": "Eye of Terror"
+     }
+    }
+   }
+  }
+ },
+ "volcano": {
+  "WORLDGEN_GROUP": {
+   "resources": {
+    "order": 4,
+    "text": "资源",
+    "atlas": {
+     "width": 2048,
+     "height": 1024,
+     "item_size": 128
+    },
+    "items": {
+     "magma_rocks": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.56274414,
+       "y": 0.24951172
+      },
+      "text": "熔岩矿堆",
+      "value": "default"
+     },
+     "rock_charcoal": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.50024414,
+       "y": 0.37451172
+      },
+      "text": "木炭矿",
+      "value": "default"
+     },
+     "rock_obsidian": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.56274414,
+       "y": 0.37451172
+      },
+      "text": "黑曜石矿",
+      "value": "default"
+     },
+     "elephantcactus": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.75024414,
+       "y": 0.12451172
+      },
+      "text": "象仙人掌",
+      "value": "default"
+     },
+     "volcano_shrub": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.00024414062,
+       "y": 0.62451172
+      },
+      "text": "灰烬树",
+      "value": "default"
+     },
+     "coffeebush": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.87524414,
+       "y": 0.0
+      },
+      "text": "咖啡丛",
+      "value": "default"
+     }
+    }
+   },
+   "misc": {
+    "order": 4,
+    "text": "杂项",
+    "atlas": {
+     "width": 2048,
+     "height": 1024,
+     "item_size": 128
+    },
+    "items": {
+     "task_set": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "生物群系",
+      "value": "volcano",
+      "text_en": "Biomes"
+     },
+     "start_location": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "出生点",
+      "value": "volcano_default",
+      "text_en": "Spawn Area"
+     }
+    }
+   },
+   "monsters": {
+    "order": 4,
+    "text": "敌对生物以及刷新点",
+    "atlas": {
+     "width": 2048,
+     "height": 1024,
+     "item_size": 128
+    },
+    "items": {
+     "dragoon": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.43774414,
+       "y": 0.12451172
+      },
+      "text": "呆龙窝",
+      "value": "default"
+     }
+    }
+   }
+  },
+  "WORLDSETTINGS_GROUP": {
+   "misc": {
+    "order": 4,
+    "text": "杂项",
+    "atlas": {
+     "width": 2048,
+     "height": 1024,
+     "item_size": 128
+    },
+    "items": {
+     "dst_boats": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "DST船",
+      "value": "always"
+     },
+     "ia_boats": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "IA船",
+      "value": "none"
+     },
+     "dragoonegg": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.50024414,
+       "y": 0.12451172
+      },
+      "text": "火山爆发",
+      "value": "default"
+     },
+     "lightning": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "闪电",
+      "value": "default",
+      "text_en": "Lightning"
+     },
+     "weather": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "雨",
+      "value": "default",
+      "text_en": "Rain"
+     }
+    }
+   },
+   "animals": {
+    "order": 4,
+    "text": "生物以及刷新点",
+    "atlas": {
+     "width": 2048,
+     "height": 1024,
+     "item_size": 128
+    },
+    "items": {
+     "wildbores_setting": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.37524414,
+       "y": 0.62451172
+      },
+      "text": "野猪",
+      "value": "default"
+     },
+     "fishermerm_setting": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.75024414,
+       "y": 0.24951172
+      },
+      "text": "渔人",
+      "value": "default"
+     },
+     "primeape_setting": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "猿猴",
+      "value": "default"
+     },
+     "bees_setting": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "蜜蜂",
+      "value": "default",
+      "text_en": "Bees"
+     },
+     "pigs_setting": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "猪",
+      "value": "default",
+      "text_en": "Pigs"
+     },
+     "bunnymen_setting": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "兔人",
+      "value": "default",
+      "text_en": "Bunnymen"
+     },
+     "moles_setting": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "鼹鼠",
+      "value": "default",
+      "text_en": "Moles"
+     }
+    }
+   },
+   "monsters": {
+    "order": 4,
+    "text": "敌对生物以及刷新点",
+    "atlas": {
+     "width": 2048,
+     "height": 1024,
+     "item_size": 128
+    },
+    "items": {
+     "dragoon_setting": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.56274414,
+       "y": 0.12451172
+      },
+      "text": "呆龙",
+      "value": "default"
+     },
+     "snake_setting": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.18774414,
+       "y": 0.49951172
+      },
+      "text": "蛇",
+      "value": "default"
+     },
+     "merms": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.75024414,
+       "y": 0.24951172
+      },
+      "text": "鱼人",
+      "value": "default",
+      "text_en": "Merms"
+     },
+     "spiders_setting": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "蜘蛛",
+      "value": "default",
+      "text_en": "Spiders"
+     },
+     "spider_warriors": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "蜘蛛战士",
+      "value": "default",
+      "text_en": "Spider Warriors"
+     }
+    }
+   },
+   "resources": {
+    "order": 4,
+    "text": "资源",
+    "atlas": {
+     "width": 2048,
+     "height": 1024,
+     "item_size": 128
+    },
+    "items": {
+     "rock_obsidian_regrowth": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.56274414,
+       "y": 0.37451172
+      },
+      "text": "黑曜石矿",
+      "value": "default"
+     },
+     "volcano_shrub_regrowth": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.00024414062,
+       "y": 0.62451172
+      },
+      "text": "灰烬树",
+      "value": "default"
+     },
+     "magmarock_regrowth": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.56274414,
+       "y": 0.24951172
+      },
+      "text": "熔岩矿堆",
+      "value": "default"
+     },
+     "rock_charcoal_regrowth": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0.50024414,
+       "y": 0.37451172
+      },
+      "text": "木炭矿",
+      "value": "default"
+     },
+     "regrowth": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "再生速度",
+      "value": "default",
+      "text_en": "Regrowth Multiplier"
+     }
+    }
+   },
+   "giants": {
+    "order": 4,
+    "text": "giants",
+    "atlas": {
+     "width": 2048,
+     "height": 1024,
+     "item_size": 128
+    },
+    "items": {
+     "fruitfly": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "果蝇王",
+      "value": "default",
+      "text_en": "Lord of the Fruit Flies"
+     },
+     "spiderqueen": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "蜘蛛女王",
+      "value": "default",
+      "text_en": "Spider Queen"
+     },
+     "liefs": {
+      "desc": {
+       "never": "无",
+       "rare": "很少",
+       "uncommon": "较少",
+       "default": "默认",
+       "often": "较多",
+       "mostly": "很多",
+       "always": "大量",
+       "insane": "疯狂",
+       "none": "无"
+      },
+      "image": {
+       "x": 0,
+       "y": 0.875
+      },
+      "text": "树精守卫",
+      "value": "default",
+      "text_en": "Treeguards"
+     }
+    }
+   }
+  }
+ }
+}

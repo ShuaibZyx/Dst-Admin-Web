@@ -1,0 +1,3094 @@
+{
+ "hiddenKeys": [
+  "has_ocean",
+  "keep_disconnected_tiles",
+  "layout_mode",
+  "no_joining_islands",
+  "no_wormholes_to_disconnected_tiles",
+  "wormhole_prefab"
+ ],
+ "domains": {
+  "ssw": {
+   "zh": {
+    "default": "温和季",
+    "wet": "飓风季",
+    "green": "雨季",
+    "dry": "旱季",
+    "mild|green": "温和季或雨季",
+    "wet|dry": "飓风季或旱季",
+    "mild|wet|green|dry": "随机"
+   },
+   "en": {
+    "default": "Mild",
+    "wet": "Hurricane",
+    "green": "Monsoon",
+    "dry": "Dry",
+    "mild|green": "Mild or Monsoon",
+    "wet|dry": "Hurricane or Dry",
+    "mild|wet|green|dry": "Random"
+   }
+  },
+  "slen": {
+   "zh": {
+    "noseason": "无",
+    "veryshortseason": "极短",
+    "shortseason": "短",
+    "default": "默认",
+    "longseason": "长",
+    "verylongseason": "极长",
+    "random": "随机"
+   },
+   "en": {
+    "noseason": "None",
+    "veryshortseason": "Very Short",
+    "shortseason": "Short",
+    "default": "Default",
+    "longseason": "Long",
+    "verylongseason": "Very Long",
+    "random": "Random"
+   }
+  },
+  "wfreq8": {
+   "zh": {
+    "never": "无",
+    "rare": "很少",
+    "uncommon": "较少",
+    "default": "默认",
+    "often": "较多",
+    "mostly": "很多",
+    "always": "大量",
+    "insane": "疯狂"
+   },
+   "en": {
+    "never": "None",
+    "rare": "Little",
+    "uncommon": "Less",
+    "default": "Default",
+    "often": "More",
+    "mostly": "Lots",
+    "always": "Tons",
+    "insane": "Insane"
+   }
+  },
+  "ee": {
+   "zh": {
+    "default": "默认",
+    "enabled": "大量"
+   },
+   "en": {
+    "default": "Default",
+    "enabled": "Tons"
+   }
+  },
+  "ed": {
+   "zh": {
+    "none": "禁用",
+    "always": "启用"
+   },
+   "en": {
+    "none": "Disabled",
+    "always": "Enabled"
+   }
+  },
+  "yesno": {
+   "zh": {
+    "never": "无",
+    "default": "默认"
+   },
+   "en": {
+    "never": "None",
+    "default": "Default"
+   }
+  },
+  "freq5": {
+   "zh": {
+    "never": "无",
+    "rare": "很少",
+    "default": "默认",
+    "often": "较多",
+    "always": "大量"
+   },
+   "en": {
+    "never": "None",
+    "rare": "Little",
+    "default": "Default",
+    "often": "More",
+    "always": "Tons"
+   }
+  },
+  "speed6": {
+   "zh": {
+    "never": "无",
+    "veryslow": "极慢",
+    "slow": "慢",
+    "default": "默认",
+    "fast": "快",
+    "veryfast": "极快"
+   },
+   "en": {
+    "never": "None",
+    "veryslow": "Very Slow",
+    "slow": "Slow",
+    "default": "Default",
+    "fast": "Fast",
+    "veryfast": "Very Fast"
+   }
+  }
+ },
+ "options": {
+  "shipwrecked_season_start": {
+   "tab": "WORLDGEN",
+   "group": "global",
+   "world": null,
+   "master": true,
+   "value": "default",
+   "image": "season_start.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.8125,
+    "y": 0.375
+   },
+   "descDomain": "ssw",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "海难开局季节",
+    "en": "Shipwrecked Starting Season"
+   },
+   "order": 2.0
+  },
+  "volcano": {
+   "tab": "WORLDGEN",
+   "group": "misc",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "volcano.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.875,
+    "y": 0.5
+   },
+   "descDomain": "yesno",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "火山",
+    "en": "Volcano"
+   }
+  },
+  "bermudatriangle": {
+   "tab": "WORLDGEN",
+   "group": "misc",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "bermudatriangle.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.25,
+    "y": 0.0
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "电光三角",
+    "en": "Electric Isosceles"
+   }
+  },
+  "volcanoisland": {
+   "tab": "WORLDGEN",
+   "group": "misc",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "none",
+   "image": "volcano_island.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.9375,
+    "y": 0.5
+   },
+   "descDomain": "ed",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "火山岛",
+    "en": "Volcanic Island"
+   }
+  },
+  "sweet_potato": {
+   "tab": "WORLDGEN",
+   "group": "resources",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "sweetpotatos.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.3125,
+    "y": 0.5
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "甘薯",
+    "en": "Sweet Potatoes"
+   }
+  },
+  "limpets": {
+   "tab": "WORLDGEN",
+   "group": "resources",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "limpets.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.375,
+    "y": 0.25
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "帽贝岩",
+    "en": "Limpets"
+   }
+  },
+  "mussel_farm": {
+   "tab": "WORLDGEN",
+   "group": "resources",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "mussels.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.0625,
+    "y": 0.375
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "贻贝",
+    "en": "Mussels"
+   }
+  },
+  "seaweed": {
+   "tab": "WORLDGEN",
+   "group": "resources",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "seaweed.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.875,
+    "y": 0.375
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "海带",
+    "en": "Seaweeds"
+   }
+  },
+  "seashell": {
+   "tab": "WORLDGEN",
+   "group": "resources",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "seashell.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.75,
+    "y": 0.375
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "贝壳",
+    "en": "Seashells"
+   }
+  },
+  "bamboo": {
+   "tab": "WORLDGEN",
+   "group": "resources",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "bamboo.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.1875,
+    "y": 0.0
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "竹子",
+    "en": "Bamboo"
+   }
+  },
+  "bush_vine": {
+   "tab": "WORLDGEN",
+   "group": "resources",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "vines.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.8125,
+    "y": 0.5
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "藤蔓根",
+    "en": "Viney Bushes"
+   }
+  },
+  "coral": {
+   "tab": "WORLDGEN",
+   "group": "resources",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "coral.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.9375,
+    "y": 0.0
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "珊瑚",
+    "en": "Corals"
+   }
+  },
+  "coral_brain_rock": {
+   "tab": "WORLDGEN",
+   "group": "resources",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "braincoral.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.6875,
+    "y": 0.0
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "智慧树",
+    "en": "Brainy Sprouts"
+   }
+  },
+  "crate": {
+   "tab": "WORLDGEN",
+   "group": "resources",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "crates.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.125,
+    "y": 0.125
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "板条箱",
+    "en": "Crates"
+   }
+  },
+  "tidalpool": {
+   "tab": "WORLDGEN",
+   "group": "resources",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "tidalpools.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "潮汐池",
+    "en": "Tidal Pools"
+   }
+  },
+  "sandhill": {
+   "tab": "WORLDGEN",
+   "group": "resources",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "sand.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.625,
+    "y": 0.375
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "沙堆",
+    "en": "Sandy Piles"
+   }
+  },
+  "poisonhole": {
+   "tab": "WORLDGEN",
+   "group": "resources",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "poisonhole.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.25,
+    "y": 0.375
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "毒穴",
+    "en": "Poisonous Holes"
+   }
+  },
+  "bioluminescence": {
+   "tab": "WORLDGEN",
+   "group": "resources",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "bioluminescence.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.375,
+    "y": 0.0
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "荧光生物",
+    "en": "Bioluminescence"
+   }
+  },
+  "magma_rocks": {
+   "tab": "WORLDGEN",
+   "group": "resources",
+   "world": [
+    "shipwrecked",
+    "volcanoworld"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "magmarocks.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.5625,
+    "y": 0.25
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "熔岩矿堆",
+    "en": "Magma Piles"
+   }
+  },
+  "tar_pool": {
+   "tab": "WORLDGEN",
+   "group": "resources",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "tarpools.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.4375,
+    "y": 0.5
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "焦油",
+    "en": "Tar Pools"
+   }
+  },
+  "shipwrecked_trees": {
+   "tab": "WORLDGEN",
+   "group": "resources",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "trees.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.6875,
+    "y": 0.5
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "岛屿树木（所有）",
+    "en": "Island Trees (All)"
+   }
+  },
+  "shipwreck": {
+   "tab": "WORLDGEN",
+   "group": "resources",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "wrecks.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.5,
+    "y": 0.625
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "沉船",
+    "en": "Wrecks"
+   }
+  },
+  "waterygrave": {
+   "tab": "WORLDGEN",
+   "group": "resources",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "waterygraves.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.125,
+    "y": 0.625
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "水墓",
+    "en": "Watery Graves"
+   }
+  },
+  "coffeebush": {
+   "tab": "WORLDGEN",
+   "group": "resources",
+   "world": [
+    "shipwrecked",
+    "volcanoworld"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "coffeebush.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.875,
+    "y": 0.0
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "咖啡丛",
+    "en": "Coffee Bushes"
+   }
+  },
+  "elephantcactus": {
+   "tab": "WORLDGEN",
+   "group": "resources",
+   "world": [
+    "shipwrecked",
+    "volcanoworld"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "elephantcactus_active.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.75,
+    "y": 0.125
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "象仙人掌",
+    "en": "Elephant Cacti"
+   }
+  },
+  "rock_obsidian": {
+   "tab": "WORLDGEN",
+   "group": "resources",
+   "world": [
+    "shipwrecked",
+    "volcanoworld"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "rock_obsidian.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.5625,
+    "y": 0.375
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "黑曜石矿",
+    "en": "Obsidian Boulders"
+   }
+  },
+  "rock_charcoal": {
+   "tab": "WORLDGEN",
+   "group": "resources",
+   "world": [
+    "shipwrecked",
+    "volcanoworld"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "rock_charcoal.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.5,
+    "y": 0.375
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "木炭矿",
+    "en": "Charcoal Boulders"
+   }
+  },
+  "volcano_shrub": {
+   "tab": "WORLDGEN",
+   "group": "resources",
+   "world": [
+    "shipwrecked",
+    "volcanoworld"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "volcano_shrub.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.0,
+    "y": 0.625
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "灰烬树",
+    "en": "Ash Trees"
+   }
+  },
+  "crabhole": {
+   "tab": "WORLDGEN",
+   "group": "animals",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "crabbithole.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.0,
+    "y": 0.125
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "兔蟹洞",
+    "en": "Crabbit Dens"
+   }
+  },
+  "ox": {
+   "tab": "WORLDGEN",
+   "group": "animals",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "ox.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.125,
+    "y": 0.375
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "水牛",
+    "en": "Water Beefalos"
+   }
+  },
+  "doydoy": {
+   "tab": "WORLDGEN",
+   "group": "animals",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "doydoy.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.375,
+    "y": 0.125
+   },
+   "descDomain": "yesno",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "渡渡鸟",
+    "en": "Doydoys"
+   }
+  },
+  "wildbores": {
+   "tab": "WORLDGEN",
+   "group": "animals",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "wildborehouse.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.3125,
+    "y": 0.625
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "野猪舍",
+    "en": "Wildbore Houses"
+   }
+  },
+  "ballphin": {
+   "tab": "WORLDGEN",
+   "group": "animals",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "ballphinhouse.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.0625,
+    "y": 0.0
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "海豚宫殿",
+    "en": "Ballphin Palaces"
+   }
+  },
+  "primeape": {
+   "tab": "WORLDGEN",
+   "group": "animals",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "primeapehut.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.3125,
+    "y": 0.375
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "猿猴小窝",
+    "en": "Prime Ape Huts"
+   }
+  },
+  "fishermerm": {
+   "tab": "WORLDGEN",
+   "group": "animals",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "fishermermhouse.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.8125,
+    "y": 0.125
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "渔人小屋",
+    "en": "Fisher Merm Huts"
+   }
+  },
+  "lobster": {
+   "tab": "WORLDGEN",
+   "group": "animals",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "lobsterhole.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.4375,
+    "y": 0.25
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "龙虾",
+    "en": "Wobster Dens"
+   }
+  },
+  "solofish": {
+   "tab": "WORLDGEN",
+   "group": "animals",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "dogfish.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.3125,
+    "y": 0.125
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "狗鱼",
+    "en": "Dogfish"
+   }
+  },
+  "jellyfish": {
+   "tab": "WORLDGEN",
+   "group": "animals",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "jellyfish.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.125,
+    "y": 0.25
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "水母",
+    "en": "Jellyfish"
+   }
+  },
+  "rainbowjellyfish": {
+   "tab": "WORLDGEN",
+   "group": "animals",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "rainbowjellyfish.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.375,
+    "y": 0.375
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "彩虹水母",
+    "en": "Rainbow Jellyfish"
+   }
+  },
+  "fishinhole": {
+   "tab": "WORLDGEN",
+   "group": "animals",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "shoals.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.0625,
+    "y": 0.5
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "鱼群",
+    "en": "Shoals"
+   }
+  },
+  "seagull": {
+   "tab": "WORLDGEN",
+   "group": "animals",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "seagulls.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.6875,
+    "y": 0.375
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "海鸥",
+    "en": "Seagulls"
+   }
+  },
+  "flup": {
+   "tab": "WORLDGEN",
+   "group": "monsters",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "flups.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.9375,
+    "y": 0.125
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "独眼弹涂鱼",
+    "en": "Flups"
+   }
+  },
+  "swordfish": {
+   "tab": "WORLDGEN",
+   "group": "monsters",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "swordfish.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.375,
+    "y": 0.5
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "剑鱼",
+    "en": "Swordfish"
+   }
+  },
+  "stungray": {
+   "tab": "WORLDGEN",
+   "group": "monsters",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "stinkrays.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.25,
+    "y": 0.5
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "恶臭蝠鲼",
+    "en": "Stink Rays"
+   }
+  },
+  "snake": {
+   "tab": "WORLDGEN",
+   "group": "monsters",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "snakeden.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.125,
+    "y": 0.5
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "蛇窝",
+    "en": "Snake Dens"
+   }
+  },
+  "dragoon": {
+   "tab": "WORLDGEN",
+   "group": "monsters",
+   "world": [
+    "shipwrecked",
+    "volcanoworld"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "dragoonden.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.4375,
+    "y": 0.125
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "呆龙窝",
+    "en": "Dragoon Dens"
+   }
+  },
+  "mild": {
+   "tab": "WORLDSETTINGS",
+   "group": "global",
+   "world": null,
+   "master": true,
+   "value": "default",
+   "image": "mild.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.8125,
+    "y": 0.25
+   },
+   "descDomain": "slen",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "温和季",
+    "en": "Mild"
+   },
+   "order": 20.0
+  },
+  "hurricane": {
+   "tab": "WORLDSETTINGS",
+   "group": "global",
+   "world": null,
+   "master": true,
+   "value": "default",
+   "image": "hurricane.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.0625,
+    "y": 0.25
+   },
+   "descDomain": "slen",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "飓风季",
+    "en": "Hurricane"
+   },
+   "order": 21.0
+  },
+  "monsoon": {
+   "tab": "WORLDSETTINGS",
+   "group": "global",
+   "world": null,
+   "master": true,
+   "value": "default",
+   "image": "monsoon.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.875,
+    "y": 0.25
+   },
+   "descDomain": "slen",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "雨季",
+    "en": "Monsoon"
+   },
+   "order": 23.0
+  },
+  "dry": {
+   "tab": "WORLDSETTINGS",
+   "group": "global",
+   "world": null,
+   "master": true,
+   "value": "default",
+   "image": "dry.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.625,
+    "y": 0.125
+   },
+   "descDomain": "slen",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "旱季",
+    "en": "Dry"
+   },
+   "order": 24.0
+  },
+  "floods": {
+   "tab": "WORLDSETTINGS",
+   "group": "misc",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "floods.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.875,
+    "y": 0.125
+   },
+   "descDomain": "freq5",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "洪水",
+    "en": "Floods"
+   }
+  },
+  "tides": {
+   "tab": "WORLDSETTINGS",
+   "group": "misc",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "tides.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.5625,
+    "y": 0.5
+   },
+   "descDomain": "freq5",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "潮汐",
+    "en": "Tides"
+   }
+  },
+  "dragoonegg": {
+   "tab": "WORLDSETTINGS",
+   "group": "misc",
+   "world": [
+    "shipwrecked",
+    "volcanoworld"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "dragooneggs.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.5,
+    "y": 0.125
+   },
+   "descDomain": "freq5",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "火山爆发",
+    "en": "Volcanic Eruptions"
+   }
+  },
+  "oceanwaves": {
+   "tab": "WORLDSETTINGS",
+   "group": "misc",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "waves.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.1875,
+    "y": 0.625
+   },
+   "descDomain": "freq5",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "海浪",
+    "en": "Waves"
+   }
+  },
+  "whalehunt": {
+   "tab": "WORLDSETTINGS",
+   "group": "misc",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "whales.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.25,
+    "y": 0.625
+   },
+   "descDomain": "freq5",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "捕鲸",
+    "en": "Whaling"
+   }
+  },
+  "alternatewhalehunt": {
+   "tab": "WORLDSETTINGS",
+   "group": "misc",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "alternatewhaling.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.0,
+    "y": 0.0
+   },
+   "descDomain": "freq5",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "追鲸惊喜",
+    "en": "Whaling Surprises"
+   }
+  },
+  "crocodog": {
+   "tab": "WORLDSETTINGS",
+   "group": "misc",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "crocodogattacks.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.1875,
+    "y": 0.125
+   },
+   "descDomain": "freq5",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "鳄狗袭击",
+    "en": "Crocodog Attacks"
+   },
+   "order": 1.0
+  },
+  "yellowcrocodog": {
+   "tab": "WORLDSETTINGS",
+   "group": "misc",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "drycrocodogs.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.6875,
+    "y": 0.125
+   },
+   "descDomain": "yesno",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "黄色鳄狗袭击",
+    "en": "Poison Crocodog Waves"
+   },
+   "order": 2.0
+  },
+  "bluecrocodog": {
+   "tab": "WORLDSETTINGS",
+   "group": "misc",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "monsooncrocodogs.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.9375,
+    "y": 0.25
+   },
+   "descDomain": "yesno",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "蓝色鳄狗袭击",
+    "en": "Water Crocodog Waves"
+   },
+   "order": 3.0
+  },
+  "waterencounters": {
+   "tab": "WORLDSETTINGS",
+   "group": "misc",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "waterencounters.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.0625,
+    "y": 0.625
+   },
+   "descDomain": "freq5",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "随机海洋奇遇",
+    "en": "Random Ocean Encounters"
+   }
+  },
+  "sweet_potato_regrowth": {
+   "tab": "WORLDSETTINGS",
+   "group": "resources",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "sweetpotatos.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.3125,
+    "y": 0.5
+   },
+   "descDomain": "speed6",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "甘薯",
+    "en": "Sweet Potatoes"
+   }
+  },
+  "palmtree_regrowth": {
+   "tab": "WORLDSETTINGS",
+   "group": "resources",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "trees.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.6875,
+    "y": 0.5
+   },
+   "descDomain": "speed6",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "椰树",
+    "en": "Palm Trees"
+   }
+  },
+  "jungletree_regrowth": {
+   "tab": "WORLDSETTINGS",
+   "group": "resources",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "jungletree.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.1875,
+    "y": 0.25
+   },
+   "descDomain": "speed6",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "丛林树",
+    "en": "Jungle Trees"
+   }
+  },
+  "mangrovetree_regrowth": {
+   "tab": "WORLDSETTINGS",
+   "group": "resources",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "mangrovetree.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.6875,
+    "y": 0.25
+   },
+   "descDomain": "speed6",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "红树林",
+    "en": "Mangroves"
+   }
+  },
+  "coral_brain_rock_regrowth": {
+   "tab": "WORLDSETTINGS",
+   "group": "resources",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "braincoral.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.6875,
+    "y": 0.0
+   },
+   "descDomain": "speed6",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "智慧树",
+    "en": "Brainy Sprouts"
+   }
+  },
+  "seashell_regrowth": {
+   "tab": "WORLDSETTINGS",
+   "group": "resources",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "seashell.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.75,
+    "y": 0.375
+   },
+   "descDomain": "speed6",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "贝壳",
+    "en": "Seashells"
+   }
+  },
+  "sandhill_regrowth": {
+   "tab": "WORLDSETTINGS",
+   "group": "resources",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "sand.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.625,
+    "y": 0.375
+   },
+   "descDomain": "speed6",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "沙堆",
+    "en": "Sandy Piles"
+   }
+  },
+  "rock_obsidian_regrowth": {
+   "tab": "WORLDSETTINGS",
+   "group": "resources",
+   "world": [
+    "shipwrecked",
+    "volcanoworld"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "rock_obsidian.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.5625,
+    "y": 0.375
+   },
+   "descDomain": "speed6",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "黑曜石矿",
+    "en": "Obsidian Boulders"
+   }
+  },
+  "rock_charcoal_regrowth": {
+   "tab": "WORLDSETTINGS",
+   "group": "resources",
+   "world": [
+    "shipwrecked",
+    "volcanoworld"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "rock_charcoal.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.5,
+    "y": 0.375
+   },
+   "descDomain": "speed6",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "木炭矿",
+    "en": "Charcoal Boulders"
+   }
+  },
+  "volcano_shrub_regrowth": {
+   "tab": "WORLDSETTINGS",
+   "group": "resources",
+   "world": [
+    "shipwrecked",
+    "volcanoworld"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "volcano_shrub.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.0,
+    "y": 0.625
+   },
+   "descDomain": "speed6",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "灰烬树",
+    "en": "Ash Trees"
+   }
+  },
+  "magmarock_regrowth": {
+   "tab": "WORLDSETTINGS",
+   "group": "resources",
+   "world": [
+    "shipwrecked",
+    "volcanoworld"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "magmarocks.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.5625,
+    "y": 0.25
+   },
+   "descDomain": "speed6",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "熔岩矿堆",
+    "en": "Magma Piles"
+   }
+  },
+  "bioluminescence_regrowth": {
+   "tab": "WORLDSETTINGS",
+   "group": "resources",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "bioluminescence.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.375,
+    "y": 0.0
+   },
+   "descDomain": "speed6",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "荧光生物",
+    "en": "Bioluminescence"
+   }
+  },
+  "crab_setting": {
+   "tab": "WORLDSETTINGS",
+   "group": "animals",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "crabbits.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.0625,
+    "y": 0.125
+   },
+   "descDomain": "freq5",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "兔蟹",
+    "en": "Crabbits"
+   }
+  },
+  "wildbores_setting": {
+   "tab": "WORLDSETTINGS",
+   "group": "animals",
+   "world": [
+    "forest",
+    "cave",
+    "shipwrecked",
+    "volcanoworld",
+    "porkland"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "wildbores.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.375,
+    "y": 0.625
+   },
+   "descDomain": "freq5",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "野猪",
+    "en": "Wildbores"
+   }
+  },
+  "ballphin_setting": {
+   "tab": "WORLDSETTINGS",
+   "group": "animals",
+   "world": [
+    "forest",
+    "shipwrecked",
+    "porkland"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "ballphins.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.125,
+    "y": 0.0
+   },
+   "descDomain": "freq5",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "海豚",
+    "en": "Ballphins"
+   }
+  },
+  "fishermerm_setting": {
+   "tab": "WORLDSETTINGS",
+   "group": "animals",
+   "world": [
+    "forest",
+    "cave",
+    "shipwrecked",
+    "volcanoworld",
+    "porkland"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "merms.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.75,
+    "y": 0.25
+   },
+   "descDomain": "freq5",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "渔人",
+    "en": "Fisher Merms"
+   }
+  },
+  "sharkitten_setting": {
+   "tab": "WORLDSETTINGS",
+   "group": "animals",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "sharkitten.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.9375,
+    "y": 0.375
+   },
+   "descDomain": "freq5",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "猫鲨",
+    "en": "Sharkittens"
+   }
+  },
+  "lobster_setting": {
+   "tab": "WORLDSETTINGS",
+   "group": "animals",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "lobsters.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.5,
+    "y": 0.25
+   },
+   "descDomain": "freq5",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "龙虾",
+    "en": "Wobsters"
+   }
+  },
+  "jellyfish_setting": {
+   "tab": "WORLDSETTINGS",
+   "group": "animals",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "jellyfish.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.125,
+    "y": 0.25
+   },
+   "descDomain": "freq5",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "水母",
+    "en": "Jellyfish"
+   }
+  },
+  "rainbowjellyfish_setting": {
+   "tab": "WORLDSETTINGS",
+   "group": "animals",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "rainbowjellyfish.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.375,
+    "y": 0.375
+   },
+   "descDomain": "freq5",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "彩虹水母",
+    "en": "Rainbow Jellyfish"
+   }
+  },
+  "solofish_setting": {
+   "tab": "WORLDSETTINGS",
+   "group": "animals",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "dogfish.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.3125,
+    "y": 0.125
+   },
+   "descDomain": "freq5",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "狗鱼",
+    "en": "Dogfish"
+   }
+  },
+  "mosquito": {
+   "tab": "WORLDSETTINGS",
+   "group": "monsters",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "mosquitos.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.0,
+    "y": 0.375
+   },
+   "descDomain": "freq5",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "毒蚊子",
+    "en": "Poison Mosquitos"
+   }
+  },
+  "swordfish_setting": {
+   "tab": "WORLDSETTINGS",
+   "group": "monsters",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "swordfish.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.375,
+    "y": 0.5
+   },
+   "descDomain": "freq5",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "剑鱼",
+    "en": "Swordfish"
+   }
+  },
+  "stungray_setting": {
+   "tab": "WORLDSETTINGS",
+   "group": "monsters",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "stinkrays.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.25,
+    "y": 0.5
+   },
+   "descDomain": "freq5",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "恶臭蝠鲼",
+    "en": "Stink Rays"
+   }
+  },
+  "chessnavy_setting": {
+   "tab": "WORLDSETTINGS",
+   "group": "monsters",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "chess_monsters.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.8125,
+    "y": 0.0
+   },
+   "descDomain": "freq5",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "浮船骑士",
+    "en": "Floaty Boaty Knights"
+   }
+  },
+  "dragoon_setting": {
+   "tab": "WORLDSETTINGS",
+   "group": "monsters",
+   "world": [
+    "forest",
+    "cave",
+    "shipwrecked",
+    "volcanoworld",
+    "porkland"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "dragoons.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.5625,
+    "y": 0.125
+   },
+   "descDomain": "freq5",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "呆龙",
+    "en": "Dragoons"
+   }
+  },
+  "twister": {
+   "tab": "WORLDSETTINGS",
+   "group": "giants",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "twister.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.75,
+    "y": 0.5
+   },
+   "descDomain": "freq5",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "豹卷风",
+    "en": "Sealnado"
+   }
+  },
+  "tigershark": {
+   "tab": "WORLDSETTINGS",
+   "group": "giants",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "tigershark.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.625,
+    "y": 0.5
+   },
+   "descDomain": "freq5",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "虎鲨",
+    "en": "Tiger Sharks"
+   }
+  },
+  "kraken": {
+   "tab": "WORLDSETTINGS",
+   "group": "giants",
+   "world": [
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "kraken.tex",
+   "atlas": {
+    "name": "customization_shipwrecked",
+    "width": 2048,
+    "height": 1024,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.25,
+    "y": 0.25
+   },
+   "descDomain": "freq5",
+   "modId": "workshop-1467214795",
+   "text": {
+    "zh": "海妖",
+    "en": "Quacken"
+   }
+  },
+  "poison": {
+   "tab": "WORLDSETTINGS",
+   "group": "global",
+   "world": null,
+   "master": true,
+   "value": "always",
+   "image": "poison.tex",
+   "atlas": {
+    "name": "customization_core",
+    "width": 512,
+    "height": 256,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.0,
+    "y": 0.5
+   },
+   "descDomain": "ed",
+   "modId": "workshop-3435352667",
+   "text": {
+    "zh": "中毒",
+    "en": "Poison"
+   },
+   "order": 25.0
+  },
+  "dst_boats": {
+   "tab": "WORLDSETTINGS",
+   "group": "misc",
+   "world": [
+    "forest",
+    "cave",
+    "shipwrecked",
+    "volcanoworld",
+    "porkland"
+   ],
+   "master": false,
+   "value": "always",
+   "image": "cookieboats.tex",
+   "atlas": {
+    "name": "customization_core",
+    "width": 512,
+    "height": 256,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.0,
+    "y": 0.0
+   },
+   "descDomain": "ed",
+   "modId": "workshop-3435352667",
+   "text": {
+    "zh": "DST船",
+    "en": "DST Boats"
+   },
+   "order": 4.0
+  },
+  "ia_boats": {
+   "tab": "WORLDSETTINGS",
+   "group": "misc",
+   "world": [
+    "forest",
+    "cave",
+    "shipwrecked",
+    "volcanoworld",
+    "porkland"
+   ],
+   "master": false,
+   "value": "none",
+   "image": "smallboats.tex",
+   "atlas": {
+    "name": "customization_core",
+    "width": 512,
+    "height": 256,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.25,
+    "y": 0.5
+   },
+   "descDomain": "ed",
+   "modId": "workshop-3435352667",
+   "text": {
+    "zh": "IA船",
+    "en": "IA Boats"
+   },
+   "order": 5.0
+  },
+  "ia_drowning": {
+   "tab": "WORLDSETTINGS",
+   "group": "misc",
+   "world": [
+    "forest",
+    "shipwrecked",
+    "porkland"
+   ],
+   "master": false,
+   "value": "none",
+   "image": "deadlydrowning.tex",
+   "atlas": {
+    "name": "customization_core",
+    "width": 512,
+    "height": 256,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.25,
+    "y": 0.0
+   },
+   "descDomain": "ed",
+   "modId": "workshop-3435352667",
+   "text": {
+    "zh": "溺死",
+    "en": "Deadly Drowning"
+   },
+   "order": 6.0
+  },
+  "primeape_setting": {
+   "tab": "WORLDSETTINGS",
+   "group": "animals",
+   "world": [
+    "forest",
+    "cave",
+    "shipwrecked",
+    "volcanoworld",
+    "porkland"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "monkeys.tex",
+   "atlas": {
+    "name": "customization_core",
+    "width": 512,
+    "height": 256,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.75,
+    "y": 0.0
+   },
+   "descDomain": "freq5",
+   "modId": "workshop-3435352667",
+   "text": {
+    "zh": "猿猴",
+    "en": "Prime Apes"
+   }
+  },
+  "snake_setting": {
+   "tab": "WORLDSETTINGS",
+   "group": "monsters",
+   "world": [
+    "forest",
+    "cave",
+    "shipwrecked",
+    "volcanoworld",
+    "porkland"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "snakes.tex",
+   "atlas": {
+    "name": "customization_core",
+    "width": 512,
+    "height": 256,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.5,
+    "y": 0.5
+   },
+   "descDomain": "freq5",
+   "modId": "workshop-3435352667",
+   "text": {
+    "zh": "蛇",
+    "en": "Snakes"
+   }
+  },
+  "cherry_bugseason": {
+   "tab": "WORLDSETTINGS",
+   "group": "events",
+   "world": [
+    "forest",
+    "shipwrecked",
+    "volcanoworld"
+   ],
+   "master": true,
+   "value": "default",
+   "image": "worldsettings_cherry_bugseason.tex",
+   "atlas": {
+    "name": "worldgen_cherry",
+    "width": 1024,
+    "height": 512,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.25,
+    "y": 0.75
+   },
+   "descDomain": "ee",
+   "modId": "workshop-1289779251",
+   "text": {
+    "zh": "甲虫风暴",
+    "en": "Beetlegale"
+   },
+   "order": 3.06
+  },
+  "cherrift": {
+   "tab": "WORLDSETTINGS",
+   "group": "events",
+   "world": [
+    "forest",
+    "shipwrecked",
+    "volcanoworld"
+   ],
+   "master": true,
+   "value": "default",
+   "image": "worldsettings_cherrift.tex",
+   "atlas": {
+    "name": "worldgen_cherry",
+    "width": 1024,
+    "height": 512,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.125,
+    "y": 0.75
+   },
+   "descDomain": "ee",
+   "modId": "workshop-1289779251",
+   "text": {
+    "zh": "樱花裂隙",
+    "en": "Cherrifts"
+   },
+   "order": 3.07
+  },
+  "petalwind": {
+   "tab": "WORLDSETTINGS",
+   "group": "misc",
+   "world": [
+    "forest",
+    "shipwrecked",
+    "volcanoworld"
+   ],
+   "master": true,
+   "value": "default",
+   "image": "worldsettings_petalwind.tex",
+   "atlas": {
+    "name": "worldgen_cherry",
+    "width": 1024,
+    "height": 512,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.75,
+    "y": 0.0
+   },
+   "descDomain": "freq5",
+   "modId": "workshop-1289779251",
+   "text": {
+    "zh": "樱花雨",
+    "en": "Petal Wind"
+   }
+  },
+  "cherrylings": {
+   "tab": "WORLDSETTINGS",
+   "group": "animals",
+   "world": [
+    "forest",
+    "shipwrecked",
+    "volcanoworld"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "worldsettings_cherrylings.tex",
+   "atlas": {
+    "name": "worldgen_cherry",
+    "width": 1024,
+    "height": 512,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.5,
+    "y": 0.0
+   },
+   "descDomain": "freq5",
+   "modId": "workshop-1289779251",
+   "text": {
+    "zh": "樱花小精灵",
+    "en": "Cherrylings"
+   }
+  },
+  "cherry_dragonflies": {
+   "tab": "WORLDSETTINGS",
+   "group": "animals",
+   "world": [
+    "forest",
+    "shipwrecked",
+    "volcanoworld"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "worldsettings_cherry_dragonflies.tex",
+   "atlas": {
+    "name": "worldgen_cherry",
+    "width": 1024,
+    "height": 512,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.375,
+    "y": 0.5
+   },
+   "descDomain": "freq5",
+   "modId": "workshop-1289779251",
+   "text": {
+    "zh": "蜻蜓",
+    "en": "Butterdragons"
+   }
+  },
+  "cherry_watchers": {
+   "tab": "WORLDSETTINGS",
+   "group": "animals",
+   "world": [
+    "forest",
+    "shipwrecked",
+    "volcanoworld"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "worldsettings_cherry_watchers.tex",
+   "atlas": {
+    "name": "worldgen_cherry",
+    "width": 1024,
+    "height": 512,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.375,
+    "y": 0.75
+   },
+   "descDomain": "freq5",
+   "modId": "workshop-1289779251",
+   "text": {
+    "zh": "守护者",
+    "en": "Watchers"
+   }
+  },
+  "cherry_trees": {
+   "tab": "WORLDGEN",
+   "group": "resources",
+   "world": [
+    "forest",
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "worldgen_cherry_trees.tex",
+   "atlas": {
+    "name": "worldgen_cherry",
+    "width": 1024,
+    "height": 512,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.125,
+    "y": 0.0
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1289779251",
+   "text": {
+    "zh": "樱花树",
+    "en": "Cherry Trees"
+   }
+  },
+  "sapling_cherry": {
+   "tab": "WORLDGEN",
+   "group": "resources",
+   "world": [
+    "forest",
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "worldgen_sapling_cherry.tex",
+   "atlas": {
+    "name": "worldgen_cherry",
+    "width": 1024,
+    "height": 512,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.125,
+    "y": 0.5
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1289779251",
+   "text": {
+    "zh": "樱花树枝",
+    "en": "Blooming Saplings"
+   }
+  },
+  "grass_cherry": {
+   "tab": "WORLDGEN",
+   "group": "resources",
+   "world": [
+    "forest",
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "worldgen_grass_cherry.tex",
+   "atlas": {
+    "name": "worldgen_cherry",
+    "width": 1024,
+    "height": 512,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.375,
+    "y": 0.25
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1289779251",
+   "text": {
+    "zh": "樱花草丛",
+    "en": "Blooming Grass"
+   }
+  },
+  "foreststatue_rock": {
+   "tab": "WORLDGEN",
+   "group": "resources",
+   "world": [
+    "forest",
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "worldgen_foreststatue_rock.tex",
+   "atlas": {
+    "name": "worldgen_cherry",
+    "width": 1024,
+    "height": 512,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.25,
+    "y": 0.25
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1289779251",
+   "text": {
+    "zh": "石化树根",
+    "en": "Stone Roots"
+   }
+  },
+  "cherrytomato": {
+   "tab": "WORLDGEN",
+   "group": "resources",
+   "world": [
+    "forest",
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "worldgen_cherrytomato.tex",
+   "atlas": {
+    "name": "worldgen_cherry",
+    "width": 1024,
+    "height": 512,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.25,
+    "y": 0.0
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1289779251",
+   "text": {
+    "zh": "番茄植株",
+    "en": "Cherry Tomatoes"
+   }
+  },
+  "bloomshrooms": {
+   "tab": "WORLDGEN",
+   "group": "resources",
+   "world": [
+    "forest",
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "worldgen_bloomshrooms.tex",
+   "atlas": {
+    "name": "worldgen_cherry",
+    "width": 1024,
+    "height": 512,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.0,
+    "y": 0.0
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1289779251",
+   "text": {
+    "zh": "繁花菇",
+    "en": "Bloomshrooms"
+   }
+  },
+  "goosebushes": {
+   "tab": "WORLDGEN",
+   "group": "resources",
+   "world": [
+    "forest",
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "worldgen_goosebushes.tex",
+   "atlas": {
+    "name": "worldgen_cherry",
+    "width": 1024,
+    "height": 512,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.375,
+    "y": 0.0
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1289779251",
+   "text": {
+    "zh": "鹅莓果丛",
+    "en": "Gooseberry Bushes"
+   }
+  },
+  "honeyvines": {
+   "tab": "WORLDGEN",
+   "group": "resources",
+   "world": [
+    "forest",
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "worldgen_honeyvines.tex",
+   "atlas": {
+    "name": "worldgen_cherry",
+    "width": 1024,
+    "height": 512,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.0,
+    "y": 0.5
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1289779251",
+   "text": {
+    "zh": "翠蜂巢",
+    "en": "Ivyscus Hives"
+   }
+  },
+  "rosebushes": {
+   "tab": "WORLDGEN",
+   "group": "resources",
+   "world": [
+    "forest",
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "worldgen_rosebushes.tex",
+   "atlas": {
+    "name": "worldgen_cherry",
+    "width": 1024,
+    "height": 512,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.0,
+    "y": 0.75
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1289779251",
+   "text": {
+    "zh": "野玫瑰丛",
+    "en": "Wild Rose Bushes"
+   }
+  },
+  "watchernests": {
+   "tab": "WORLDGEN",
+   "group": "monsters",
+   "world": [
+    "forest",
+    "shipwrecked"
+   ],
+   "master": false,
+   "value": "default",
+   "image": "worldgen_watchernests.tex",
+   "atlas": {
+    "name": "worldgen_cherry",
+    "width": 1024,
+    "height": 512,
+    "item_size": 128
+   },
+   "uv": {
+    "x": 0.25,
+    "y": 0.5
+   },
+   "descDomain": "wfreq8",
+   "modId": "workshop-1289779251",
+   "text": {
+    "zh": "守护者巢穴",
+    "en": "Watcher Nests"
+   }
+  }
+ }
+}

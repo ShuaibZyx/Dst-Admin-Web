@@ -1,0 +1,314 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+import {Skeleton, Alert, Button, Input, message, Modal, Popconfirm, Space, Table} from 'antd';
+import {DeleteOutlined, DownloadOutlined, EditOutlined, ReloadOutlined, UndoOutlined} from '@ant-design/icons';
+import React, {useEffect, useRef, useState} from 'react';
+import {useParams} from "react-router-dom";
+import axios from 'axios';
+import {useTranslation} from "react-i18next";
+
+import {
+    deleteBackupApi,
+    getBackupApi,
+    renameBackupApi,
+    restoreBackupApi
+} from '../../../api/backupApi.jsx';
+import BackupStatistic from "./Statistic/index.jsx";
+import CreateBackUpBtn from "../../Panel/OpBtnGroup/CreateBackUpBtn.jsx";
+
+import style from "../../Home/DstEomj/index.module.css";
+
+
+
+const Backup = ({showStatistic}) => {
+
+    const {t} = useTranslation()
+    const {cluster} = useParams()
+    const actionRef = useRef();
+
+    const [loading, setLoading] = useState(true)
+
+    // 选中的备份文件
+    const [selectBackup, setSelectBackup] = useState({})
+    const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+
+    const [backupData, setBackupData] = useState([])
+
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [deleteBackup, setDeleteBackup] = useState({});
+
+    const [confirmLoading, setConfirmLoading] = useState(false);
+
+    const inputRef = useRef("");
+
+    const updateBackupData = () => {
+        getBackupApi(cluster)
+            .then(data => {
+                const backupList = data.data || []
+                // eslint-disable-next-line no-plusplus
+                for (let i = 0; i < backupList.length; i++) {
+                    backupList[i].key = i
+                }
+                backupList.sort((a, b) => {
+                    return b.createTime < a.createTime ? -1 : 1
+                })
+                setBackupData(backupList)
+                setData(backupList)
+                setLoading(false)
+            })
+    }
+
+    useEffect(() => {
+        updateBackupData()
+    }, [])
+
+    const rowSelection = {
+        selectedRowKeys,
+        onChange: (selectedRowKeys, selectedRows) => {
+            console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows)
+            setSelectedRowKeys(selectedRowKeys)
+            setSelectBackup(selectedRows)
+        },
+    }
+
+    const deleteSelectBackup = () => {
+        const {length} = selectBackup
+        if (length < 1) {
+            message.warning(t('backup.select.empty'))
+            return
+        }
+        const fileNames = selectBackup.map(item => item.fileName)
+        deleteBackupApi(cluster, fileNames)
+            .then(data => {
+                console.log(data);
+                message.success(t("backup.delete.ok"))
+
+                setSelectBackup([])
+                setSelectedRowKeys([])
+                updateBackupData()
+            })
+    }
+
+    const deletBackupItem = (value) => {
+        setConfirmLoading(true);
+        const oldBackupData = backupData
+        const newBackupData = oldBackupData.filter(item => value.key !== item.key)
+
+        const newData = data.filter(item => value.key !== item.key)
+
+        deleteBackupApi(cluster, [value.fileName])
+            .then(data => {
+                if (data.code === 200) {
+                    setTimeout(() => {
+                        message.success(t("backup.delete.ok"))
+                        setConfirmLoading(false);
+                        setIsDeleteModalOpen(false)
+                        setBackupData(newBackupData)
+
+                        setData(newData)
+                    }, 100);
+
+                }
+            })
+    }
+
+    const renameBackupItem = (value) => {
+        setConfirmLoading(true);
+        const data = {
+            fileName: value.fileName,
+            newName: `${inputRef.current.input.value}.zip`
+        }
+        renameBackupApi(cluster, data)
+            .then(data => {
+                if (data.code === 200) {
+                    setTimeout(() => {
+                        message.success(t("backup.rename.ok"))
+                        updateBackupData()
+                    }, 1000);
+                }
+            }).catch(error => {
+            message.error(t("backup.rename.error"))
+        }).finally(() => {
+            setConfirmLoading(false);
+            setIsEditModalOpen(false)
+        });
+    }
+
+    const restoreArchive = (fileName) => {
+        restoreBackupApi(cluster, fileName)
+            .then(data => {
+                if (data.code === 200) {
+                    message.success(t("backup.restore.ok"))
+                }
+            }).catch(error => {
+            console.log(error)
+            message.error(t("backup.restore.error"))
+        })
+    }
+
+    const columns = [
+        {
+            title: t('backup.fileName'),
+            dataIndex: 'fileName',
+            key: 'fileName',
+            render: (text) => <span>{text}</span>,
+            editable: true,
+        },
+        {
+            title: t('backup.fileSize'),
+            dataIndex: 'fileSize',
+            align: 'center',
+            key: 'fileSize',
+            render: (fileSize) => <span>{`${(fileSize / 1024 / 1024).toFixed(2)} MB`}</span>,
+            sorter: (a, b) => b.fileSize - a.fileSize,
+        },
+        {
+            title: t('backup.createTime'),
+            dataIndex: 'createTime',
+            align: 'center',
+            key: 'createTime',
+            render: (createTime) => <span>{new Date(createTime).toLocaleString()}</span>,
+            sorter: (a, b) => b.createTime - a.createTime,
+        },
+        {
+            title: t('backup.action'),
+            key: 'action',
+            align: 'center',
+            render: (_, record) => (
+                <Space size={2} style={{ justifyContent: 'center', display: 'flex', width: '100%' }}>
+                    <Button variant="text" color="primary" icon={<UndoOutlined/>} onClick={() => {
+                        Modal.confirm({
+                            title: t('backup.restore.title'),
+                            content: (
+                                <div>
+                                    <p><strong>{record.fileName}</strong></p>  {/* 显示备份文件名 */}
+                                    <p>{t('backup.restore.desc')}</p>
+                                    <CreateBackUpBtn/>
+                                </div>
+                            ),
+                            okText: t('panel.y'),
+                            cancelText: t('panel.n'),
+                            onOk: () => restoreArchive(record.fileName),
+                        });
+                    }}>
+                        {t('backup.restore')}
+                    </Button>
+
+                    <Button icon={<EditOutlined/>} variant="text" color="primary" onClick={() => {
+                        setIsEditModalOpen(true);
+                        setDeleteBackup(record)
+                    }}>{t('backup.edit')}</Button>
+
+                    <Button icon={<DownloadOutlined/>} variant="text" color="primary" onClick={() => {
+                        window.location.href = `/api/game/backup/download?fileName=${record.fileName}`;
+                    }}>{t('backup.download')}</Button>
+
+                    <Button icon={<DeleteOutlined/>} variant="text" color="danger" onClick={() => {
+                        setIsDeleteModalOpen(true);
+                        setDeleteBackup(record)
+                    }}>{t('backup.delete')}</Button>
+                </Space>
+            ),
+        },
+    ]
+
+    const HeaderTitle = () => (
+        <Space wrap style={{
+            paddingBottom: 12
+        }}>
+            <Button icon={<DeleteOutlined/>} type="primary" danger disabled={selectedRowKeys.length === 0} onClick={deleteSelectBackup}>
+                {t('backup.batchDelete')}
+            </Button>
+            <Button icon={<ReloadOutlined/>} onClick={updateBackupData}>
+                {t('backup.refresh')}
+            </Button>
+        </Space>
+
+    )
+
+    const EditModal = () => (
+        <Modal title={t('backup.edit.title')}
+               open={isEditModalOpen}
+               confirmLoading={confirmLoading}
+               getContainer={false}
+               onOk={() => {
+                   renameBackupItem(deleteBackup)
+               }}
+               onCancel={() => {
+                   setIsEditModalOpen(false)
+               }}>
+            <br/>
+            <div>{t('backup.cur.filename')}: </div>
+            <div>
+                {deleteBackup.fileName}
+            </div>
+            <br/>
+            <Input allowClear placeholder={t('backup.newBackupName')} ref={inputRef}/>
+        </Modal>
+    )
+
+    const DeletetModal = () => (
+        <Modal title={t('backup.delete.title')}
+               open={isDeleteModalOpen}
+               confirmLoading={confirmLoading}
+               getContainer={false}
+               onOk={() => {
+                   deletBackupItem(deleteBackup)
+               }}
+               onCancel={() => {
+                   setIsDeleteModalOpen(false)
+               }}>
+            <p>{t('backup.cur.filename')}</p>
+            <p>{deleteBackup.fileName || ""}</p>
+        </Modal>
+    )
+
+    const backupDataSize = (backupData
+        .map(backup => backup.fileSize)
+        // eslint-disable-next-line no-restricted-globals
+        .reduce((prev, curr) => !isNaN(Number(curr)) ? prev + curr : prev, 0) / 1024 / 1024 / 1024).toFixed(4)
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageSize, setPageSize] = useState(10);
+    const [data, setData] = useState([]);
+    const startIndex = (currentPage - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+
+    const dataSource = data.slice(startIndex, endIndex);
+
+    return (
+        <Skeleton loading={loading} active>
+        <>
+            <DeletetModal/>
+            <div style={{
+                paddingBottom: 12
+            }}>
+                <Alert message={t('backup.tips1')} type="info" showIcon/>
+            </div>
+
+            {showStatistic && <BackupStatistic size={backupData.length} data={backupDataSize}/>}
+            <HeaderTitle/>
+            <Table
+                ref={actionRef}
+                rowSelection={rowSelection}
+                scroll={{
+                    x: 600,
+                }}
+                columns={columns}
+                dataSource={dataSource}
+                pagination={{
+                    current: currentPage,
+                    pageSize,
+                    total: data.length,
+                    onChange: setCurrentPage,
+                    showSizeChanger: true,
+                    onShowSizeChange: (current, size) => setPageSize(size),
+                }}
+            />
+
+            <EditModal/>
+        </>
+    </Skeleton>)
+};
+export default Backup;

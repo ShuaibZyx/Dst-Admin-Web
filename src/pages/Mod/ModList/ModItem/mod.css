@@ -1,0 +1,12 @@
+.mod.ant-card .ant-card-body {
+    padding: 4px;
+    border-radius: 0 0 8px 8px;
+}
+/* 悬停微抬升:模组卡片有"可点"的质感 */
+.mod.ant-card {
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.mod.ant-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+}

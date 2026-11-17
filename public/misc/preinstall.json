@@ -1,0 +1,23 @@
+[
+ {
+  "key": "classic",
+  "name": "经典",
+  "description": "森林和洞穴（原版经典双层）",
+  "value": "经典",
+  "src": "/misc/preinstall_classic.png"
+ },
+ {
+  "key": "shipwrecked",
+  "name": "海难",
+  "description": "海难和火山（岛屿冒险双层）",
+  "value": "海难",
+  "src": "/misc/preinstall_shipwrecked.png"
+ },
+ {
+  "key": "fourLayers",
+  "name": "四层世界",
+  "description": "森林+洞穴+海难+火山四层",
+  "value": "四层世界",
+  "src": "/misc/preinstall_four.png"
+ }
+]
