@@ -1,8 +1,11 @@
-import React, {useMemo} from 'react';
-import {Divider, Empty, Input, InputNumber, Switch, Typography} from 'antd';
+import React, {useMemo, useState} from 'react';
+import {Divider, Empty, Input, InputNumber, Switch, Tooltip, Typography} from 'antd';
+import {SearchOutlined} from '@ant-design/icons';
 import {parse, format} from 'lua-json';
 import {luaSafe} from '../../utils/luaFormat';
+import {modMatches} from '../../utils/modIndex';
 import {useTranslation} from 'react-i18next';
+import {useTheme} from '../../hooks/useTheme';
 
 // modoverrides.lua 的可视化镜像（样式沿用模组配置抽屉：Divider 加粗标题 + 标签/控件行）。
 // 与代码视图同源：value → 解析 → 表单；表单改动 → 重新序列化 → onChange。
@@ -41,8 +44,10 @@ const Row = ({label, control}) => (
     </div>
 );
 
-export default ({value, onChange}) => {
+export default ({value, onChange, nameMap = {}, activeModId = null, onSelectMod}) => {
     const {t} = useTranslation();
+    const {theme} = useTheme();
+    const [query, setQuery] = useState('');
     const mods = useMemo(() => parseMods(value), [value]);
 
     if (mods === null) {
@@ -51,6 +56,8 @@ export default ({value, onChange}) => {
     if (mods.length === 0) {
         return <Empty description={t('level.modVisual.empty')} style={{marginTop: 24}}/>;
     }
+
+    const visible = mods.filter(m => modMatches(m.id, nameMap[m.id], query));
 
     const patch = (modId, fn) => {
         const next = mods.map(m => (m.id === modId ? fn(m) : m));
@@ -61,10 +68,30 @@ export default ({value, onChange}) => {
 
     return (
         <div style={{maxHeight: 'calc(100vh - 480px)', overflowY: 'auto', paddingRight: 4}}>
-            {mods.map(m => (
-                <React.Fragment key={m.id}>
+            <div style={{
+                position: 'sticky', top: 0, zIndex: 2, padding: '4px 0 10px',
+                background: theme === 'dark' ? '#141414' : '#fff',
+            }}>
+                <Input
+                    allowClear
+                    prefix={<SearchOutlined/>}
+                    placeholder={t('level.modVisual.search.placeholder')}
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                />
+            </div>
+            {visible.length === 0 ? (
+                <Empty description={t('level.modVisual.search.empty')} style={{marginTop: 24}}/>
+            ) : visible.map(m => (
+                <div key={m.id} className={m.id === activeModId ? 'mod-card-active' : undefined}
+                     style={{padding: '2px 8px'}}>
                     <Divider style={{margin: '12px 0 8px'}}>
-                        <span style={{fontSize: '14px', fontWeight: '600'}}>{m.id}</span>
+                        <span
+                            style={{fontSize: '14px', fontWeight: '600', cursor: 'pointer'}}
+                            onClick={() => onSelectMod?.(m.id)}
+                        >
+                            {nameMap[m.id] ? <Tooltip title={m.id}>{nameMap[m.id]}</Tooltip> : m.id}
+                        </span>
                     </Divider>
                     <Row
                         label={t('level.modVisual.enabled')}
@@ -109,7 +136,7 @@ export default ({value, onChange}) => {
                             }
                         />
                     ))}
-                </React.Fragment>
+                </div>
             ))}
         </div>
     );
