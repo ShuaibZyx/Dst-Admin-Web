@@ -489,7 +489,7 @@ const LevelViewEditor: React.FC<{
                     <Alert message={t('level.ia.modRequired')} type="warning" showIcon/>)}
                 {levelType === 'volcano' && (iaModReady ? <Tabs items={volcanoItems}/> :
                     <Alert message={t('level.ia.modRequired')} type="warning" showIcon/>)}
-                {(levelType !== 'forest' && levelType !== 'cave' && levelType !== 'shipwrecked' && levelType !== 'volcano') && (
+                {levelType && levelType !== 'forest' && levelType !== 'cave' && levelType !== 'shipwrecked' && levelType !== 'volcano' && (
                     <Alert style={{marginBottom: '4px'}} message={`${t("level.warning.not.support.view")} ${levelType}`}
                            type="info" showIcon closable/>
                 )}
