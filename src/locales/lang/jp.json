@@ -1,4 +1,5 @@
 {
+  "panel.command.placeholder": "コマンドを入力し、Enter か送信をクリック",
   "level.quickAdd.shipwrecked": "難破",
   "level.quickAdd.volcano": "火山",
   "level.modOptions": "モッド設定",

@@ -219,6 +219,7 @@ export default () => {
                             flushLogBuffer()
                         }, 150)
                     }
+                    setCommand('') // 发送成功清空输入框；失败保留便于重试
                     message.success(t('panel.command.send.success'))
                 } else {
                     message.error(t('panel.command.send.error'))
@@ -441,7 +442,7 @@ export default () => {
                         marginBottom: 12
                     }}
                 >
-                    <Input defaultValue="" onChange={onchange}/>
+                    <Input value={command} onChange={onchange} placeholder={t('panel.command.placeholder')}/>
                     <Button icon={<SendOutlined/>} type="primary" onClick={() => sendInstruct(command)}>{t('panel.send')}</Button>
                 </Space.Compact>
                 <Space size={8} wrap>

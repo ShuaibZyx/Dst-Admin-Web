@@ -1,4 +1,5 @@
 {
+  "panel.command.placeholder": "명령을 입력하고 Enter 또는 전송을 누르세요",
   "level.quickAdd.shipwrecked": "난파",
   "level.quickAdd.volcano": "화산",
   "level.modOptions": "모드 옵션",

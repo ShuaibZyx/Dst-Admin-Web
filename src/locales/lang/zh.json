@@ -1,4 +1,5 @@
 {
+  "panel.command.placeholder": "输入指令，回车或点击发送",
   "level.quickAdd.shipwrecked": "海滩",
   "level.quickAdd.volcano": "火山",
   "level.modOptions": "模组选项",

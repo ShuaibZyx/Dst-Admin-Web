@@ -1,4 +1,5 @@
 {
+  "panel.command.placeholder": "Type a command, press Enter or click Send",
   "level.quickAdd.shipwrecked": "Shipwrecked",
   "level.quickAdd.volcano": "Volcano",
   "level.modOptions": "Mod Options",
