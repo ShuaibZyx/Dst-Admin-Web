@@ -2,10 +2,11 @@ import {shipwreckedTpl, volcanoTpl} from "../../types/dst.ts";
 import {parse} from "lua-json";
 import Modoverrides from "./Modoverrides";
 import ServerIni from "./ServerIni";
+import CreateWorld from "./CreateWorld";
 import {fillLevelDefaults} from "../../utils/levelDefaults";
 import {useTranslation} from "react-i18next";
 import React, {useEffect, useMemo, useRef, useState} from "react";
-import {Alert, Button, Divider, Dropdown, Empty, Form, Input, InputNumber, message, Modal, Radio, Skeleton, Space, Switch, Tabs, TabsProps, Tag, Tooltip, Upload, Row, Col} from "antd";
+import {Alert, Button, Divider, Dropdown, Empty, Form, Input, message, Modal, Skeleton, Space, Tabs, TabsProps, Tag, Tooltip, Upload, Row, Col} from "antd";
 import type {MenuProps} from 'antd';
 import {EditOutlined, ImportOutlined, DownloadOutlined, SaveOutlined, PlusOutlined, AppstoreOutlined} from '@ant-design/icons';
 import type {MonacoEditorRef} from "../NewEditor2";
@@ -279,7 +280,6 @@ const Level2 = () => {
     const [activeKey, setActiveKey] = useState('');
 
     // Modal states
-    const [openAdd, setOpenAdd] = useState(false)
     const [templateOpen, setTemplateOpen] = useState(false)
     const [openDelete, setOpenDelete] = useState(false)
     const [openDownload, setOpenDownload] = useState(false)
@@ -295,7 +295,6 @@ const Level2 = () => {
         }).catch(() => setIaModReady(true))
     }, [])
 
-    const [levelForm] = Form.useForm()
 
     const changeLevel = (levelName: string, changeValue: Record<string, unknown>) => {
         const oldLevels = levelListRef.current
@@ -412,17 +411,6 @@ const Level2 = () => {
     }, [cluster, lang, t]);
 
     // Helper functions
-    const getMasterModoverrides = () => {
-        const levels = levelListRef.current
-        let modoverrides = "return {}"
-        levels.forEach(level => {
-            if (level.uuid === "Master") {
-                modoverrides = level.modoverrides
-            }
-        })
-        return modoverrides
-    }
-
     // IA(岛屿冒险)模组 modoverrides:海难/火山是 IA 模组世界,须启用 workshop-1467214795
     // (用户需先订阅该模组;no_joining_islands=true 与后端 iaModoverrides(true) 一致)
     const getIAModoverrides = () => `return {
@@ -628,6 +616,46 @@ const Level2 = () => {
         setActiveKey(uuid);
     }
 
+    // 创建世界配置台落盘：成功 → 插入新世界 tab（add 内会切过去）；失败由调用方保草稿
+    const handleCreateWorld = async (body: {
+        levelName: string, uuid: string, type: string,
+        leveldataoverride: string, modoverrides: string, server_ini: LevelServerIni
+    }) => {
+        try {
+            const resp = await createLevelApi(body as never);
+            if (resp.code === 200 && resp.data) {
+                message.success(`${body.levelName} ${t('level.create.success')}`)
+                add(body.levelName, resp.data.uuid, body.leveldataoverride, body.modoverrides, body.server_ini)
+                return true;
+            }
+            message.error(`${body.levelName} ${t('level.create.error')}`)
+            return false;
+        } catch {
+            message.error(`${body.levelName} ${t('level.create.error')}`)
+            return false;
+        }
+    };
+
+    // 「创建世界」固定 tab（不可关）：完整配置台，草稿流
+    const createTabItem = {
+        key: 'create',
+        closable: false,
+        label: t('level2.createTab'),
+        children: (
+            <CreateWorld
+                dstWorldSetting={dstWorldSetting}
+                has={has}
+                getExisting={() => ({
+                    names: levelListRef.current.map((l: LevelData) => l.levelName),
+                    uuids: levelListRef.current.map((l: LevelData) => l.uuid),
+                })}
+                getServerIniInit={() => getNextServerIni('')}
+                getIAEntry={() => (parse(getIAModoverrides()) as Record<string, Record<string, unknown>>)['workshop-1467214795']}
+                onCreated={handleCreateWorld}
+            />
+        ),
+    };
+
     const onChange = (newActiveKey: string) => {
         setActiveKey(newActiveKey);
     };
@@ -662,88 +690,11 @@ const Level2 = () => {
 
     const onEdit = (targetKey: string | React.MouseEvent<Element, MouseEvent> | React.KeyboardEvent<Element>, action: 'add' | 'remove') => {
         if (action === 'add') {
-            setOpenAdd(true);
+            setActiveKey('create');
         } else {
             remove(targetKey as string);
         }
     };
-
-    // Form validation
-    const validateName1 = (_: unknown, value: string) => {
-        const stringList = levelListRef.current.map(level => level.levelName)
-        if (value && stringList.includes(value)) {
-            return Promise.reject(new Error(t('level.name.duplication')));
-        }
-        return Promise.resolve();
-    };
-
-    const validateName2 = (_: unknown, value: string) => {
-        const stringList = levelListRef.current.map(level => level.uuid)
-        if (value && stringList.includes(value)) {
-            return Promise.reject(new Error(t('level.filename.duplication')));
-        }
-        for (let i = 0; i < stringList.length; i++) {
-            if (value && stringList[i].includes(value)) {
-                return Promise.reject(new Error(t('level.filename.error.substring')));
-            }
-        }
-        const regex = /^[a-zA-Z][a-zA-Z0-9]*$/;
-        if (value && !regex.test(value)) {
-            return Promise.reject(new Error(t('level.filename.error.contain.special.characters')));
-        }
-        return Promise.resolve();
-    };
-
-    const validateName3 = (_: unknown, value: string) => {
-        if (value === undefined || value === null || value === "") {
-            return Promise.reject(new Error(t('level.required.type')));
-        }
-        return Promise.resolve();
-    };
-
-    // Create level
-    const onCreateLevel = () => {
-        levelForm.validateFields().then(() => {
-            const body = levelForm.getFieldsValue()
-
-            if (body.levelName === undefined || body.levelName === '') {
-                message.warning(t('level.warning.name.not.allow.null'))
-                return
-            }
-
-            if (body.type === "forest") {
-                body.leveldataoverride = forest
-            } else if (body.type === 'shipwrecked') {
-                body.leveldataoverride = shipwreckedTpl
-            } else if (body.type === 'volcano') {
-                body.leveldataoverride = volcanoTpl
-            } else {
-                body.leveldataoverride = cave
-            }
-            // 海难/火山是 IA 模组世界：须启用 IA 模组（与快捷创建一致），其余世界沿用森林的 modoverrides
-            body.modoverrides = (body.type === 'shipwrecked' || body.type === 'volcano') ? getIAModoverrides() : getMasterModoverrides()
-            body.server_ini = getNextServerIni(body.levelName)
-
-            setConfirmLoading(true)
-            createLevelApi(body).then(resp => {
-                if (resp.code === 200 && resp.data) {
-                    message.success(`${body.levelName} ${t('level.create.success')}`)
-                    const data = resp.data
-                    add(body.levelName, data.uuid, data.leveldataoverride, data.modoverrides, data.server_ini)
-                    setConfirmLoading(false)
-                    setOpenAdd(false)
-                } else {
-                    message.error(`${body.levelName} ${t('level.create.error')}`)
-                    setConfirmLoading(false)
-                }
-            }).catch(() => {
-                message.error(`${body.levelName} ${t('level.create.error')}`)
-                setConfirmLoading(false)
-            })
-        }).catch(err => {
-            message.error(err.errorFields[0].errors[0])
-        });
-    }
 
     // 快捷创建海滩/火山世界（世界 Tab 行快捷卡）
     const quickAddWorld = (kind: 'shipwrecked' | 'volcano') => {
@@ -870,7 +821,7 @@ const Level2 = () => {
                 onChange={onChange}
                 activeKey={activeKey}
                 onEdit={onEdit}
-                items={items ? [...items, ...quickCards] : quickCards}
+                items={items ? [...items, createTabItem, ...quickCards] : [createTabItem, ...quickCards]}
                 tabBarExtraContent={{
                     right: dirty ? (
                         <span style={{color: '#faad14', fontSize: '12px'}}>● {t('level.unsaved')}</span>
@@ -888,7 +839,7 @@ const Level2 = () => {
                 </Space>
                 <Space size={8}>
                     {has('allowAddLevel') &&
-                        <Button icon={<PlusOutlined/>} type={"primary"} onClick={() => setOpenAdd(true)}>{t('level.add')}</Button>
+                        <Button icon={<PlusOutlined/>} type={"primary"} onClick={() => setActiveKey('create')}>{t('level.add')}</Button>
                     }
                     <Button icon={<AppstoreOutlined/>} type={"primary"} style={{background: '#722ed1', borderColor: '#722ed1'}}
                             onClick={() => setTemplateOpen(true)}>{t('tool.preinstall.worldTemplate')}</Button>
@@ -897,67 +848,6 @@ const Level2 = () => {
         {/* 世界模板弹窗(集群级预设存档,整档替换语义与原独立页一致) */}
         <Modal title={t('tool.preinstall.worldTemplate')} open={templateOpen} onCancel={() => setTemplateOpen(false)} footer={null} width={860}>
             <Preinstall reload={() => { fetchData().catch(console.log) }} />
-        </Modal>
-        {/* Add Level Modal */}
-        <Modal
-            title={t('level.add')}
-            open={openAdd}
-            onOk={() => onCreateLevel()}
-            confirmLoading={confirmLoading}
-            onCancel={() => {
-                setOpenAdd(false)
-            }}>
-
-            <Form
-                form={levelForm}
-                layout="vertical"
-                labelAlign={'left'}
-            >
-                <Form.Item label={t('level.name')}
-                           name="levelName"
-                           rules={[
-                               {
-                                   required: true,
-                                   validator: validateName1
-                               },
-                           ]}
-                >
-                    <Input placeholder={t('level.placeholder.name')}/>
-                </Form.Item>
-                <Alert
-                    message={t('level.add.tips2')}
-                    type="warning" showIcon closable/>
-                <br/>
-                <Form.Item label={t('level.filename')}
-                           name="uuid"
-                           rules={[
-                               {
-                                   required: false,
-                                   validator: validateName2
-                               },
-                           ]}
-                >
-                    <Input placeholder={t('level.placeholder.filename')}/>
-                </Form.Item>
-                <Form.Item label={t('level.type')}
-                           name="type"
-                           rules={[
-                               {
-                                   required: true,
-                                   validator: validateName3,
-                                   message: t('level.required.type'),
-                               },
-                           ]}
-                >
-                    <Radio.Group>
-                        <Radio value={'forest'}>{t('level.type.forest')}</Radio>
-                        <Radio value={'cave'}>{t('level.type.caves')}</Radio>
-                        {/* 海难/火山世界选项必须建立在已订阅 IA 模组的基础上:未订阅不显示 */}
-                        {iaModReady && <Radio value={'shipwrecked'}>{t('level.type.shipwrecked')}</Radio>}
-                        {iaModReady && <Radio value={'volcano'}>{t('level.type.volcano')}</Radio>}
-                    </Radio.Group>
-                </Form.Item>
-            </Form>
         </Modal>
 
         {/* Delete Level Modal */}
