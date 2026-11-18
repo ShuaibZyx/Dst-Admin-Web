@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import {Button, Divider, Input, message, Modal, Radio, Tabs, Typography} from 'antd';
 import {PlusOutlined, RedoOutlined} from '@ant-design/icons';
 import {useTranslation} from 'react-i18next';
-import LevelViewer, {ATLAS_URL} from './LevelViewer.tsx';
+import LevelViewer from './LevelViewer.tsx';
 import Modoverrides from './Modoverrides';
 import ServerIni from './ServerIni';
 import ModPicker from './ModPicker';
@@ -14,16 +14,12 @@ import {shipwreckedTpl, volcanoTpl} from '../../types/dst.ts';
 const TYPE_TPL = {forest, cave, shipwrecked: shipwreckedTpl, volcano: volcanoTpl};
 const IA_MOD_KEY = 'workshop-1467214795';
 
-// 世界类型图标：同世界设置选项的图标卡（64px 格图集、同款 UV 平绕公式）
-const ATLAS_META = {
-    worldgen_customization: {width: 2048, height: 1024, item_size: 128},
-    customization_shipwrecked: {width: 2048, height: 1024, item_size: 128},
-};
+// 世界类型条目：同世界设置左竖列的行样式（无图标、无尾叉），行首加单选
 const TYPE_OPTIONS = [
-    {value: 'forest', labelKey: 'level.type.forest', atlas: 'worldgen_customization', image: {x: 0.5, y: 0.5}},
-    {value: 'cave', labelKey: 'level.type.caves', atlas: 'worldgen_customization', image: {x: 0.6875, y: 0.25}},
-    {value: 'shipwrecked', labelKey: 'level.type.shipwrecked', atlas: 'customization_shipwrecked', image: {x: 0.6875, y: 0.5}, ia: true},
-    {value: 'volcano', labelKey: 'level.type.volcano', atlas: 'customization_shipwrecked', image: {x: 0.875, y: 0.5}, ia: true},
+    {value: 'forest', labelKey: 'level.type.forest'},
+    {value: 'cave', labelKey: 'level.type.caves'},
+    {value: 'shipwrecked', labelKey: 'level.type.shipwrecked', ia: true},
+    {value: 'volcano', labelKey: 'level.type.volcano', ia: true},
 ];
 
 // 创建世界配置台：草稿式完整编辑（世界生成/模组双栏/server_ini），创建一次落盘。
@@ -135,30 +131,19 @@ const CreateWorld = ({dstWorldSetting, has, getExisting, onCreated, getServerIni
         {/* 左栏：世界类型（与世界竖列同构图）；名称/文件名在「创建」弹窗输入 */}
         <div style={{width: 220, flex: 'none'}}>
             <Typography.Text type="secondary">{t('level.type')}</Typography.Text>
-            {/* 世界设置选项条式：单选 + 图标卡 + 名称，选中行金色高亮 */}
+            {/* 同世界设置左竖列的行样式（无图标、无尾叉），行首加单选；选中行金色高亮 */}
             <div style={{marginTop: 4}}>
-                {TYPE_OPTIONS.filter(o => !o.ia || iaModReady).map(o => {
-                    const meta = ATLAS_META[o.atlas];
-                    return (
-                        <div key={o.value} onClick={() => onTypeChange(o.value)}
-                             style={{
-                                 display: 'flex', alignItems: 'center', gap: 10,
-                                 padding: '6px 8px', cursor: 'pointer', borderRadius: 4,
-                                 background: draft.type === o.value ? 'rgba(232, 196, 106, 0.14)' : undefined,
-                             }}>
-                            <Radio checked={draft.type === o.value}/>
-                            {/* 图标窗必须保持 64px（平绕公式与图集格等宽才取准），显示尺寸用 transform 缩 */}
-                            <div style={{width: 48, height: 48, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                                <div style={{
-                                    width: '64px', height: '64px', transform: 'scale(0.75)',
-                                    backgroundImage: `url(${ATLAS_URL[o.atlas] || ''})`,
-                                    backgroundPosition: `-${Math.round(o.image.x * meta.width / meta.item_size) * 100}% -${Math.round(o.image.y * meta.height / meta.item_size) * 100}%`,
-                                }}/>
-                            </div>
-                            <span className={'option-name'} style={{flex: 1, minWidth: 0}}>{t(o.labelKey)}</span>
-                        </div>
-                    );
-                })}
+                {TYPE_OPTIONS.filter(o => !o.ia || iaModReady).map(o => (
+                    <div key={o.value} onClick={() => onTypeChange(o.value)}
+                         style={{
+                             display: 'flex', alignItems: 'center', gap: 8,
+                             padding: '6px 8px', cursor: 'pointer', borderRadius: 4,
+                             background: draft.type === o.value ? 'rgba(232, 196, 106, 0.12)' : undefined,
+                         }}>
+                        <Radio checked={draft.type === o.value}/>
+                        <div style={{flex: 1, minWidth: 0}}>{t(o.labelKey)}</div>
+                    </div>
+                ))}
             </div>
         </div>
 
