@@ -85,3 +85,14 @@
         transition-duration: 0.01ms !important;
     }
 }
+
+/* 骨架屏→内容 切换淡入：消除页面切换/加载完成时的闪烁 */
+@keyframes dstFadeIn { from { opacity: 0; } to { opacity: 1; } }
+.ant-skeleton:not(.ant-skeleton-active) > *:not(.ant-skeleton),
+.ant-skeleton + * {
+    animation: dstFadeIn 0.18s ease both;
+}
+
+/* 页面切换/骨架→内容：整页淡入，掩盖 DOM 突变的闪烁 */
+@keyframes dstPageIn { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: none; } }
+.page-fade { animation: dstPageIn 0.22s ease both; }

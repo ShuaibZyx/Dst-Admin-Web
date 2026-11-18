@@ -1,4 +1,8 @@
 {
+  "level.quickAdd.shipwrecked": "난파",
+  "level.quickAdd.volcano": "화산",
+  "level.modOptions": "모드 옵션",
+  "level.unknown": "알 수 없음",
   "level.save.success": "저장되었습니다",
   "setting.timedTask.get.error": "작업을 불러오지 못했습니다",
   "dst.character.mod": "모드 캐릭터",

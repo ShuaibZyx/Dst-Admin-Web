@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
-import {Alert, Skeleton, Tabs} from 'antd';
+import {Alert, Card, Col, Row, Skeleton, Tabs} from 'antd';
 import {useLevelsStore} from "../../store/useLevelsStore.tsx";
 import {getLevelStatusApi} from "../../api/level.jsx";
 import {getClusters} from "../../api/dstConfigApi.jsx";
@@ -37,7 +37,7 @@ const Panel = () => {
                             key: level.uuid,
                             uuid: level.uuid,
                             levelName: level.levelName,
-                            location: '未知',
+                            location: t('level.unknown'),
                             ps: level.ps,
                             Ps: level.Ps,
                             status: level.status,
@@ -82,11 +82,24 @@ const Panel = () => {
         )
     }
 
+    // 排版匹配骨架：与 GameOperator 的卡片网格同构（OS 通栏 + 两行双列卡片）
+    const PanelSkeleton = () => (
+        <div>
+            <Card size="small" style={{marginBottom: 16}}>
+                <Skeleton active title={false} paragraph={{rows: 1, width: ['40%', '65%', '55%']}}/>
+            </Card>
+            <Row gutter={[16, 16]}>
+                <Col xs={24} md={10}><Card><Skeleton active title paragraph={{rows: 5}}/></Card></Col>
+                <Col xs={24} md={14}><Card><Skeleton active title paragraph={{rows: 8}}/></Card></Col>
+                <Col xs={24} md={10}><Card><Skeleton active title paragraph={{rows: 6}}/></Card></Col>
+                <Col xs={24} md={14}><Card><Skeleton active title paragraph={{rows: 6}}/></Card></Col>
+            </Row>
+        </div>
+    )
+
     return (
         <>
-            <Skeleton loading={loading} >
-                <Tabs items={items}/>
-            </Skeleton>
+            {loading ? <PanelSkeleton/> : <Tabs items={items}/>}
         </>
     )
 };

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import {FormSkeleton} from '../../../components/Skeletons.jsx';
 import {SaveOutlined} from '@ant-design/icons';
 
 import {
@@ -146,7 +147,7 @@ const ClusterIni: React.FC = () => {
                 <DstEmojiList />
             </Modal>
 
-            <Skeleton loading={loading} active>
+            {loading ? <FormSkeleton fields={8}/> : (
                 <ProCard
                     className={'scrollbar'}
                     style={{
@@ -514,7 +515,7 @@ const ClusterIni: React.FC = () => {
                     </div>
                 </ProCard>
 
-            </Skeleton>
+            )}
         </div>
     )
 }

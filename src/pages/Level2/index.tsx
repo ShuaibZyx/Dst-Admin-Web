@@ -909,7 +909,7 @@ const Level2 = () => {
     // 快捷创建海滩/火山世界（世界 Tab 行快捷卡）
     const quickAddWorld = (kind: 'shipwrecked' | 'volcano') => {
         const uuid = kind === 'shipwrecked' ? 'Shipwrecked' : 'Volcano';
-        const levelName = kind === 'shipwrecked' ? '海滩' : '火山';
+        const levelName = kind === 'shipwrecked' ? t('level.quickAdd.shipwrecked') : t('level.quickAdd.volcano');
         if (levelListRef.current.some(l => l.uuid === uuid || l.levelName === levelName)) {
             message.info(levelName + ' ' + t('level.name.duplication'));
             return;
@@ -948,7 +948,7 @@ const Level2 = () => {
                     <Button size="small" type="dashed" icon={<PlusOutlined/>} onClick={(e) => {
                         e.stopPropagation();
                         quickAddWorld('shipwrecked');
-                    }}>+ 海滩</Button>
+                    }}>+ {t('level.quickAdd.shipwrecked')}</Button>
                 </Tooltip>
             ),
             children: <Empty description={t('level.ia.createShipwrecked')}/>,
@@ -963,7 +963,7 @@ const Level2 = () => {
                     <Button size="small" type="dashed" icon={<PlusOutlined/>} onClick={(e) => {
                         e.stopPropagation();
                         quickAddWorld('volcano');
-                    }}>+ 火山</Button>
+                    }}>+ {t('level.quickAdd.volcano')}</Button>
                 </Tooltip>
             ),
             children: <Empty description={t('level.ia.createVolcano')}/>,

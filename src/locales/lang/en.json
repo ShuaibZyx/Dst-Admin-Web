@@ -1,4 +1,8 @@
 {
+  "level.quickAdd.shipwrecked": "Shipwrecked",
+  "level.quickAdd.volcano": "Volcano",
+  "level.modOptions": "Mod Options",
+  "level.unknown": "Unknown",
   "level.save.success": "Saved successfully",
   "setting.timedTask.get.error": "Failed to load scheduled tasks",
   "dst.character.mod": "Mod Character",

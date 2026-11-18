@@ -210,7 +210,7 @@ const Group: React.FC<GroupProps> = ({
             {/* 拿不准归属的模组键：兜底"模组选项"节（只挂在世界规则页签） */}
             {!isWorldGen && (unknownKeys || []).length > 0 && (
                 <div style={{ overflow: 'hidden' }}>
-                    <h3>{lang.includes('zh') ? '模组选项' : 'Mod Options'}</h3>
+                    <h3>{t('level.modOptions')}</h3>
                     <Row gutter={[16, 16]}>
                         {unknownKeys!.map(key2 => (
                             <Col key={key2} xs={24} sm={12} md={8} lg={8} xl={4}>

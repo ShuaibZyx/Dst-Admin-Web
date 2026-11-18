@@ -1,4 +1,8 @@
 {
+  "level.quickAdd.shipwrecked": "海滩",
+  "level.quickAdd.volcano": "火山",
+  "level.modOptions": "模组选项",
+  "level.unknown": "未知",
   "setting.dstConfig.persistent_storage_root.placeholder": "留空则使用上面的存档目录",
   "level.save.success": "保存成功",
   "setting.timedTask.get.error": "获取定时任务失败",

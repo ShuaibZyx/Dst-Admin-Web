@@ -1,4 +1,5 @@
 import {useEffect, useState, useCallback} from "react";
+import {TableSkeleton} from '../../../components/Skeletons.jsx';
 import {useTranslation} from "react-i18next";
 import {
     Button,
@@ -169,7 +170,8 @@ const NameList: React.FC<NameListProps> = ({title, tips, getApi, saveApi}) => {
         .filter(row => !searchText.trim() || row.id.toLowerCase().includes(searchText.toLowerCase()));
 
     return (
-        <Skeleton loading={loading} active>
+        <>
+            {loading ? <TableSkeleton rows={6} cols={3}/> : (<>
             {/* 原样：页面标题 + 说明 */}
             <div style={{marginBottom: 12}}>
                 <Typography.Title level={4} style={{margin: 0}}>
@@ -271,7 +273,8 @@ const NameList: React.FC<NameListProps> = ({title, tips, getApi, saveApi}) => {
                     rows={6}
                 />
             </div>
-        </Skeleton>
+            </>)} 
+        </>
     );
 };
 

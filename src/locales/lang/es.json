@@ -1,4 +1,8 @@
 {
+  "level.quickAdd.shipwrecked": "Náufragos",
+  "level.quickAdd.volcano": "Volcán",
+  "level.modOptions": "Opciones de mod",
+  "level.unknown": "Desconocido",
   "level.save.success": "Guardado correctamente",
   "setting.timedTask.get.error": "Error al cargar las tareas programadas",
   "dst.character.mod": "Personaje de mod",

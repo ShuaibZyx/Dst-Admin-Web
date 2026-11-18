@@ -1,4 +1,5 @@
 import {useEffect, useRef, useState} from "react";
+import {SplitSkeleton} from '../../components/Skeletons.jsx';
 import {useParams} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import {message, Skeleton, Tabs} from "antd";
@@ -240,11 +241,10 @@ export default () => {
 
     return (
         <>
-            <Skeleton loading={loading}>
-                <Tabs activeKey={activeTab} items={items} onChange={(key) => {
+            {loading ? <SplitSkeleton leftRows={8} rightRows={6}/> : (<>                <Tabs activeKey={activeTab} items={items} onChange={(key) => {
                     setActiveTab(key)
                 }}/>
-            </Skeleton>
+            </>) }
         </>
     )
 }

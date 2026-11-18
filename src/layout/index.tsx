@@ -252,11 +252,11 @@ export default () => {
                         >
                             {(location.pathname === firstPagePath
                                 || location.pathname === '/home/clusterIni') && (
-                                <Outlet/>
+                                <div key={location.pathname} className="page-fade"><Outlet/></div>
                             )}
                             {(location.pathname !== firstPagePath
                                 && location.pathname !== '/home/clusterIni') && (
-                                <ProCard>
+                                <ProCard key={location.pathname} className="page-fade">
                                     <Outlet/>
                                 </ProCard>
                             )}

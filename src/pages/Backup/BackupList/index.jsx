@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
+import {TableSkeleton} from "../../../components/Skeletons.jsx";
 import {Skeleton, Alert, Button, Input, message, Modal, Popconfirm, Space, Table} from 'antd';
 import {DeleteOutlined, DownloadOutlined, EditOutlined, ReloadOutlined, UndoOutlined} from '@ant-design/icons';
 import React, {useEffect, useRef, useState} from 'react';
@@ -278,8 +279,8 @@ const Backup = ({showStatistic}) => {
     const dataSource = data.slice(startIndex, endIndex);
 
     return (
-        <Skeleton loading={loading} active>
         <>
+            {loading ? <TableSkeleton rows={6} cols={5}/> : <>
             <DeletetModal/>
             <div style={{
                 paddingBottom: 12
@@ -308,7 +309,8 @@ const Backup = ({showStatistic}) => {
             />
 
             <EditModal/>
+            </>}
         </>
-    </Skeleton>)
+    )
 };
 export default Backup;

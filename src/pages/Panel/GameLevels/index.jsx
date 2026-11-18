@@ -56,7 +56,7 @@ export default () => {
                 key: level.uuid,
                 uuid: level.uuid,
                 levelName: level.levelName,
-                location: '未知',
+                location: t('level.unknown'),
                 ps: level.ps,
                 Ps: level.Ps,
                 status: level.status

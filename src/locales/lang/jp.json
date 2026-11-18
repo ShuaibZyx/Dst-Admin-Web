@@ -1,4 +1,8 @@
 {
+  "level.quickAdd.shipwrecked": "難破",
+  "level.quickAdd.volcano": "火山",
+  "level.modOptions": "モッド設定",
+  "level.unknown": "不明",
   "level.save.success": "保存しました",
   "setting.timedTask.get.error": "タスクの取得に失敗しました",
   "dst.character.mod": "MODキャラクター",
