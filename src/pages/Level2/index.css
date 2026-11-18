@@ -38,6 +38,27 @@
     width: 100%;
 }
 
+/* 模组块装饰（Monaco 整行装饰 class）：交替淡底色区分块边界，活动块金边强底 */
+.mod-block-alt {
+    background: rgba(120, 160, 220, 0.06);
+}
+
+.mod-block-alt2 {
+    background: rgba(120, 160, 220, 0.11);
+}
+
+.mod-block-active {
+    background: rgba(232, 196, 106, 0.16);
+    border-left: 3px solid #E8C46A;
+}
+
+/* 可视化栏卡片：当前联动模组高亮 */
+.mod-card-active {
+    background: rgba(232, 196, 106, 0.10);
+    border-left: 3px solid #E8C46A;
+    border-radius: 4px;
+}
+
 /* 桌面端 - 768px 及以上 */
 @media (min-width: 768px) {
     .level-buttons-container {
