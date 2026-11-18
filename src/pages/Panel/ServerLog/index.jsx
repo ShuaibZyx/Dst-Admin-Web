@@ -1,4 +1,4 @@
-import {Skeleton, Button, Card, Input, message, Modal, Popconfirm, Popover, Progress, Select, Space, Spin, Tag, Typography} from "antd";
+import {Button, Card, Input, message, Modal, Popconfirm, Popover, Progress, Select, Space, Spin, Tag, Typography} from "antd";
 import {DownloadOutlined, HistoryOutlined, SaveOutlined, SendOutlined, ThunderboltOutlined} from '@ant-design/icons';
 import React, {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import {useParams} from "react-router-dom";
@@ -355,7 +355,7 @@ export default () => {
         {levels.map(l => (
             <WorldLogCollector key={l.key || l.uuid} uuid={l.key || l.uuid} cluster={cluster}/>
         ))}
-        <Skeleton loading={spinLoading} active>
+        <Spin spinning={spinLoading}>
             <ProCard
                 title={<Space size={8}>
                     {t('panel.serverLog')}
@@ -470,6 +470,6 @@ export default () => {
                     </Button>
                 </Space>
             </ProCard>
-        </Skeleton>
+        </Spin>
     </>
 }
