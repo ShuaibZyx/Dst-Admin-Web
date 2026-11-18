@@ -23,7 +23,7 @@ export default {
                 icon: <HomeOutlined />,
             },
             {
-                path: '/levels/levels',
+                path: '/levels',
                 name: 'menu.levels',
                 icon: <AppstoreOutlined />,
             },

@@ -1,67 +1,80 @@
+import React, {Suspense} from 'react';
 import {Navigate, useRoutes} from 'react-router-dom';
+import {Spin} from 'antd';
 
-import Login from './pages/Login/index.tsx';
+import Layout from './layout/index';
+import Page404 from './pages/Page404/index';
 
-import Backup from './pages/Backup/index.jsx';
-import Setting from './pages/System/index.jsx';
-import Github from './pages/Github/index.jsx';
-import Panel from './pages/Panel/index.jsx';
-import Begin from './pages/Begin/index.jsx';
-import Link from "./pages/WebLink/index.jsx";
+// 路由级代码分割：页面组件懒加载，避免全部页面打进一个巨型首屏包
+const Login = React.lazy(() => import('./pages/Login/index.tsx'));
+const Backup = React.lazy(() => import('./pages/Backup/index.jsx'));
+const Setting = React.lazy(() => import('./pages/System/index.jsx'));
+const Github = React.lazy(() => import('./pages/Github/index.jsx'));
+const Panel = React.lazy(() => import('./pages/Panel/index.jsx'));
+const Begin = React.lazy(() => import('./pages/Begin/index.jsx'));
+const Link = React.lazy(() => import('./pages/WebLink/index.jsx'));
+const Help = React.lazy(() => import('./pages/Help/index.jsx'));
+const Mod = React.lazy(() => import('./pages/Mod/index.jsx'));
+const PlayerLog = React.lazy(() => import('./pages/PlayerLog/index.jsx'));
+const Home = React.lazy(() => import('./pages/Home/index.jsx'));
+const DstMapData = React.lazy(() => import('./pages/DstData/DstMapData'));
+const UserProfile = React.lazy(() => import('./layout/UserProfile.jsx'));
+const Level2 = React.lazy(() => import('./pages/Level2/index'));
+const ModViewer = React.lazy(() => import('./pages/ModViewer/index'));
 
-import Help from "./pages/Help/index.jsx";
-
-import Levels from "./pages/Levels/index.jsx";
-import Mod from "./pages/Mod/index.jsx";
-import PlayerLog from "./pages/PlayerLog/index.jsx";
-import Layout from "./layout/index";
-import Home from "./pages/Home/index.jsx";
-import Page404 from "./pages/Page404/index";
-import DstMapData from "./pages/DstData/DstMapData";
-import UserProfile from "./layout/UserProfile.jsx";
-import Level2 from "./pages/Level2/index";
-import ModViewer from "./pages/ModViewer/index";
+const loading = (
+    <div style={{display: 'flex', justifyContent: 'center', padding: 48}}>
+        <Spin size="large"/>
+    </div>
+);
 
 export default function Routes() {
-    return useRoutes([
-        {
-            path: '/',
-            element: <Layout/>,
-            children: [
-                {element: <Navigate to="/panel"/>, index: true,},
-                {path: 'playerLog', element: <PlayerLog/>},
-                {path: 'mod', element: <Mod/>},
-                {path: 'panel', element: <Panel/>},
-                {path: ':cluster/:name/panel', element: <Panel/>},
-                {path: 'home', element: <Home/>},
+    return (
+        <Suspense fallback={loading}>
+            {useRoutes([
                 {
-                    path: 'levels',
+                    path: '/',
+                    element: <Layout/>,
                     children: [
-                        {path: 'levels', element: <Level2/>},
-                        {path: 'genMap', element: <DstMapData/>},
-                    ]
+                        {element: <Navigate to="/panel"/>, index: true},
+                        {path: 'playerLog', element: <PlayerLog/>},
+                        {path: 'mod', element: <Mod/>},
+                        {path: 'panel', element: <Panel/>},
+                        {path: ':cluster/:name/panel', element: <Panel/>},
+                        {path: 'home', element: <Home/>},
+                        {
+                            path: 'levels',
+                            children: [
+                                {index: true, element: <Level2/>},
+                                {path: 'genMap', element: <DstMapData/>},
+                                // 旧地址兼容：/levels/levels（历史菜单路径）
+                                {path: 'levels', element: <Navigate to="/levels" replace/>},
+                            ]
+                        },
+                        // 旧地址兼容：/level2
+                        {path: 'level2', element: <Navigate to="/levels" replace/>},
+                        {path: 'backup', element: <Backup/>},
+                        {path: 'setting', element: <Setting/>},
+                        {path: 'help', element: <Help/>},
+                        {path: 'userProfile', element: <UserProfile/>},
+                        {path: 'link', element: <Link/>},
+                        {path: '404', element: <Page404/>},
+                        {path: 'mod2', element: <ModViewer/>},
+                    ],
                 },
-                {path: 'backup', element: <Backup/>},
-                {path: 'setting', element: <Setting/>},
-                {path: 'help', element: <Help/>},
-                {path: 'userProfile', element: <UserProfile/>},
-                {path: 'link', element: <Link/>},
-                {path: '404', element: <Page404/>},
-                {path: 'level2', element: <Level2 />},
-                {path: 'mod2', element: <ModViewer />},
-            ],
-        },
-        {
-            path: 'login',
-            element: <Login/>,
-        },
-        {
-            path: 'init',
-            element: <Begin/>,
-        },
-        {
-            path: '*',
-            element: <Navigate to="/404" replace/>,
-        },
-    ]);
+                {
+                    path: 'login',
+                    element: <Login/>,
+                },
+                {
+                    path: 'init',
+                    element: <Begin/>,
+                },
+                {
+                    path: '*',
+                    element: <Navigate to="/404" replace/>,
+                },
+            ])}
+        </Suspense>
+    );
 }
