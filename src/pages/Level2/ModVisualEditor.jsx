@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {Divider, Empty, Input, InputNumber, Switch, Tooltip, Typography} from 'antd';
 import {SearchOutlined} from '@ant-design/icons';
 import {parse, format} from 'lua-json';
@@ -44,10 +44,35 @@ const Row = ({label, control}) => (
     </div>
 );
 
+// 配置项滚入视口才挂载：进入（rootMargin 200px 预载）后不再卸载；小卡（≤8 项）直接挂。
+// 未挂载渲染等高占位，避免滚动条高度跳动。
+const LazyOptions = ({options, rootRef, children}) => {
+    const [mounted, setMounted] = useState(() => options.length <= 8);
+    const ref = useRef(null);
+
+    useEffect(() => {
+        if (mounted) return;
+        const el = ref.current;
+        if (!el) return;
+        const observer = new IntersectionObserver((entries) => {
+            if (entries.some((e) => e.isIntersecting)) {
+                setMounted(true);
+                observer.disconnect();
+            }
+        }, {root: rootRef?.current || null, rootMargin: '200px'});
+        observer.observe(el);
+        return () => observer.disconnect();
+    }, [mounted, rootRef]);
+
+    if (!mounted) return <div ref={ref} style={{minHeight: 44 * options.length}}/>;
+    return <>{children}</>;
+};
+
 export default ({value, onChange, nameMap = {}, activeModId = null, onSelectMod}) => {
     const {t} = useTranslation();
     const {theme} = useTheme();
     const [query, setQuery] = useState('');
+    const scrollRef = useRef(null);
     const mods = useMemo(() => parseMods(value), [value]);
 
     if (mods === null) {
@@ -67,7 +92,7 @@ export default ({value, onChange, nameMap = {}, activeModId = null, onSelectMod}
         patch(modId, mod => ({...mod, options: mod.options.map(o => (o.key === key ? {...o, value} : o))}));
 
     return (
-        <div style={{maxHeight: 'calc(100vh - 480px)', overflowY: 'auto', paddingRight: 4}}>
+        <div ref={scrollRef} style={{maxHeight: 'calc(100vh - 480px)', overflowY: 'auto', paddingRight: 4}}>
             <div style={{
                 position: 'sticky', top: 0, zIndex: 2, padding: '4px 0 10px',
                 background: theme === 'dark' ? '#141414' : '#fff',
@@ -104,38 +129,42 @@ export default ({value, onChange, nameMap = {}, activeModId = null, onSelectMod}
                             />
                         }
                     />
-                    {m.enabled && m.options.map((opt) => (
-                        <Row
-                            key={opt.key}
-                            label={<Typography.Text type="secondary" ellipsis={{tooltip: opt.key}}>{opt.key}</Typography.Text>}
-                            control={
-                                typeof opt.value === 'boolean' ? (
-                                    <Switch
-                                        checked={opt.value}
-                                        checkedChildren={t('switch.open')}
-                                        unCheckedChildren={t('switch.close')}
-                                        onChange={(checked) => patchOption(m.id, opt.key, checked)}
-                                    />
-                                ) : typeof opt.value === 'number' ? (
-                                    <InputNumber
-                                        value={opt.value}
-                                        style={{width: '100%'}}
-                                        onChange={(v) => v !== null && v !== undefined && patchOption(m.id, opt.key, v)}
-                                    />
-                                ) : typeof opt.value === 'string' ? (
-                                    <Input
-                                        value={opt.value}
-                                        onChange={(e) => patchOption(m.id, opt.key, e.target.value)}
-                                    />
-                                ) : (
-                                    /* 表/数组等非标量值不做表单编辑（会改型），只读展示、到左侧代码改 */
-                                    <Typography.Text type="secondary" ellipsis={{tooltip: String(opt.value)}}>
-                                        {String(opt.value)}
-                                    </Typography.Text>
-                                )
-                            }
-                        />
-                    ))}
+                    {m.enabled && (
+                        <LazyOptions options={m.options} rootRef={scrollRef}>
+                            {m.options.map((opt) => (
+                                <Row
+                                    key={opt.key}
+                                    label={<Typography.Text type="secondary" ellipsis={{tooltip: opt.key}}>{opt.key}</Typography.Text>}
+                                    control={
+                                        typeof opt.value === 'boolean' ? (
+                                            <Switch
+                                                checked={opt.value}
+                                                checkedChildren={t('switch.open')}
+                                                unCheckedChildren={t('switch.close')}
+                                                onChange={(checked) => patchOption(m.id, opt.key, checked)}
+                                            />
+                                        ) : typeof opt.value === 'number' ? (
+                                            <InputNumber
+                                                value={opt.value}
+                                                style={{width: '100%'}}
+                                                onChange={(v) => v !== null && v !== undefined && patchOption(m.id, opt.key, v)}
+                                            />
+                                        ) : typeof opt.value === 'string' ? (
+                                            <Input
+                                                value={opt.value}
+                                                onChange={(e) => patchOption(m.id, opt.key, e.target.value)}
+                                            />
+                                        ) : (
+                                            /* 表/数组等非标量值不做表单编辑（会改型），只读展示、到左侧代码改 */
+                                            <Typography.Text type="secondary" ellipsis={{tooltip: String(opt.value)}}>
+                                                {String(opt.value)}
+                                            </Typography.Text>
+                                        )
+                                    }
+                                />
+                            ))}
+                        </LazyOptions>
+                    )}
                 </div>
             ))}
         </div>
