@@ -2,8 +2,9 @@ import {shipwreckedTpl, volcanoTpl} from "../../types/dst.ts";
 import {parse} from "lua-json";
 import ModVisualEditor from "./ModVisualEditor";
 import {fillLevelDefaults} from "../../utils/levelDefaults";
+import {buildModIndex} from "../../utils/modIndex";
 import {useTranslation} from "react-i18next";
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useMemo, useRef, useState} from "react";
 import {Alert, Button, Divider, Dropdown, Empty, Form, Input, InputNumber, message, Modal, Radio, Skeleton, Space, Switch, Tabs, TabsProps, Tag, Tooltip, Upload, Row, Col} from "antd";
 import type {MenuProps} from 'antd';
 import {EditOutlined, ImportOutlined, DownloadOutlined, SaveOutlined, PlusOutlined, AppstoreOutlined} from '@ant-design/icons';
@@ -16,6 +17,7 @@ import {useParams} from "react-router-dom";
 import axios from "axios";
 import LevelViewer from "./LevelViewer.tsx";
 import {getLevelListApi, createLevelApi, deleteLevelApi, updateLevelsApi, getLevelStatusApi} from "../../api/levelApi";
+import {getMyModInfoList} from "../../api/modApi.jsx";
 import {modSubscribedApi} from "../../api/gezigeApi";
 import type {LevelData, LevelServerIni} from "../../type";
 import {cave, forest} from "../../utils/dst";
@@ -224,15 +226,73 @@ const Leveldataoverride: React.FC<LevelItemProps> = (props) => {
 const Modoverrides: React.FC<LevelItemProps> = (props) => {
     const {theme} = useTheme();
     const editorRef = useRef<MonacoEditorRef>(null);
+    const {cluster} = useParams<{ cluster?: string }>();
     // props.level 是加载时快照（changeLevel 只写 levelListRef、不刷新 props），编辑期用本地 state
     // 承接两个视图的每次改动——否则可视化表单读旧快照，连续改动会互相覆盖
     const [text, setText] = useState(props.level?.modoverrides || '')
+    const index = useMemo(() => buildModIndex(text), [text]);
+    const [activeModId, setActiveModId] = useState<string | null>(null);
+    // 右卡滚动跟随：仅光标驱动的聚焦才推进（点右卡标题不触发，防回拉）
+    const [focus, setFocus] = useState<{ id: string, tick: number } | null>(null);
+    const [nameMap, setNameMap] = useState<Record<string, string>>({});
+    const [editorReady, setEditorReady] = useState(0);
+    // 右→左跳转（reveal+setPosition）引起的光标事件行号：不回拉右栏
+    const revealedLineRef = useRef<number | null>(null);
 
     useEffect(() => {
         const value = props.level?.modoverrides || ''
         editorRef.current?.setValue(value)
         setText(value)
     }, [props.level?.modoverrides]);
+
+    // 模组名表 modid→name（搜索匹配 + 卡片标题）；失败降级空表（回退显示 id）
+    useEffect(() => {
+        getMyModInfoList(cluster || '').then((resp: { code?: number, data?: Array<{ modid?: string, name?: string }> | null }) => {
+            if (resp?.code !== 200) return;
+            const map: Record<string, string> = {};
+            for (const m of resp.data || []) {
+                if (m?.modid) map[m.modid] = m.name || '';
+            }
+            setNameMap(map);
+        }).catch(() => setNameMap({}));
+    }, [cluster]);
+
+    // 活动模组被删/改掉（不在索引里）→ 清高亮
+    useEffect(() => {
+        if (activeModId && !index.some(b => b.id === activeModId)) setActiveModId(null);
+    }, [index, activeModId]);
+
+    // 块配色：交替淡底色区分边界，活动块金边；editorReady 兜住懒挂载晚于首跑的情况
+    useEffect(() => {
+        editorRef.current?.setBlockDecorations(index.map((b, i) => ({
+            startLine: b.startLine,
+            endLine: b.endLine,
+            className: b.id === activeModId ? 'mod-block-active' : (i % 2 ? 'mod-block-alt' : 'mod-block-alt2'),
+        })));
+    }, [index, activeModId, editorReady]);
+
+    // 左→右：光标跨进哪个模组块，右卡滚入并高亮（同块不触发，打字不跳）
+    const handleCursorChange = (line: number) => {
+        const hit = index.find(b => line >= b.startLine && line <= b.endLine);
+        const id = hit?.id ?? null;
+        setActiveModId(prev => (prev === id ? prev : id));
+        if (revealedLineRef.current === line) {
+            revealedLineRef.current = null;
+            return;
+        }
+        if (id) setFocus(f => ({id, tick: (f?.tick ?? 0) + 1}));
+    };
+
+    // 右→左：点卡片标题 → 代码滚到该模组块（reveal 内 setPosition 同块，不回拉右栏）
+    const handleSelectMod = (id: string) => {
+        setActiveModId(id);
+        const block = index.find(b => b.id === id);
+        if (block) {
+            revealedLineRef.current = block.startLine;
+            editorRef.current?.revealLineInCenter(block.startLine);
+        }
+    };
+
     return (<>
         {/* 左代码 / 右可视化：同一份 modoverrides 的两个视图，互为对照（可视化改动写回代码、代码改动重解析） */}
         <Row gutter={12} style={{flexWrap: 'nowrap'}}>
@@ -246,6 +306,8 @@ const Modoverrides: React.FC<LevelItemProps> = (props) => {
                                            "maxHeight": "600px",
                                            "width": "100%"
                                        }}
+                                       onReady={() => setEditorReady(v => v + 1)}
+                                       onCursorChange={handleCursorChange}
                                        onChange={value => {
                                            setText(value)
                                            if (props.changeLevel) {
@@ -257,6 +319,10 @@ const Modoverrides: React.FC<LevelItemProps> = (props) => {
             <Col flex="380px" style={{minWidth: 300}}>
                 <ModVisualEditor
                     value={text}
+                    nameMap={nameMap}
+                    activeModId={activeModId}
+                    focus={focus}
+                    onSelectMod={handleSelectMod}
                     onChange={next => {
                         setText(next)
                         props.changeLevel?.(props.levelName || '', {modoverrides: next})

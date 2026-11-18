@@ -9,6 +9,7 @@ interface MonacoEditorProps {
     style?: React.CSSProperties;
     onChange?: (value: string) => void;
     onCursorChange?: (line: number) => void;
+    onReady?: () => void;
 }
 
 export interface MonacoEditorRef {
@@ -25,7 +26,8 @@ const MonacoEditor2 = forwardRef<MonacoEditorRef, MonacoEditorProps>(({
                                                                           options = {},
                                                                           style = {},
                                                                           onChange,
-                                                                          onCursorChange
+                                                                          onCursorChange,
+                                                                          onReady
                                                                       }, ref) => {
     const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
     const containerRef = useRef<HTMLDivElement | null>(null);
@@ -33,6 +35,8 @@ const MonacoEditor2 = forwardRef<MonacoEditorRef, MonacoEditorProps>(({
     // 回调经 ref 转发：创建 effect 只跑一次，闭包不持旧回调
     const onCursorChangeRef = useRef(onCursorChange);
     onCursorChangeRef.current = onCursorChange;
+    const onReadyRef = useRef(onReady);
+    onReadyRef.current = onReady;
 
     useEffect(() => {
         if (containerRef.current) {
@@ -50,6 +54,7 @@ const MonacoEditor2 = forwardRef<MonacoEditorRef, MonacoEditorProps>(({
             editorRef.current.onDidChangeCursorPosition((e) => {
                 onCursorChangeRef.current?.(e.position.lineNumber);
             });
+            onReadyRef.current?.();
         }
 
         return () => editorRef.current?.dispose();

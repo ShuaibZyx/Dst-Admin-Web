@@ -68,12 +68,19 @@ const LazyOptions = ({options, rootRef, children}) => {
     return <>{children}</>;
 };
 
-export default ({value, onChange, nameMap = {}, activeModId = null, onSelectMod}) => {
+export default ({value, onChange, nameMap = {}, activeModId = null, onSelectMod, focus = null}) => {
     const {t} = useTranslation();
     const {theme} = useTheme();
     const [query, setQuery] = useState('');
     const scrollRef = useRef(null);
+    const cardRefs = useRef({});
     const mods = useMemo(() => parseMods(value), [value]);
+
+    // 左→右联动：光标驱动的聚焦（focus 换代）才把卡片滚入视口；点标题不推进 focus、不回拉
+    useEffect(() => {
+        if (!focus?.id) return;
+        cardRefs.current[focus.id]?.scrollIntoView({block: 'center'});
+    }, [focus]);
 
     if (mods === null) {
         return <Empty description={t('level.modVisual.unparsed')} style={{marginTop: 24}}/>;
@@ -108,7 +115,8 @@ export default ({value, onChange, nameMap = {}, activeModId = null, onSelectMod}
             {visible.length === 0 ? (
                 <Empty description={t('level.modVisual.search.empty')} style={{marginTop: 24}}/>
             ) : visible.map(m => (
-                <div key={m.id} className={m.id === activeModId ? 'mod-card-active' : undefined}
+                <div key={m.id} ref={(el) => { cardRefs.current[m.id] = el; }}
+                     className={m.id === activeModId ? 'mod-card-active' : undefined}
                      style={{padding: '2px 8px'}}>
                     <Divider style={{margin: '12px 0 8px'}}>
                         <span

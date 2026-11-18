@@ -2,6 +2,8 @@
   "level.modVisual.unparsed": "코드가 표준 구조가 아니어 시각화할 수 없습니다 — 왼쪽 코드에서 편집하세요",
   "level.modVisual.empty": "modoverrides 가 비어 있습니다 (활성 모드 없음)",
   "level.modVisual.enabled": "활성화",
+  "level.modVisual.search.placeholder": "모드 이름 / ID 검색",
+  "level.modVisual.search.empty": "일치하는 모드가 없습니다",
   "panel.command.placeholder": "명령을 입력하고 Enter 또는 전송을 누르세요",
   "level.quickAdd.shipwrecked": "난파",
   "level.quickAdd.volcano": "화산",
