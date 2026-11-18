@@ -208,6 +208,17 @@ export default () => {
         sendCommandApi(cluster, currentLevelName, command)
             .then(resp => {
                 if (resp.code === 200) {
+                    // 终端式回显：把发出的指令记入当前世界日志——发送可见、去向可查
+                    // （进世界缓冲，切换世界再切回也保留）
+                    const echo = `> ${command}`
+                    useWorldLogsStore.getState().appendLog(currentLevelName, echo)
+                    logBufRef.current.push(echo)
+                    if (!flushTimerRef.current) {
+                        flushTimerRef.current = setTimeout(() => {
+                            flushTimerRef.current = null
+                            flushLogBuffer()
+                        }, 150)
+                    }
                     message.success(t('panel.command.send.success'))
                 } else {
                     message.error(t('panel.command.send.error'))
