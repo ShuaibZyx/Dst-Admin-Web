@@ -147,11 +147,14 @@ const CreateWorld = ({dstWorldSetting, has, getExisting, onCreated, getServerIni
                                  background: draft.type === o.value ? 'rgba(232, 196, 106, 0.14)' : undefined,
                              }}>
                             <Radio checked={draft.type === o.value}/>
-                            <div style={{
-                                width: '64px', height: '64px', flexShrink: 0,
-                                backgroundImage: `url(${ATLAS_URL[o.atlas] || ''})`,
-                                backgroundPosition: `-${Math.round(o.image.x * meta.width / meta.item_size) * 100}% -${Math.round(o.image.y * meta.height / meta.item_size) * 100}%`,
-                            }}/>
+                            {/* 图标窗必须保持 64px（平绕公式与图集格等宽才取准），显示尺寸用 transform 缩 */}
+                            <div style={{width: 48, height: 48, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                                <div style={{
+                                    width: '64px', height: '64px', transform: 'scale(0.75)',
+                                    backgroundImage: `url(${ATLAS_URL[o.atlas] || ''})`,
+                                    backgroundPosition: `-${Math.round(o.image.x * meta.width / meta.item_size) * 100}% -${Math.round(o.image.y * meta.height / meta.item_size) * 100}%`,
+                                }}/>
+                            </div>
                             <span className={'option-name'} style={{flex: 1, minWidth: 0}}>{t(o.labelKey)}</span>
                         </div>
                     );
