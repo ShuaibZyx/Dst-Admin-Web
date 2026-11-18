@@ -99,7 +99,10 @@ export default ({value, onChange, nameMap = {}, activeModId = null, onSelectMod,
         patch(modId, mod => ({...mod, options: mod.options.map(o => (o.key === key ? {...o, value} : o))}));
 
     return (
-        <div ref={scrollRef} style={{maxHeight: 'calc(100vh - 480px)', overflowY: 'auto', paddingRight: 4}}>
+        <div ref={scrollRef} style={{
+            height: 'calc(100vh - 280px)', minHeight: 400, maxHeight: 800,
+            overflowY: 'auto', paddingRight: 4,
+        }}>
             <div style={{
                 position: 'sticky', top: 0, zIndex: 2, padding: '4px 0 10px',
                 background: theme === 'dark' ? '#141414' : '#fff',

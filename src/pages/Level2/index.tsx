@@ -300,10 +300,11 @@ const Modoverrides: React.FC<LevelItemProps> = (props) => {
                 <React.Suspense fallback={null}><MonacoEditor2 ref={editorRef}
                                        value={text}
                                        theme={theme === 'dark' ? 'vs-dark' : ''}
+                                       indentRainbow
                                        style={{
-                                           "height": "calc(100vh - 340px)",
-                                           "minHeight": "300px",
-                                           "maxHeight": "600px",
+                                           "height": "calc(100vh - 280px)",
+                                           "minHeight": "400px",
+                                           "maxHeight": "800px",
                                            "width": "100%"
                                        }}
                                        onReady={() => setEditorReady(v => v + 1)}
