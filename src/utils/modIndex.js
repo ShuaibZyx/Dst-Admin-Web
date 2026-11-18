@@ -49,3 +49,9 @@ export function modMatches(id, name, query) {
     if (!needle) return true;
     return id.toLowerCase().includes(needle) || (name || '').toLowerCase().includes(needle);
 }
+
+// 行所属模组块 id；行不在任何块内返回 null（块外不清活动态，只由「活动 id 不在索引里」清）
+export function modIdAtLine(blocks, line) {
+    const hit = blocks.find((b) => line >= b.startLine && line <= b.endLine);
+    return hit ? hit.id : null;
+}

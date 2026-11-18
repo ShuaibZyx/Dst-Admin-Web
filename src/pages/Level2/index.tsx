@@ -2,7 +2,7 @@ import {shipwreckedTpl, volcanoTpl} from "../../types/dst.ts";
 import {parse} from "lua-json";
 import ModVisualEditor from "./ModVisualEditor";
 import {fillLevelDefaults} from "../../utils/levelDefaults";
-import {buildModIndex} from "../../utils/modIndex";
+import {buildModIndex, modIdAtLine} from "../../utils/modIndex";
 import {useTranslation} from "react-i18next";
 import React, {useEffect, useMemo, useRef, useState} from "react";
 import {Alert, Button, Divider, Dropdown, Empty, Form, Input, InputNumber, message, Modal, Radio, Skeleton, Space, Switch, Tabs, TabsProps, Tag, Tooltip, Upload, Row, Col} from "antd";
@@ -271,11 +271,11 @@ const Modoverrides: React.FC<LevelItemProps> = (props) => {
         })));
     }, [index, activeModId, editorReady]);
 
-    // 左→右：光标跨进哪个模组块，右卡滚入并高亮（同块不触发，打字不跳）
+    // 左→右：光标跨进哪个模组块，右卡滚入并高亮（同块不触发，打字不跳；块外不改活动态——
+    // setValue 等程序化移动会派生光标事件，命中块外不能把高亮清掉）
     const handleCursorChange = (line: number) => {
-        const hit = index.find(b => line >= b.startLine && line <= b.endLine);
-        const id = hit?.id ?? null;
-        setActiveModId(prev => (prev === id ? prev : id));
+        const id = modIdAtLine(index, line);
+        if (id) setActiveModId(prev => (prev === id ? prev : id));
         if (revealedLineRef.current === line) {
             revealedLineRef.current = null;
             return;

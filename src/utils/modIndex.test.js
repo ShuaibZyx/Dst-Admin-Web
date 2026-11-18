@@ -1,6 +1,6 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {buildModIndex, modMatches} from './modIndex.js';
+import {buildModIndex, modIdAtLine, modMatches} from './modIndex.js';
 
 // serialize 同构的 canonical 文本：10 行，workshop-1 起于 2 行、workshop-2 起于 6 行
 const CANONICAL = [
@@ -57,4 +57,14 @@ test('modMatches：id/name 大小写不敏感子串，空 query 恒真', () => {
     assert.equal(modMatches('workshop-123', 'Insight', 'x'), false);
     assert.equal(modMatches('workshop-123', 'Insight', ''), true);
     assert.equal(modMatches('workshop-123', 'Insight', '   '), true);
+});
+
+test('modIdAtLine：块内行→块 id；块外行→null（块外不清活动态的判据）', () => {
+    const blocks = buildModIndex(CANONICAL);
+    assert.equal(modIdAtLine(blocks, 2), 'workshop-1');  // 块首行含
+    assert.equal(modIdAtLine(blocks, 5), 'workshop-1');  // 块尾行含
+    assert.equal(modIdAtLine(blocks, 6), 'workshop-2');
+    assert.equal(modIdAtLine(blocks, 10), 'workshop-2');
+    assert.equal(modIdAtLine(blocks, 1), null);          // return { 行在块外
+    assert.equal(modIdAtLine([], 3), null);
 });
