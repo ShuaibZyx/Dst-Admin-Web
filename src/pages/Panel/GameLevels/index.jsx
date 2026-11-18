@@ -121,6 +121,7 @@ export default () => {
         // 停止需确认，启动直接执行
         if (!checked) {
             Modal.confirm({
+                centered: true,
                 title: t('panel.start.down'),
                 content: t('panel.stop.confirm.desc', {levelName}),
                 okText: t('panel.y'),
