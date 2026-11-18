@@ -88,9 +88,8 @@ const Modoverrides = (props) => {
                                        theme={theme === 'dark' ? 'vs-dark' : ''}
                                        indentRainbow
                                        style={{
-                                           "height": "calc(100vh - 280px)",
-                                           "minHeight": "400px",
-                                           "maxHeight": "800px",
+                                           "height": "calc(100vh - 330px)",
+                                           "minHeight": "300px",
                                            "width": "100%"
                                        }}
                                        onReady={() => setEditorReady(v => v + 1)}

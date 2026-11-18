@@ -100,7 +100,7 @@ export default ({value, onChange, nameMap = {}, activeModId = null, onSelectMod,
 
     return (
         <div ref={scrollRef} style={{
-            height: 'calc(100vh - 280px)', minHeight: 400, maxHeight: 800,
+            height: 'calc(100vh - 330px)', minHeight: 300,
             overflowY: 'auto', paddingRight: 4,
         }}>
             <div style={{

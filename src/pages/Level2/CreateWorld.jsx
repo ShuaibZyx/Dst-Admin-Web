@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {Button, Input, message, Modal, Radio, Space, Tabs, Typography} from 'antd';
+import {Button, Divider, Input, message, Modal, Radio, Space, Tabs, Typography} from 'antd';
 import {PlusOutlined, RedoOutlined} from '@ant-design/icons';
 import {useTranslation} from 'react-i18next';
 import LevelViewer from './LevelViewer.tsx';
@@ -30,6 +30,11 @@ const CreateWorld = ({dstWorldSetting, has, getExisting, onCreated, getServerIni
     const [draft, setDraft] = useState(emptyDraft);
     const [pickerOpen, setPickerOpen] = useState(false);
     const [iaModReady, setIaModReady] = useState(true);
+    // 名称/文件名在「创建」时弹窗输入（左栏只留类型）
+    const [createOpen, setCreateOpen] = useState(false);
+    const [creating, setCreating] = useState(false);
+    const [formName, setFormName] = useState('');
+    const [formUuid, setFormUuid] = useState('');
     // 当前模板原文：leveldataoverride 仍逐字等于它（未手改）才允许切 type 时换模板
     const templateTextRef = useRef(forest);
 
@@ -66,25 +71,19 @@ const CreateWorld = ({dstWorldSetting, has, getExisting, onCreated, getServerIni
     };
 
     // 与原「添加世界」弹窗同规则：重名/文件名（重复、含子串、特殊字符）/必填
-    const validate = () => {
+    const validate = (levelName, uuid) => {
         const {names, uuids} = getExisting();
-        const {levelName, uuid, type} = draft;
         if (!levelName) return t('level.warning.name.not.allow.null');
         if (names.includes(levelName)) return t('level.name.duplication');
         if (!uuid) return t('level2.filename.required');
         if (uuids.includes(uuid)) return t('level.filename.duplication');
         if (uuids.some(u => u.includes(uuid))) return t('level.filename.error.substring');
         if (!/^[a-zA-Z][a-zA-Z0-9]*$/.test(uuid)) return t('level.filename.error.contain.special.characters');
-        if (!type) return t('level.required.type');
+        if (!draft.type) return t('level.required.type');
         return null;
     };
 
-    const submit = async () => {
-        const err = validate();
-        if (err) {
-            message.error(err);
-            return;
-        }
+    const submit = async (levelName, uuid) => {
         let modoverrides = draft.modoverrides;
         if (draft.type === 'shipwrecked' || draft.type === 'volcano') {
             // IA 世界规则：自动补入启用的 IA 模组（缺键插 entry、已存在只翻 enabled）
@@ -93,15 +92,17 @@ const CreateWorld = ({dstWorldSetting, has, getExisting, onCreated, getServerIni
         }
         const server_ini = {...(draft.server_ini || {})};
         // 名字单向补：server_ini.name 为空才补世界名（端口等不随名重算）
-        if (!server_ini.name) server_ini.name = draft.levelName;
+        if (!server_ini.name) server_ini.name = levelName;
+        setCreating(true);
         const ok = await onCreated({
-            levelName: draft.levelName,
-            uuid: draft.uuid,
+            levelName,
+            uuid,
             type: draft.type,
             leveldataoverride: draft.leveldataoverride,
             modoverrides,
             server_ini,
         });
+        setCreating(false);
         if (ok) {
             setDraft(emptyDraft());
             templateTextRef.current = forest;
@@ -117,20 +118,11 @@ const CreateWorld = ({dstWorldSetting, has, getExisting, onCreated, getServerIni
         },
     });
 
-    return (<div style={{display: 'flex', gap: 12}}>
-        {/* 左栏：创建表单（与世界设置的左竖列同构图：窄栏 + 右侧 tab 工作区） */}
+    return (<>
+        <div style={{display: 'flex', gap: 12}}>
+        {/* 左栏：世界类型（与世界竖列同构图）；名称/文件名在「创建」弹窗输入 */}
         <div style={{width: 220, flex: 'none'}}>
-            <div style={{marginBottom: 10}}>
-                <Typography.Text type="secondary">{t('level.name')}</Typography.Text>
-                <Input placeholder={t('level.placeholder.name')} value={draft.levelName} style={{marginTop: 4}}
-                       onChange={(e) => setDraft(d => ({...d, levelName: e.target.value}))}/>
-            </div>
-            <div style={{marginBottom: 10}}>
-                <Typography.Text type="secondary">{t('level.filename')}</Typography.Text>
-                <Input placeholder={t('level.placeholder.filename')} value={draft.uuid} style={{marginTop: 4}}
-                       onChange={(e) => setDraft(d => ({...d, uuid: e.target.value}))}/>
-            </div>
-            <div style={{marginBottom: 12}}>
+            <div>
                 <Typography.Text type="secondary">{t('level.type')}</Typography.Text>
                 <Radio.Group value={draft.type} onChange={(e) => onTypeChange(e.target.value)}
                              style={{marginTop: 4, display: 'block'}}>
@@ -142,10 +134,6 @@ const CreateWorld = ({dstWorldSetting, has, getExisting, onCreated, getServerIni
                     </Space>
                 </Radio.Group>
             </div>
-            <Space direction="vertical" style={{width: '100%'}}>
-                <Button type="primary" block icon={<PlusOutlined/>} onClick={submit}>{t('level2.create.submit')}</Button>
-                <Button block icon={<RedoOutlined/>} onClick={reset}>{t('level2.create.reset')}</Button>
-            </Space>
         </div>
 
         {/* 右区：三段结构完全照抄世界 tab（tab 在上、内容在下） */}
@@ -184,9 +172,45 @@ const CreateWorld = ({dstWorldSetting, has, getExisting, onCreated, getServerIni
             },
         ]}/>
         </div>
+        </div>
+
+        {/* 底栏（同世界设置的位置）：创建/重置 */}
+        <Divider/>
+        <div style={{display: 'flex', gap: 8}}>
+            <Button type="primary" icon={<PlusOutlined/>} onClick={() => {
+                setFormName(draft.levelName || '');
+                setFormUuid(draft.uuid || '');
+                setCreateOpen(true);
+            }}>{t('level2.create.submit')}</Button>
+            <Button icon={<RedoOutlined/>} onClick={reset}>{t('level2.create.reset')}</Button>
+        </div>
+
+        {/* 创建弹窗：世界名称/文件名 */}
+        <Modal title={t('level2.createTab')} open={createOpen} confirmLoading={creating}
+               onCancel={() => setCreateOpen(false)}
+               onOk={() => {
+                   const err = validate(formName, formUuid);
+                   if (err) {
+                       message.error(err);
+                       return;
+                   }
+                   setCreateOpen(false);
+                   submit(formName, formUuid);
+               }}>
+            <div style={{marginBottom: 12}}>
+                <Typography.Text type="secondary">{t('level.name')}</Typography.Text>
+                <Input placeholder={t('level.placeholder.name')} value={formName} style={{marginTop: 4}}
+                       onChange={(e) => setFormName(e.target.value)}/>
+            </div>
+            <div>
+                <Typography.Text type="secondary">{t('level.filename')}</Typography.Text>
+                <Input placeholder={t('level.placeholder.filename')} value={formUuid} style={{marginTop: 4}}
+                       onChange={(e) => setFormUuid(e.target.value)}/>
+            </div>
+        </Modal>
 
         <ModPicker open={pickerOpen} onClose={() => setPickerOpen(false)} onAdd={onAddMods}/>
-    </div>);
+    </>);
 };
 
 export default CreateWorld;

@@ -479,7 +479,7 @@ const LevelViewEditor: React.FC<{
     return (
         <>
             <div className={'scrollbar'} style={{
-                "height": "calc(100vh - 420px)",
+                "height": "calc(100vh - 380px)",
                 "minHeight": "300px",
                 overflowY: 'auto',
             }}>

@@ -120,9 +120,8 @@ const LevelItem: React.FC<LevelItemProps> = ({dstWorldSetting, levelName, level,
         {
             label: t('level.leveldataoverride'),
             children: <div className={'scrollbar'} style={{
-                height: 'calc(100vh - 280px)',
+                height: 'calc(100vh - 290px)',
                 minHeight: '400px',
-                maxHeight: '800px',
                 overflowY: 'auto',
             }}>
                 <Leveldataoverride dstWorldSetting={dstWorldSetting}
@@ -134,9 +133,8 @@ const LevelItem: React.FC<LevelItemProps> = ({dstWorldSetting, levelName, level,
         {
             label: t('level.modoverrides'),
             children: <div className={'scrollbar'} style={{
-                height: 'calc(100vh - 280px)',
+                height: 'calc(100vh - 290px)',
                 minHeight: '400px',
-                maxHeight: '800px',
                 overflowY: 'auto',
             }}><Modoverrides levelName={levelName} level={level}
                              changeLevel={changeLevel} has={has}/>
@@ -147,9 +145,8 @@ const LevelItem: React.FC<LevelItemProps> = ({dstWorldSetting, levelName, level,
             key: 3,
             label: t('level.serverIni'),
             children: <div className={'scrollbar'} style={{
-                height: 'calc(100vh - 340px)',
+                height: 'calc(100vh - 290px)',
                 minHeight: '400px',
-                maxHeight: '800px',
                 overflowY: 'auto',
             }}><ServerIni levelName={levelName} level={level}
                           changeLevel={changeLevel} has={has}/>
@@ -202,7 +199,6 @@ const Leveldataoverride: React.FC<LevelItemProps> = (props) => {
                                style={{
                                    "height": "calc(100vh - 340px)",
                                    "minHeight": "300px",
-                                   "maxHeight": "600px",
                                    "width": "100%"
                                }}
                                onChange={value => {
@@ -793,7 +789,7 @@ const Level2 = () => {
                             {levelListRef.current.length === 0 && (<>
                                 <Empty description={t('level.empty')}/>
                             </>)}
-                            <div style={{display: 'flex', height: 'calc(100vh - 330px)', minHeight: '420px'}}>
+                            <div style={{display: 'flex', height: 'calc(100vh - 250px)', minHeight: '420px'}}>
                                 {/* 世界切换竖列（弃 tab 套 tab）：双击/右键改名沿用 LevelTabLabel */}
                                 <div style={{
                                     width: 220, flex: 'none', overflowY: 'auto',
