@@ -222,10 +222,12 @@ export default () => {
                                         </div>
                                         <div style={{display: 'flex', alignItems: 'center'}}>
                                             <Space size="middle" wrap>
-                                                <Button size="small" icon={<PictureOutlined/>} onClick={() => {
-                                                    setMapTs(Date.now())
+                                                <Button size="small" icon={<PictureOutlined/>} onClick={async () => {
                                                     setMapImgErr(false)
+                                                    // 先生成再取图：地图只在生成后落盘（旧 DstMapData 页下线后无人触发生成）
+                                                    await fetch(`/api/dst/map/gen?levelName=${record.uuid}`).catch(() => null)
                                                     setMapLevel(record)
+                                                    setMapTs(Date.now())
                                                 }}>{t('panel.map')}</Button>
                                                 <Switch checked={pendingOps[record.uuid]?.op === 'starting' ? true : pendingOps[record.uuid]?.op === 'stopping' ? false : record.status}
                                                         loading={Boolean(pendingOps[record.uuid])}
@@ -250,9 +252,10 @@ export default () => {
             <Modal title={(
                     <Space>
                         <span>{mapLevel ? `${mapLevel.levelName} · ${t('panel.map')}` : t('panel.map')}</span>
-                        <Button size="small" icon={<SyncOutlined/>} onClick={() => {
-                            setMapTs(Date.now())
+                        <Button size="small" icon={<SyncOutlined/>} onClick={async () => {
                             setMapImgErr(false)
+                            await fetch(`/api/dst/map/gen?levelName=${mapLevel.uuid}`).catch(() => null)
+                            setMapTs(Date.now())
                         }}>{t('panel.map.refresh')}</Button>
                     </Space>
                 )}
