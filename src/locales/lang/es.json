@@ -1,4 +1,6 @@
 {
+  "level.modVisual.unparsed": "El código no tiene estructura estándar — edite en el panel de código",
+  "level.modVisual.empty": "modoverrides está vacío (sin mods activados)",
   "panel.command.placeholder": "Escriba un comando, pulse Intro o haga clic en Enviar",
   "level.quickAdd.shipwrecked": "Náufragos",
   "level.quickAdd.volcano": "Volcán",

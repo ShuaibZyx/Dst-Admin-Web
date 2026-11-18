@@ -1,28 +1,10 @@
 import {shipwreckedTpl, volcanoTpl} from "../../types/dst.ts";
 import {parse} from "lua-json";
+import ModVisualEditor from "./ModVisualEditor";
 import {fillLevelDefaults} from "../../utils/levelDefaults";
 import {useTranslation} from "react-i18next";
 import React, {useEffect, useRef, useState} from "react";
-import {
-    Alert,
-    Button,
-    Divider,
-    Dropdown,
-    Empty,
-    Form,
-    Input,
-    InputNumber,
-    message,
-    Modal,
-    Radio,
-    Skeleton, Space,
-    Switch,
-    Tabs,
-    TabsProps,
-    Tag,
-    Tooltip,
-    Upload
-} from "antd";
+import {Alert, Button, Divider, Dropdown, Empty, Form, Input, InputNumber, message, Modal, Radio, Skeleton, Space, Switch, Tabs, TabsProps, Tag, Tooltip, Upload, Row, Col} from "antd";
 import type {MenuProps} from 'antd';
 import {EditOutlined, ImportOutlined, DownloadOutlined, SaveOutlined, PlusOutlined, AppstoreOutlined} from '@ant-design/icons';
 import type {MonacoEditorRef} from "../NewEditor2";
@@ -248,22 +230,34 @@ const Modoverrides: React.FC<LevelItemProps> = (props) => {
         editorRef.current?.setValue(props.level?.modoverrides || '')
     }, [props.level?.modoverrides]);
     return (<>
-        <div>
-            <React.Suspense fallback={null}><MonacoEditor2 ref={editorRef}
-                           theme={theme === 'dark' ? 'vs-dark' : ''}
-                           style={{
-                               "height": "calc(100vh - 340px)",
-                               "minHeight": "300px",
-                               "maxHeight": "600px",
-                               "width": "100%"
-                           }}
-                           onChange={value => {
-                               if (props.changeLevel) {
-                                   props.changeLevel(props.levelName || '', {modoverrides: value})
-                               }
-                           }}
-            /></React.Suspense>
-        </div>
+        {/* 左可视化 / 右代码：同一份 modoverrides 的两个视图，互为对照（可视化改动写回代码、代码改动重解析） */}
+        <Row gutter={12} style={{flexWrap: 'nowrap'}}>
+            <Col flex="380px" style={{minWidth: 300}}>
+                <ModVisualEditor
+                    value={props.level?.modoverrides || ''}
+                    onChange={next => {
+                        props.changeLevel?.(props.levelName || '', {modoverrides: next})
+                        editorRef.current?.setValue(next)
+                    }}
+                />
+            </Col>
+            <Col flex="auto">
+                <React.Suspense fallback={null}><MonacoEditor2 ref={editorRef}
+                                       theme={theme === 'dark' ? 'vs-dark' : ''}
+                                       style={{
+                                           "height": "calc(100vh - 340px)",
+                                           "minHeight": "300px",
+                                           "maxHeight": "600px",
+                                           "width": "100%"
+                                       }}
+                                       onChange={value => {
+                                           if (props.changeLevel) {
+                                               props.changeLevel(props.levelName || '', {modoverrides: value})
+                                           }
+                                       }}
+                /></React.Suspense>
+            </Col>
+        </Row>
     </>)
 }
 
