@@ -35,6 +35,11 @@ async function deleteModInfo(cluster,modId) {
     return response.data
 }
 
+async function addSubscriptionApi(modid) {
+    const response = await http.post('/api/mod/subscription/add', {modid})
+    return response.data
+}
+
 async function getMyModInfoList(cluster) {
     const url = '/api/mod'
     const response = await http.get(url,{
@@ -118,7 +123,7 @@ async function deleteUgcModAcfFileApi(cluster, levelName, workshopId) {
 }
 
 export {
-    searchMod,getModInfo, getMyModInfoList,deleteModInfo,deleteStepupWorkshopApi,
+    searchMod,getModInfo, getMyModInfoList,deleteModInfo,addSubscriptionApi,deleteStepupWorkshopApi,
     getModInfoFileApi,
     updateModApi,
 

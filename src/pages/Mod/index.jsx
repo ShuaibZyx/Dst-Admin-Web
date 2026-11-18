@@ -7,6 +7,7 @@ import {parse} from "lua-json";
 
 import {getMyModInfoList, getModInfo} from "../../api/modApi.jsx";
 import ModList from "./ModList/index.jsx";
+import MySubscriptions from "./MySubscriptions/index.jsx";
 
 import Workshop from "./Workshop/index.jsx";
 import {useLevelsStore} from "../../store/useLevelsStore";
@@ -20,6 +21,7 @@ export default () => {
 
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState('1')
+    const [subsRefreshKey, setSubsRefreshKey] = useState(0)
 
     // 模组列表展示数据
     const [modList, setmodList] = useState([])
@@ -233,9 +235,17 @@ export default () => {
             />,
         },
         {
+            key: '0',
+            label: t('mod.mySubscriptions'),
+            children: <MySubscriptions cluster={cluster} refreshKey={subsRefreshKey}/>,
+        },
+        {
             key: '2',
             label: t('mod.Subscribe'),
-            children: <Workshop addModList={setmodList} onAdded={() => setActiveTab('1')}/>,
+            children: <Workshop addModList={setmodList} onAdded={() => {
+                setActiveTab('0')
+                setSubsRefreshKey(k => k + 1)
+            }}/>,
         },
     ];
 

@@ -5,7 +5,7 @@ import {StarFilled, HeartFilled, CloudDownloadOutlined, SearchOutlined, PlusOutl
 import {useParams} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 
-import {getModInfo, searchMod} from '../../../api/modApi.jsx';
+import {addSubscriptionApi, searchMod} from '../../../api/modApi.jsx';
 import {format} from "../../../utils/dateUitls";
 import {fShortenNumber} from "../../../utils/formatNumber";
 
@@ -168,24 +168,16 @@ export default ({addModList, onAdded}) => {
         });
         setLoading(true)
         // message.info(`正在订阅 ${modName}`)
-        getModInfo(lang, cluster, modId).then(data => {
-            data.data.installed = true
-            addModList(current => {
-                const newData = []
-                current.forEach(item=>{
-                    if (item.modid !== data.data.modid) {
-                        newData.push(item)
-                    }
-                })
-                newData.push(data.data)
-                return [... newData]
-            })
-
-            // Dismiss manually and asynchronously
+        // 订阅 = 加入「我的订阅」库（不直接下载到模组设置）
+        addSubscriptionApi(modId).then(data => {
             setTimeout(messageApi.destroy, 1);
-            message.success(`${t('mod.subscribe.ok')} ${modName}`)
+            if (data.code === 200) {
+                message.success(`${t('mod.subscribe.ok')} ${modName}`)
+                if (onAdded) onAdded()
+            } else {
+                message.warning(`${t('mod.subscribe.error')} ${modName}`)
+            }
             setLoading(false)
-            if (onAdded) onAdded()
         }).catch(error => {
             setTimeout(messageApi.destroy, 1);
             message.warning(`${t('mod.subscribe.error')} ${modName}`)
