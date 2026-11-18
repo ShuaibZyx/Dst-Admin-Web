@@ -442,7 +442,7 @@ export default () => {
                         marginBottom: 12
                     }}
                 >
-                    <Input value={command} onChange={onchange} placeholder={t('panel.command.placeholder')}/>
+                    <Input value={command} onChange={onchange} onPressEnter={() => sendInstruct(command)} placeholder={t('panel.command.placeholder')}/>
                     <Button icon={<SendOutlined/>} type="primary" onClick={() => sendInstruct(command)}>{t('panel.send')}</Button>
                 </Space.Compact>
                 <Space size={8} wrap>
