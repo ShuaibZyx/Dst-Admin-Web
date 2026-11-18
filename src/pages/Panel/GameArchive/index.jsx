@@ -83,6 +83,7 @@ export default () => {
     // 运行状态徽标（与世界开关同源）：一眼看清世界跑没跑，不再从按钮文案猜状态
     const levels = useLevelsStore((state) => state.levels)
     const runningCount = levels.filter(l => l.status).length
+    const pendingOps = useLevelsStore((state) => state.pendingOps)
 
     function getTimeStatus(daysElapsedInSeason, daysLeftInSeason) {
         const totalDays = daysElapsedInSeason + daysLeftInSeason;
@@ -165,6 +166,7 @@ export default () => {
                     .game-shard-chip { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 8px; background: rgba(128,128,128,0.10); min-width: 0; }
                     .game-shard-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(128,128,128,0.45); flex: none; }
                     .game-shard-dot[data-on="true"] { background: #52c41a; box-shadow: 0 0 6px rgba(82,196,26,0.7); animation: dstDotPulse 2s ease-in-out infinite; }
+                    .game-shard-dot[data-pending="true"] { background: #faad14; box-shadow: 0 0 6px rgba(250,173,20,0.7); animation: dstDotPulse 1s ease-in-out infinite; }
                     .game-shard-name { font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
                     .game-shard-meta { margin-left: auto; font-size: 12px; color: rgba(128,128,128,0.95); white-space: nowrap; }
                 `}</style>
@@ -249,17 +251,22 @@ export default () => {
                 {/* 分片状态条:各层世界运行状态一览 */}
                 {levels.length > 0 && (
                     <div className="game-shard-strip">
-                        {levels.map(l => (
-                            <div className="game-shard-chip" key={l.uuid || l.key}>
-                                <span className="game-shard-dot" data-on={String(!!l.status)}/>
-                                <span className="game-shard-name">{l.levelName}</span>
-                                <span className="game-shard-meta">
-                                    {l.status
-                                        ? `${t('panel.run')}${l.Ps ? ` · ${Math.round((l.Ps.RSS || 0) / 1024)}MB` : ''}`
-                                        : t('panel.stop')}
-                                </span>
-                            </div>
-                        ))}
+                        {levels.map(l => {
+                            const pending = pendingOps[l.uuid || l.key]
+                            return (
+                                <div className="game-shard-chip" key={l.uuid || l.key}>
+                                    <span className="game-shard-dot" data-on={String(!!l.status)} data-pending={String(!!pending)}/>
+                                    <span className="game-shard-name">{l.levelName}</span>
+                                    <span className="game-shard-meta">
+                                        {pending
+                                            ? (pending.op === 'starting' ? t('panel.starting') : t('panel.stopping'))
+                                            : l.status
+                                                ? `${t('panel.run')} · CPU ${Math.round(Number(l.Ps?.cpuUage || 0))}% · ${Math.round((l.Ps?.RSS || 0) / 1024)}MB`
+                                                : t('panel.stop')}
+                                    </span>
+                                </div>
+                            )
+                        })}
                     </div>
                 )}
             </ProCard>

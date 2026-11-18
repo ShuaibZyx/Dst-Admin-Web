@@ -24,6 +24,7 @@ import {getLevelStatusApi, startAllLevelApi, startLevelApi} from "../../../api/l
 import {getClusters, readDstConfigSync, writeDstConfigSync} from "../../../api/dstConfigApi.jsx";
 import CreateBackUpBtn from "../OpBtnGroup/CreateBackUpBtn";
 import {useLevelsStore} from "../../../store/useLevelsStore.tsx";
+import ElapsedTag from "../../../components/ElapsedTag.jsx";
 import {useLiveStream} from "../../../hooks/useLiveStream.js";
 import {ProCard} from "@ant-design/pro-components";
 import {useThemeConfigStore} from "../../../store/useThemeConfigStore.tsx";
@@ -197,10 +198,10 @@ export default () => {
                                                     {pendingOps[record.uuid]?.op === 'stopping' && <Tag color={'warning'} bordered={false}>{record.levelName} · {t('panel.stopping')}</Tag>}
                                                     {!pendingOps[record.uuid] && record.status && <Tag color={'green'} bordered={false}>{record.levelName}</Tag>}
                                                     {!pendingOps[record.uuid] && !record.status && <Tag color={'default'} bordered={false}>{record.levelName}</Tag>}
-                                                    <div style={{fontSize: 12}}>
-                                                        <>
-                                                            <span>{`${formatData((record.Ps !== undefined ? record.Ps.RSS : 0) / 1024, 2)}MB`}</span>
-                                                        </>
+                                                    <div style={{fontSize: 12, display: 'flex', gap: 8, flexWrap: 'wrap'}}>
+                                                        {record.status && <span>CPU {formatData(record.Ps?.cpuUage ?? 0, 1)}%</span>}
+                                                        <span>{`${formatData((record.Ps !== undefined ? record.Ps.RSS : 0) / 1024, 2)}MB`}</span>
+                                                        {record.status && <ElapsedTag startedAt={record.startedAt}/>}
                                                     </div>
                                                 </div>
                                             </Space>
