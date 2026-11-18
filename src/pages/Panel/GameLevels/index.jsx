@@ -18,7 +18,6 @@ import {Skeleton,
     Tooltip
 } from 'antd';
 
-import {parse} from "lua-json";
 
 import {PictureOutlined, SyncOutlined} from "@ant-design/icons";
 import {getLevelStatusApi, startAllLevelApi, startLevelApi} from "../../../api/level.jsx";
@@ -56,16 +55,10 @@ export default () => {
                 key: level.uuid,
                 uuid: level.uuid,
                 levelName: level.levelName,
-                location: t('level.unknown'),
+                location: level.location || t('level.unknown'),
                 ps: level.ps,
                 Ps: level.Ps,
                 status: level.status
-            }
-            try {
-                const parsed = parse(level.leveldataoverride)
-                item.location = parsed.location
-            } catch (error) {
-                console.log(error)
             }
             return item
         })
@@ -161,21 +154,12 @@ export default () => {
 
 
 
-    function getLevelObject(value) {
-        value = value.replace(/\n/g, "")
-        try {
-            return parse(value)
-        } catch (error) {
-            return {}
-        }
-    }
 
     const {themeConfig} = useThemeConfigStore();
 
     function GetLevelIcon(level) {
         // 文字图标：世界名首字（按 location 取色），替代 emoji
-        const levelObject = getLevelObject(level?.leveldataoverride || '');
-        const location = levelObject?.location
+        const location = level?.location || ''
         const name = level?.levelName || '?'
         return (
             <Avatar

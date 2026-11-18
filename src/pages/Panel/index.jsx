@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {Alert, Card, Col, Row, Skeleton, Tabs} from 'antd';
+import {OSSkeleton, WorldListSkeleton, ServerLogSkeleton, PlayersSkeleton} from '../../components/Skeletons.jsx';
 import {useLevelsStore} from "../../store/useLevelsStore.tsx";
 import {getLevelStatusApi} from "../../api/level.jsx";
 import {getClusters} from "../../api/dstConfigApi.jsx";
@@ -41,7 +42,6 @@ const Panel = () => {
                             ps: level.ps,
                             Ps: level.Ps,
                             status: level.status,
-                            modoverrides: level.modoverrides
                         }
                         items.push(item)
                     })
@@ -82,17 +82,15 @@ const Panel = () => {
         )
     }
 
-    // 排版匹配骨架：与 GameOperator 的卡片网格同构（OS 通栏 + 两行双列卡片）
+    // 面板总览针对性骨架：OS 五值条 + 世界卡 + 日志卡 + 玩家卡（与 GameOperator 同构）
     const PanelSkeleton = () => (
         <div>
-            <Card size="small" style={{marginBottom: 16}}>
-                <Skeleton active title={false} paragraph={{rows: 1, width: ['40%', '65%', '55%']}}/>
-            </Card>
-            <Row gutter={[16, 16]}>
+            <OSSkeleton/>
+            <Row gutter={[16, 16]} style={{marginTop: 16}}>
+                <Col xs={24} md={10}><WorldListSkeleton items={4}/></Col>
+                <Col xs={24} md={14}><ServerLogSkeleton/></Col>
                 <Col xs={24} md={10}><Card><Skeleton active title paragraph={{rows: 5}}/></Card></Col>
-                <Col xs={24} md={14}><Card><Skeleton active title paragraph={{rows: 8}}/></Card></Col>
-                <Col xs={24} md={10}><Card><Skeleton active title paragraph={{rows: 6}}/></Card></Col>
-                <Col xs={24} md={14}><Card><Skeleton active title paragraph={{rows: 6}}/></Card></Col>
+                <Col xs={24} md={14}><PlayersSkeleton/></Col>
             </Row>
         </div>
     )
