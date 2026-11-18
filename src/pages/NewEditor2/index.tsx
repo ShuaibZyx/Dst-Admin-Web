@@ -1,5 +1,7 @@
 import * as monaco from 'monaco-editor'
 import React, {useEffect, useRef, useImperativeHandle, forwardRef} from 'react';
+import {indentUnits} from '../../utils/indentUnits';
+import './index.css';
 
 interface MonacoEditorProps {
     value?: string;
@@ -53,15 +55,18 @@ const MonacoEditor2 = forwardRef<MonacoEditorRef, MonacoEditorProps>(({
             indentDecorationsRef.current = editor.deltaDecorations(indentDecorationsRef.current, []);
             return;
         }
+        // setValue/手改内容都不会重猜缩进单位：每次按当前内容重猜（2 空格/4 空格/tab 自适应）
+        model.detectIndentation();
         const unit = model.getOptions().tabSize || 4;
         const items: monaco.editor.IModelDeltaDecoration[] = [];
         for (let line = 1; line <= model.getLineCount(); line++) {
-            const ws = model.getLineContent(line).match(/^[ \t]*/)?.[0] ?? '';
-            const cols = ws.replace(/\t/g, ' '.repeat(unit)).length;
-            for (let k = 0; k * unit + unit <= cols; k++) {
+            const text = model.getLineContent(line);
+            let end = 0;
+            while (end < text.length && (text[end] === ' ' || text[end] === '\t')) end++;
+            for (const {startCol, endCol, level} of indentUnits(text.slice(0, end), unit)) {
                 items.push({
-                    range: new monaco.Range(line, 1 + k * unit, line, 1 + (k + 1) * unit),
-                    options: {inlineClassName: `indent-lvl-${k % 4}`},
+                    range: new monaco.Range(line, startCol, line, endCol),
+                    options: {inlineClassName: `monaco-indent-lvl-${level % 4}`},
                 });
             }
         }
@@ -89,9 +94,6 @@ const MonacoEditor2 = forwardRef<MonacoEditorRef, MonacoEditorProps>(({
                 language,
                 theme,
                 automaticLayout: true,
-                // 括号层级配色 + 缩进导引线（写代码插件观感）
-                bracketPairColorization: {enabled: true},
-                guides: {indentation: true, highlightActiveIndentation: true},
                 ...options,
             });
 

@@ -1,0 +1,17 @@
+/* 彩虹缩进（indent-rainbow 风格）：按缩进层级列循环着色行首空白（monaco inlineClassName）。
+   类名带 monaco- 前缀防全局撞名；随组件引入，不依赖任何页面的样式装载。 */
+.monaco-indent-lvl-0 {
+    background: rgba(255, 99, 99, 0.16);
+}
+
+.monaco-indent-lvl-1 {
+    background: rgba(255, 179, 71, 0.16);
+}
+
+.monaco-indent-lvl-2 {
+    background: rgba(80, 200, 120, 0.16);
+}
+
+.monaco-indent-lvl-3 {
+    background: rgba(80, 150, 255, 0.16);
+}
