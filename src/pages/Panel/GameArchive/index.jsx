@@ -1,4 +1,4 @@
-import {Alert, Button, Col, Row, Select, Space, Tag, Tooltip, theme} from 'antd';
+import {Alert, Button, Col, Row, Select, Space, Tag, Tooltip, theme, Skeleton} from 'antd';
 
 import {QuestionCircleOutlined} from '@ant-design/icons';
 import React, {useEffect, useState} from 'react';
@@ -27,6 +27,7 @@ export default () => {
 
     const {cluster} = useParams()
     const [archive, setArchive] = useState({})
+    const [loading, setLoading] = useState(true)
 
     const playerList = usePlayerListStore((state) => state.playerList)
     // 存档切换器(自面板顶部迁入,置于信息表第一行):下拉即切换到对应存档的面板路由
@@ -66,6 +67,7 @@ export default () => {
             if (arc.status === 'fulfilled') {
                 setArchive(arc.value.data)
             }
+            setLoading(false)
         })()
     }, [cluster])
 
@@ -111,6 +113,9 @@ export default () => {
             </span>
         )
     }
+
+    // 兜底：数据未就绪时给骨架屏，避免面板首卡长时间空白
+    if (loading) return <Skeleton active style={{padding: 12}}/>
 
     return (
         <>

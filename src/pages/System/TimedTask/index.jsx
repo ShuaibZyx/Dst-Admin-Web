@@ -50,6 +50,7 @@ export default () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(true);
     const startIndex = (currentPage - 1) * pageSize;
     const endIndex = startIndex + pageSize;
     const dataSource = data.slice(startIndex, endIndex);
@@ -66,6 +67,7 @@ export default () => {
                 console.error('load job tasks failed:', error)
                 message.error(t('setting.timedTask.get.error'))
             })
+            .finally(() => setLoading(false))
     }
     useEffect(() => {
         getJobTaskList()
@@ -369,6 +371,9 @@ export default () => {
             </Modal>
         )
     }
+
+    // 兜底：加载给骨架、空列表给提示
+    if (loading) return <Skeleton active style={{padding: 12}}/>
 
     return (<>
                 <div>
