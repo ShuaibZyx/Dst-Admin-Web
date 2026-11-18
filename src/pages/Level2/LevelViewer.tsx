@@ -9,7 +9,7 @@ import {modSubscribedApi} from "../../api/gezigeApi";
 import modWorldOptions from "../../types/modWorldOptions.json";
 
 // ---- 图集：name -> 面板图片 URL（缓存击穿参数必须保留，图集换图后旧缓存会顶死） ----
-const ATLAS_URL: Record<string, string> = {
+export const ATLAS_URL: Record<string, string> = {
     'worldgen_customization': './misc/worldgen_customization_game.webp?v=20261117',
     'worldsettings_customization': './misc/worldsettings_customization_game.webp?v=20261117',
     'customization_shipwrecked': '/misc/customization_shipwrecked.png?v=20261117',
