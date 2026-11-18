@@ -8,7 +8,7 @@ import {useTranslation} from "react-i18next";
 import React, {useEffect, useRef, useState} from "react";
 import {Alert, Button, Divider, Dropdown, Empty, Form, Input, message, Modal, Skeleton, Space, Tabs, TabsProps, Tag, Tooltip, Upload} from "antd";
 import type {MenuProps} from 'antd';
-import {EditOutlined, ImportOutlined, DownloadOutlined, SaveOutlined, PlusOutlined, AppstoreOutlined} from '@ant-design/icons';
+import {CloseOutlined, EditOutlined, ImportOutlined, DownloadOutlined, SaveOutlined, PlusOutlined, AppstoreOutlined} from '@ant-design/icons';
 import type {MonacoEditorRef} from "../NewEditor2";
 // Monaco 体积大,懒加载(类型走 type import 不进运行时)
 const MonacoEditor2 = React.lazy(() => import("../NewEditor2"));
@@ -278,6 +278,8 @@ const Level2 = () => {
     const [items, setItems] = useState<TabsProps['items']>([])
     const itemsRef = useRef<TabsProps['items']>([])
     const [activeKey, setActiveKey] = useState('');
+    // 顶层两 tab：世界设置（世界竖列+编辑区）| 创建世界（配置台）
+    const [topTab, setTopTab] = useState('settings');
 
     // Modal states
     const [templateOpen, setTemplateOpen] = useState(false)
@@ -626,6 +628,7 @@ const Level2 = () => {
             if (resp.code === 200 && resp.data) {
                 message.success(`${body.levelName} ${t('level.create.success')}`)
                 add(body.levelName, resp.data.uuid, body.leveldataoverride, body.modoverrides, body.server_ini)
+                setTopTab('settings')
                 return true;
             }
             message.error(`${body.levelName} ${t('level.create.error')}`)
@@ -636,25 +639,6 @@ const Level2 = () => {
         }
     };
 
-    // 「创建世界」固定 tab（不可关，key 带连字符避开 uuid 合法值）：完整配置台，草稿流
-    const createTabItem = {
-        key: 'create-world',
-        closable: false,
-        label: t('level2.createTab'),
-        children: (
-            <CreateWorld
-                dstWorldSetting={dstWorldSetting}
-                has={has}
-                getExisting={() => ({
-                    names: levelListRef.current.map((l: LevelData) => l.levelName),
-                    uuids: levelListRef.current.map((l: LevelData) => l.uuid),
-                })}
-                getServerIniInit={() => getNextServerIni('')}
-                getIAEntry={() => (parse(getIAModoverrides()) as Record<string, Record<string, unknown>>)['workshop-1467214795']}
-                onCreated={handleCreateWorld}
-            />
-        ),
-    };
 
     const onChange = (newActiveKey: string) => {
         setActiveKey(newActiveKey);
@@ -687,14 +671,6 @@ const Level2 = () => {
 
         levelListRef.current = levelListRef.current.filter((item) => item.uuid !== targetKey)
     }
-
-    const onEdit = (targetKey: string | React.MouseEvent<Element, MouseEvent> | React.KeyboardEvent<Element>, action: 'add' | 'remove') => {
-        if (action === 'add') {
-            setActiveKey('create-world');
-        } else {
-            remove(targetKey as string);
-        }
-    };
 
     // 快捷创建海滩/火山世界（世界 Tab 行快捷卡）
     const quickAddWorld = (kind: 'shipwrecked' | 'volcano') => {
@@ -805,46 +781,96 @@ const Level2 = () => {
     }
 
     return (<Skeleton loading={loading}>
-            {/* 重命名提示 */}
-
-            {levelListRef.current.length === 0 && (<>
-                <Empty description={t('level.empty')}/>
-            </>)}
             <Tabs
-                tabPosition={'top'}
-                style={{
-                    height: 'calc(100vh - 240px)',
-                    minHeight: '500px',
-                }}
-                hideAdd
-                type="editable-card"
-                onChange={onChange}
-                activeKey={activeKey}
-                onEdit={onEdit}
-                items={items ? [...items, createTabItem, ...quickCards] : [createTabItem, ...quickCards]}
-                tabBarExtraContent={{
-                    right: dirty ? (
-                        <span style={{color: '#faad14', fontSize: '12px'}}>● {t('level.unsaved')}</span>
-                    ) : null,
-                }}
+                activeKey={topTab}
+                onChange={setTopTab}
+                type="card"
+                items={[
+                    {
+                        key: 'settings',
+                        label: t('level.leveldataoverride'),
+                        children: (<>
+                            {levelListRef.current.length === 0 && (<>
+                                <Empty description={t('level.empty')}/>
+                            </>)}
+                            <div style={{display: 'flex', height: 'calc(100vh - 330px)', minHeight: '420px'}}>
+                                {/* 世界切换竖列（弃 tab 套 tab）：双击/右键改名沿用 LevelTabLabel */}
+                                <div style={{
+                                    width: 220, flex: 'none', overflowY: 'auto',
+                                    borderRight: '1px solid rgba(128, 128, 128, 0.2)', paddingRight: 4,
+                                }}>
+                                    {(items || []).map((it: any) => (
+                                        <div key={it.key}
+                                             onClick={() => onChange(String(it.key))}
+                                             style={{
+                                                 display: 'flex', alignItems: 'center', gap: 8,
+                                                 padding: '6px 8px', cursor: 'pointer', borderRadius: 4,
+                                                 background: activeKey === it.key ? 'rgba(232, 196, 106, 0.12)' : undefined,
+                                             }}>
+                                            <div style={{flex: 1, minWidth: 0}}>{it.label}</div>
+                                            {it.closable && (
+                                                <Button size="small" type="text" icon={<CloseOutlined/>}
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            remove(String(it.key));
+                                                        }}/>
+                                            )}
+                                        </div>
+                                    ))}
+                                    {quickCards.map((qc: any) => (
+                                        <div key={qc.key} style={{padding: '6px 8px'}}>{qc.label}</div>
+                                    ))}
+                                </div>
+                                {/* 各世界内容常驻挂载、显隐切换（保留各自内层 tab 状态） */}
+                                <div style={{flex: 1, minWidth: 0, overflowY: 'auto', paddingLeft: 12}}>
+                                    {(items || []).map((it: any) => (
+                                        <div key={it.key} style={{display: it.key === activeKey ? undefined : 'none'}}>
+                                            {it.children}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                            <Divider/>
+                            <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px'}}>
+                                <Space size={8} wrap>
+                                    <Button icon={<SaveOutlined/>} type={"primary"} onClick={handleSave}>{t('level.save')}</Button>
+                                    <Upload beforeUpload={handleUpload} showUploadList={false}>
+                                        <Button icon={<ImportOutlined/>} type={'primary'}>{t('level2.import.button')}</Button>
+                                    </Upload>
+                                    <Button icon={<DownloadOutlined/>} type={'primary'} onClick={handleDownload}>{t('backup.download')}</Button>
+                                </Space>
+                                <Space size={8}>
+                                    {dirty && (
+                                        <span style={{color: '#faad14', fontSize: '12px'}}>● {t('level.unsaved')}</span>
+                                    )}
+                                    {has('allowAddLevel') &&
+                                        <Button icon={<PlusOutlined/>} type={"primary"} onClick={() => setTopTab('create')}>{t('level.add')}</Button>
+                                    }
+                                    <Button icon={<AppstoreOutlined/>} type={"primary"} style={{background: '#722ed1', borderColor: '#722ed1'}}
+                                            onClick={() => setTemplateOpen(true)}>{t('tool.preinstall.worldTemplate')}</Button>
+                                </Space>
+                            </div>
+                        </>),
+                    },
+                    {
+                        key: 'create',
+                        label: t('level2.createTab'),
+                        children: (
+                            <CreateWorld
+                                dstWorldSetting={dstWorldSetting}
+                                has={has}
+                                getExisting={() => ({
+                                    names: levelListRef.current.map((l: LevelData) => l.levelName),
+                                    uuids: levelListRef.current.map((l: LevelData) => l.uuid),
+                                })}
+                                getServerIniInit={() => getNextServerIni('')}
+                                getIAEntry={() => (parse(getIAModoverrides()) as Record<string, Record<string, unknown>>)['workshop-1467214795']}
+                                onCreated={handleCreateWorld}
+                            />
+                        ),
+                    },
+                ]}
             />
-            <Divider/>
-            <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px'}}>
-                <Space size={8} wrap>
-                    <Button icon={<SaveOutlined/>} type={"primary"} onClick={handleSave}>{t('level.save')}</Button>
-                    <Upload beforeUpload={handleUpload} showUploadList={false}>
-                        <Button icon={<ImportOutlined/>} type={'primary'}>{t('level2.import.button')}</Button>
-                    </Upload>
-                    <Button icon={<DownloadOutlined/>} type={'primary'} onClick={handleDownload}>{t('backup.download')}</Button>
-                </Space>
-                <Space size={8}>
-                    {has('allowAddLevel') &&
-                        <Button icon={<PlusOutlined/>} type={"primary"} onClick={() => setActiveKey('create-world')}>{t('level.add')}</Button>
-                    }
-                    <Button icon={<AppstoreOutlined/>} type={"primary"} style={{background: '#722ed1', borderColor: '#722ed1'}}
-                            onClick={() => setTemplateOpen(true)}>{t('tool.preinstall.worldTemplate')}</Button>
-                </Space>
-            </div>
         {/* 世界模板弹窗(集群级预设存档,整档替换语义与原独立页一致) */}
         <Modal title={t('tool.preinstall.worldTemplate')} open={templateOpen} onCancel={() => setTemplateOpen(false)} footer={null} width={860}>
             <Preinstall reload={() => { fetchData().catch(console.log) }} />

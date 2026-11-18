@@ -4,10 +4,11 @@ import {SearchOutlined} from '@ant-design/icons';
 import {useParams} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import {getMyModInfoList} from '../../api/modApi.jsx';
+import {http} from '../../utils/http';
 import {modMatches} from '../../utils/modIndex';
 
-// 订阅池选模组弹窗：按名/ID 搜、多选 → onAdd(勾选行原样)。追加语义（不覆盖已有）
-// 由调用方经 appendModsToOverrides 保证。
+// 订阅池选模组弹窗：池=模组设置的「我的订阅」（Steam 资产库，跨存档）；
+// 按名/ID 搜、多选 → onAdd(勾选行 {modid,name,mod_config})。追加语义由调用方保证。
 export default ({open, onClose, onAdd}) => {
     const {t} = useTranslation();
     const {cluster} = useParams();
@@ -19,9 +20,17 @@ export default ({open, onClose, onAdd}) => {
     useEffect(() => {
         if (!open || rows.length > 0) return;
         setLoading(true);
-        getMyModInfoList(cluster || '').then((resp) => {
-            if (resp?.code === 200) setRows(resp.data || []);
-            else message.error(t('level2.modPicker.fetchError'));
+        // 订阅行是 PascalCase（Modid/Name/Img）；mod_config 默认值从 mod_infos 查得到的带上
+        Promise.all([
+            http.get('/api/mod/subscription', {headers: {Cluster: cluster || ''}}),
+            getMyModInfoList(cluster || '').catch(() => null),
+        ]).then(([subs, infos]) => {
+            const infoMap = {};
+            for (const m of (infos?.data || [])) if (m?.modid) infoMap[m.modid] = m.mod_config;
+            const list = (subs?.data?.data || [])
+                .map(r => ({modid: r.Modid, name: r.Name, img: r.Img, mod_config: infoMap[r.Modid]}))
+                .filter(r => r.modid);
+            setRows(list);
         }).catch(() => message.error(t('level2.modPicker.fetchError')))
             .finally(() => setLoading(false));
     }, [open, cluster]);

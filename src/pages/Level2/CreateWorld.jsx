@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {Button, Divider, Input, message, Modal, Radio, Space} from 'antd';
+import {Button, Input, message, Modal, Radio, Space, Tabs} from 'antd';
 import {PlusOutlined, RedoOutlined} from '@ant-design/icons';
 import {useTranslation} from 'react-i18next';
 import LevelViewer from './LevelViewer.tsx';
@@ -133,24 +133,40 @@ const CreateWorld = ({dstWorldSetting, has, getExisting, onCreated, getServerIni
             <Button icon={<RedoOutlined/>} onClick={reset}>{t('level2.create.reset')}</Button>
         </Space>
 
-        <Divider orientation="left">{t('level.leveldataoverride')}</Divider>
-        <LevelViewer leveldataoverride={draft.leveldataoverride} dstWorldSetting={dstWorldSetting}
-                     isMaster={!!draft.server_ini?.is_master}
-                     changeValue={(v) => setDraft(d => ({...d, leveldataoverride: v}))}/>
-
-        <Divider orientation="left">
-            {t('level.modoverrides')}
-            <Button size="small" icon={<PlusOutlined/>} style={{marginLeft: 12}}
-                    onClick={() => setPickerOpen(true)}>
-                {t('level2.create.addMods')}
-            </Button>
-        </Divider>
-        <Modoverrides level={{...draft}} levelName={draft.levelName} has={has}
-                      changeLevel={(_n, v) => setDraft(d => ({...d, ...v}))}/>
-
-        <Divider orientation="left">{t('level.serverIni')}</Divider>
-        <ServerIni level={{...draft}} levelName={draft.levelName} has={has}
-                   changeLevel={(_n, v) => setDraft(d => ({...d, ...v}))}/>
+        {/* 三段结构完全照抄世界 tab：世界设置 / 模组设置 / 端口设置 */}
+        <Tabs items={[
+            {
+                key: '1',
+                label: t('level.leveldataoverride'),
+                children: (
+                    <LevelViewer leveldataoverride={draft.leveldataoverride} dstWorldSetting={dstWorldSetting}
+                                 isMaster={!!draft.server_ini?.is_master}
+                                 changeValue={(v) => setDraft(d => ({...d, leveldataoverride: v}))}/>
+                ),
+            },
+            {
+                key: '2',
+                label: t('level.modoverrides'),
+                children: (
+                    <div>
+                        <Button icon={<PlusOutlined/>} style={{marginBottom: 8}}
+                                onClick={() => setPickerOpen(true)}>
+                            {t('level2.create.addMods')}
+                        </Button>
+                        <Modoverrides level={{...draft}} levelName={draft.levelName} has={has}
+                                      changeLevel={(_n, v) => setDraft(d => ({...d, ...v}))}/>
+                    </div>
+                ),
+            },
+            {
+                key: '3',
+                label: t('level.serverIni'),
+                children: (
+                    <ServerIni level={{...draft}} levelName={draft.levelName} has={has}
+                               changeLevel={(_n, v) => setDraft(d => ({...d, ...v}))}/>
+                ),
+            },
+        ]}/>
 
         <ModPicker open={pickerOpen} onClose={() => setPickerOpen(false)} onAdd={onAddMods}/>
     </div>);
