@@ -280,7 +280,7 @@ const Backup = ({showStatistic}) => {
 
     return (
         <>
-            {loading ? <TableSkeleton rows={6} cols={5}/> : <>
+            {loading ? <Skeleton active title paragraph={{rows: 6}}/> : <>
             <DeletetModal/>
             <div style={{
                 paddingBottom: 12

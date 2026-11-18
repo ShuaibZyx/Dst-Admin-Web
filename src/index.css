@@ -96,3 +96,20 @@
 /* 页面切换/骨架→内容：整页淡入，掩盖 DOM 突变的闪烁 */
 @keyframes dstPageIn { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: none; } }
 .page-fade { animation: dstPageIn 0.22s ease both; }
+
+/* ===== 动效优化：状态/主题/数值平滑过渡 ===== */
+.ant-tag, .ant-switch, .ant-btn, .ant-progress-circle-path {
+    transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, stroke 0.25s ease;
+}
+/* 主题切换渐变（背景/文字柔和过渡） */
+.ant-layout, .ant-pro-card, .ant-card, .ant-table, .ant-input, .ant-select-selector {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+/* 数值卡：内容更新柔和显现 */
+.ant-statistic-content {
+    transition: opacity 0.25s ease;
+}
+/* 列表项进出淡入 */
+.ant-list-item, .ant-card {
+    animation: dstFadeIn 0.22s ease both;
+}

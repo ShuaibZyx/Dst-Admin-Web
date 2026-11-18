@@ -1,5 +1,4 @@
 import {useEffect, useState, useCallback} from "react";
-import {TableSkeleton} from '../../../components/Skeletons.jsx';
 import {useTranslation} from "react-i18next";
 import {
     Button,
@@ -171,7 +170,7 @@ const NameList: React.FC<NameListProps> = ({title, tips, getApi, saveApi}) => {
 
     return (
         <>
-            {loading ? <TableSkeleton rows={6} cols={3}/> : (<>
+            {loading ? <Skeleton active title paragraph={{rows: 6}}/> : (<>
             {/* 原样：页面标题 + 说明 */}
             <div style={{marginBottom: 12}}>
                 <Typography.Title level={4} style={{margin: 0}}>

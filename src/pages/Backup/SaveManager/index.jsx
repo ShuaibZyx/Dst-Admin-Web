@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import {TableSkeleton} from '../../../../components/Skeletons.jsx';
 import {Skeleton, Button, Checkbox, Input, message, Modal, Popconfirm, Space, Table, Tag, Upload} from 'antd';
 import {CloudUploadOutlined, DeleteOutlined, FolderOutlined, ImportOutlined, ReloadOutlined} from '@ant-design/icons';
 import {useTranslation} from "react-i18next";
@@ -127,7 +126,7 @@ export default () => {
 
     return (
         <>
-            {loading ? <TableSkeleton rows={5} cols={4}/> : (<>
+            {loading ? <Skeleton active title paragraph={{rows: 6}}/> : (<>
         <div>
             {!configured ? (
                 <div style={{marginBottom: 12, opacity: 0.65}}>{t('backup.saveManager.needRoot')}</div>

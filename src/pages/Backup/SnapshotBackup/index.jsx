@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from "react";
-import {FormSkeleton} from '../../../../components/Skeletons.jsx';
 import {useParams} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 
@@ -53,7 +52,7 @@ export default () => {
             message={t('backup.tips3')}
             type="info" showIcon closable/>
         <br/>
-        {loading ? <FormSkeleton fields={4}/> : (
+        {loading ? <Skeleton active title paragraph={{rows: 4}}/> : (
             <Form
                 form={form}
                 labelCol={{
