@@ -2,7 +2,7 @@ import {shipwreckedTpl, volcanoTpl} from "../../types/dst.ts";
 import {parse} from "lua-json";
 import ModVisualEditor from "./ModVisualEditor";
 import {fillLevelDefaults} from "../../utils/levelDefaults";
-import {buildModIndex, modIdAtLine} from "../../utils/modIndex";
+import {buildModIndex, buildModNameMap, modIdAtLine} from "../../utils/modIndex";
 import {useTranslation} from "react-i18next";
 import React, {useEffect, useMemo, useRef, useState} from "react";
 import {Alert, Button, Divider, Dropdown, Empty, Form, Input, InputNumber, message, Modal, Radio, Skeleton, Space, Switch, Tabs, TabsProps, Tag, Tooltip, Upload, Row, Col} from "antd";
@@ -249,11 +249,7 @@ const Modoverrides: React.FC<LevelItemProps> = (props) => {
     useEffect(() => {
         getMyModInfoList(cluster || '').then((resp: { code?: number, data?: Array<{ modid?: string, name?: string }> | null }) => {
             if (resp?.code !== 200) return;
-            const map: Record<string, string> = {};
-            for (const m of resp.data || []) {
-                if (m?.modid) map[m.modid] = m.name || '';
-            }
-            setNameMap(map);
+            setNameMap(buildModNameMap(resp.data));
         }).catch(() => setNameMap({}));
     }, [cluster]);
 

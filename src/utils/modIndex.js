@@ -55,3 +55,20 @@ export function modIdAtLine(blocks, line) {
     const hit = blocks.find((b) => line >= b.startLine && line <= b.endLine);
     return hit ? hit.id : null;
 }
+
+// /api/mod 行 → modid/名 映射。mod_infos 的 modid 是裸数字，modoverrides 的键是
+// workshop-<数字>——两种形态都入表，标题与搜索才都能命中；名字缺失或名字就是 id
+// （后端 Name: modId 兜底脏行）不建映射，让界面回退显示 id。
+export function buildModNameMap(rows) {
+    const map = {};
+    for (const r of rows || []) {
+        const id = r?.modid;
+        const name = r?.name;
+        if (!id || !name || name === id) continue;
+        map[id] = name;
+        const bare = id.startsWith('workshop-') ? id.slice('workshop-'.length) : id;
+        map[bare] = name;
+        if (/^\d+$/.test(bare)) map[`workshop-${bare}`] = name;
+    }
+    return map;
+}

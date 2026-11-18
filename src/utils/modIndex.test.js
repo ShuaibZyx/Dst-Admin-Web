@@ -1,6 +1,6 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {buildModIndex, modIdAtLine, modMatches} from './modIndex.js';
+import {buildModIndex, buildModNameMap, modIdAtLine, modMatches} from './modIndex.js';
 
 // serialize 同构的 canonical 文本：10 行，workshop-1 起于 2 行、workshop-2 起于 6 行
 const CANONICAL = [
@@ -67,4 +67,27 @@ test('modIdAtLine：块内行→块 id；块外行→null（块外不清活动�
     assert.equal(modIdAtLine(blocks, 10), 'workshop-2');
     assert.equal(modIdAtLine(blocks, 1), null);          // return { 行在块外
     assert.equal(modIdAtLine([], 3), null);
+});
+
+test('buildModNameMap：裸数字 modid 与 workshop- 键双向可查（modoverrides 键带前缀）', () => {
+    const map = buildModNameMap([{modid: '378160973', name: 'Global Positions'}]);
+    assert.equal(map['378160973'], 'Global Positions');
+    assert.equal(map['workshop-378160973'], 'Global Positions');
+});
+
+test('buildModNameMap：带前缀/本地 modid 与脏名处理', () => {
+    const map = buildModNameMap([
+        {modid: 'workshop-123', name: 'X'},
+        {modid: 'client_mods_disabled', name: '禁用本地模组'},
+        {modid: '9', name: '9'},          // 名字就是 id（后端 Name: modId 兜底脏行）→ 不建映射
+        {modid: '8', name: ''},           // 无名 → 不建映射
+        {name: 'no-modid'},               // 缺 modid → 跳过
+    ]);
+    assert.equal(map['workshop-123'], 'X');
+    assert.equal(map['123'], 'X');
+    assert.equal(map['client_mods_disabled'], '禁用本地模组');
+    assert.equal('workshop-client_mods_disabled' in map, false);
+    assert.equal('9' in map, false);
+    assert.equal('8' in map, false);
+    assert.deepEqual(buildModNameMap(null), {});
 });
