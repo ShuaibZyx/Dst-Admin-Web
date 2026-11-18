@@ -135,7 +135,7 @@ const Login: React.FC = () => {
 
     useEffect(() => {
 
-        document.body.style.backgroundImage = theme === 'dark'? "url('./assets/dark-bg.png')":"url('./assets/light-bg.png')";
+        document.body.style.backgroundImage = theme === 'dark'? "url('./assets/dark-bg.webp')":"url('./assets/light-bg.webp')";
         document.body.style.backgroundSize = 'cover'; // 背景图覆盖整个页面
         document.body.style.backgroundPosition = 'center'; // 背景图居中显示
         document.body.style.backgroundRepeat = 'no-repeat'; // 背景图不重复
