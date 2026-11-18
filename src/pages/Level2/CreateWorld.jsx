@@ -81,6 +81,8 @@ const CreateWorld = ({dstWorldSetting, has, getExisting, onCreated, getServerIni
     // 与原「添加世界」弹窗同规则：重名/文件名（重复、含子串、特殊字符）/必填
     const validate = (levelName, uuid) => {
         const {names, uuids} = getExisting();
+        levelName = (levelName || '').trim();
+        uuid = (uuid || '').trim();
         if (!levelName) return t('level.warning.name.not.allow.null');
         if (names.includes(levelName)) return t('level.name.duplication');
         if (!uuid) return t('level2.filename.required');
@@ -199,21 +201,23 @@ const CreateWorld = ({dstWorldSetting, has, getExisting, onCreated, getServerIni
         <Modal title={t('level2.createTab')} open={createOpen} confirmLoading={creating}
                onCancel={() => setCreateOpen(false)}
                onOk={() => {
-                   const err = validate(formName, formUuid);
+                   const name = formName.trim();
+                   const uuid = formUuid.trim();
+                   const err = validate(name, uuid);
                    if (err) {
                        message.error(err);
                        return;
                    }
                    setCreateOpen(false);
-                   submit(formName, formUuid);
+                   submit(name, uuid);
                }}>
             <div style={{marginBottom: 12}}>
-                <Typography.Text type="secondary">{t('level.name')}</Typography.Text>
+                <Typography.Text type="secondary"><span style={{color: '#ff4d4f', marginRight: 2}}>*</span>{t('level.name')}</Typography.Text>
                 <Input placeholder={t('level.placeholder.name')} value={formName} style={{marginTop: 4}}
                        onChange={(e) => setFormName(e.target.value)}/>
             </div>
             <div>
-                <Typography.Text type="secondary">{t('level.filename')}</Typography.Text>
+                <Typography.Text type="secondary"><span style={{color: '#ff4d4f', marginRight: 2}}>*</span>{t('level.filename')}</Typography.Text>
                 <Input placeholder={t('level.placeholder.filename')} value={formUuid} style={{marginTop: 4}}
                        onChange={(e) => setFormUuid(e.target.value)}/>
             </div>
