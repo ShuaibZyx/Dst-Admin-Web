@@ -43,16 +43,17 @@ export default function Routes() {
                         {path: ':cluster/:name/panel', element: <Panel/>},
                         {path: 'home', element: <Home/>},
                         {
-                            path: 'levels',
+                            path: 'level',
                             children: [
                                 {index: true, element: <Level2/>},
                                 {path: 'genMap', element: <DstMapData/>},
-                                // 旧地址兼容：/levels/levels（历史菜单路径）
-                                {path: 'levels', element: <Navigate to="/levels" replace/>},
                             ]
                         },
-                        // 旧地址兼容：/level2
-                        {path: 'level2', element: <Navigate to="/levels" replace/>},
+                        // 旧地址兼容（统一单数前的路径）
+                        {path: 'levels', element: <Navigate to="/level" replace/>},
+                        {path: 'levels/genMap', element: <Navigate to="/level/genMap" replace/>},
+                        {path: 'levels/levels', element: <Navigate to="/level" replace/>},
+                        {path: 'level2', element: <Navigate to="/level" replace/>},
                         {path: 'backup', element: <Backup/>},
                         {path: 'setting', element: <Setting/>},
                         {path: 'help', element: <Help/>},
