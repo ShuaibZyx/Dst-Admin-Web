@@ -9,10 +9,6 @@ import React, {useEffect, useRef, useState} from "react";
 import {Alert, Button, Divider, Dropdown, Empty, Form, Input, message, Modal, Skeleton, Space, Tabs, TabsProps, Tag, Tooltip, Upload} from "antd";
 import type {MenuProps} from 'antd';
 import {CloseOutlined, EditOutlined, ImportOutlined, DownloadOutlined, SaveOutlined, PlusOutlined, AppstoreOutlined} from '@ant-design/icons';
-import type {MonacoEditorRef} from "../NewEditor2";
-// Monaco 体积大,懒加载(类型走 type import 不进运行时)
-const MonacoEditor2 = React.lazy(() => import("../NewEditor2"));
-import {useTheme} from "../../hooks/useTheme";
 import {useParams} from "react-router-dom";
 
 import axios from "axios";
@@ -162,61 +158,19 @@ const LevelItem: React.FC<LevelItemProps> = ({dstWorldSetting, levelName, level,
 };
 
 const Leveldataoverride: React.FC<LevelItemProps> = (props) => {
-    const {theme} = useTheme()
-    const {t} = useTranslation()
-
-    const editorRef = useRef<MonacoEditorRef>(null);
-    const valueRef = useRef(props.level?.leveldataoverride || '')
     const [leveldataoverride, setLeveldataoverride] = useState<string>(props.level?.leveldataoverride || '')
-    // editorRef?: React.RefObject<MonacoEditorRef>;
 
     useEffect(() => {
-        editorRef.current?.setValue(props.level?.leveldataoverride || '')
         setLeveldataoverride(props.level?.leveldataoverride || '')
-        valueRef.current = props.level?.leveldataoverride || ''
     }, [props.level?.leveldataoverride]);
 
-    const items: TabsProps['items'] = [
-        {
-            forceRender: true,
-            key: '1',
-            label: t('level.view'),
-            children: <LevelViewer leveldataoverride={leveldataoverride} dstWorldSetting={props.dstWorldSetting}
-                                   isMaster={!!props.level?.server_ini?.is_master}
-                                   changeValue={(value) => {
-                                       props.changeLevel(props.levelName, {leveldataoverride: value})
-                                       editorRef?.current?.setValue(value)
-                                   }}/>,
-        },
-        {
-            forceRender: true,
-            key: '2',
-            label: t('level.edit'),
-            children: <div>
-                <React.Suspense fallback={null}>
-<React.Suspense fallback={null}><MonacoEditor2 ref={editorRef}
-                               theme={theme === 'dark' ? 'vs-dark' : ''}
-                               style={{
-                                   "height": "calc(100vh - 370px)",
-                                   "minHeight": "300px",
-                                   "width": "100%"
-                               }}
-                               onChange={value => {
-                                   if (props.changeLevel) {
-                                       props.changeLevel(props.levelName, {leveldataoverride: value})
-                                       setLeveldataoverride(value)
-                                   }
-                               }}
-                /></React.Suspense>
-</React.Suspense>
-            </div>,
-        },
-    ];
-
-
-    return (<Skeleton loading={false}>
-        <Tabs defaultActiveKey="1" type={'card'} destroyInactiveTabPane={true} items={items}/>
-    </Skeleton>)
+    // 「编辑」（Lua 代码）页签已撤：世界设置只留可视化（与创建台一致）
+    return <LevelViewer leveldataoverride={leveldataoverride} dstWorldSetting={props.dstWorldSetting}
+                        isMaster={!!props.level?.server_ini?.is_master}
+                        changeValue={(value) => {
+                            props.changeLevel(props.levelName, {leveldataoverride: value})
+                            setLeveldataoverride(value)
+                        }}/>
 }
 
 
