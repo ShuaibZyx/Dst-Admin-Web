@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {Button, Input, message, Modal, Radio, Space, Tabs} from 'antd';
+import {Button, Input, message, Modal, Radio, Space, Tabs, Typography} from 'antd';
 import {PlusOutlined, RedoOutlined} from '@ant-design/icons';
 import {useTranslation} from 'react-i18next';
 import LevelViewer from './LevelViewer.tsx';
@@ -117,23 +117,39 @@ const CreateWorld = ({dstWorldSetting, has, getExisting, onCreated, getServerIni
         },
     });
 
-    return (<div>
-        <Space wrap style={{marginBottom: 12}}>
-            <Input placeholder={t('level.placeholder.name')} value={draft.levelName} style={{width: 200}}
-                   onChange={(e) => setDraft(d => ({...d, levelName: e.target.value}))}/>
-            <Input placeholder={t('level.placeholder.filename')} value={draft.uuid} style={{width: 200}}
-                   onChange={(e) => setDraft(d => ({...d, uuid: e.target.value}))}/>
-            <Radio.Group value={draft.type} onChange={(e) => onTypeChange(e.target.value)}>
-                <Radio value={'forest'}>{t('level.type.forest')}</Radio>
-                <Radio value={'cave'}>{t('level.type.caves')}</Radio>
-                {iaModReady && <Radio value={'shipwrecked'}>{t('level.type.shipwrecked')}</Radio>}
-                {iaModReady && <Radio value={'volcano'}>{t('level.type.volcano')}</Radio>}
-            </Radio.Group>
-            <Button type="primary" icon={<PlusOutlined/>} onClick={submit}>{t('level2.create.submit')}</Button>
-            <Button icon={<RedoOutlined/>} onClick={reset}>{t('level2.create.reset')}</Button>
-        </Space>
+    return (<div style={{display: 'flex', gap: 12}}>
+        {/* 左栏：创建表单（与世界设置的左竖列同构图：窄栏 + 右侧 tab 工作区） */}
+        <div style={{width: 220, flex: 'none'}}>
+            <div style={{marginBottom: 10}}>
+                <Typography.Text type="secondary">{t('level.name')}</Typography.Text>
+                <Input placeholder={t('level.placeholder.name')} value={draft.levelName} style={{marginTop: 4}}
+                       onChange={(e) => setDraft(d => ({...d, levelName: e.target.value}))}/>
+            </div>
+            <div style={{marginBottom: 10}}>
+                <Typography.Text type="secondary">{t('level.filename')}</Typography.Text>
+                <Input placeholder={t('level.placeholder.filename')} value={draft.uuid} style={{marginTop: 4}}
+                       onChange={(e) => setDraft(d => ({...d, uuid: e.target.value}))}/>
+            </div>
+            <div style={{marginBottom: 12}}>
+                <Typography.Text type="secondary">{t('level.type')}</Typography.Text>
+                <Radio.Group value={draft.type} onChange={(e) => onTypeChange(e.target.value)}
+                             style={{marginTop: 4, display: 'block'}}>
+                    <Space direction="vertical">
+                        <Radio value={'forest'}>{t('level.type.forest')}</Radio>
+                        <Radio value={'cave'}>{t('level.type.caves')}</Radio>
+                        {iaModReady && <Radio value={'shipwrecked'}>{t('level.type.shipwrecked')}</Radio>}
+                        {iaModReady && <Radio value={'volcano'}>{t('level.type.volcano')}</Radio>}
+                    </Space>
+                </Radio.Group>
+            </div>
+            <Space direction="vertical" style={{width: '100%'}}>
+                <Button type="primary" block icon={<PlusOutlined/>} onClick={submit}>{t('level2.create.submit')}</Button>
+                <Button block icon={<RedoOutlined/>} onClick={reset}>{t('level2.create.reset')}</Button>
+            </Space>
+        </div>
 
-        {/* 三段结构完全照抄世界 tab：世界设置 / 模组设置 / 端口设置 */}
+        {/* 右区：三段结构完全照抄世界 tab（tab 在上、内容在下） */}
+        <div style={{flex: 1, minWidth: 0}}>
         <Tabs items={[
             {
                 key: '1',
@@ -167,6 +183,7 @@ const CreateWorld = ({dstWorldSetting, has, getExisting, onCreated, getServerIni
                 ),
             },
         ]}/>
+        </div>
 
         <ModPicker open={pickerOpen} onClose={() => setPickerOpen(false)} onAdd={onAddMods}/>
     </div>);
