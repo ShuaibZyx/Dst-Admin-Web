@@ -130,9 +130,8 @@ const CreateWorld = ({dstWorldSetting, has, getExisting, onCreated, getServerIni
         <div style={{display: 'flex', gap: 12}}>
         {/* 左栏：世界类型（与世界竖列同构图）；名称/文件名在「创建」弹窗输入 */}
         <div style={{width: 220, flex: 'none'}}>
-            <Typography.Text type="secondary">{t('level.type')}</Typography.Text>
             {/* 同世界设置左竖列的行样式（无图标、无尾叉），行首加单选；选中行金色高亮 */}
-            <div style={{marginTop: 4}}>
+            <div>
                 {TYPE_OPTIONS.filter(o => !o.ia || iaModReady).map(o => (
                     <div key={o.value} onClick={() => onTypeChange(o.value)}
                          style={{
