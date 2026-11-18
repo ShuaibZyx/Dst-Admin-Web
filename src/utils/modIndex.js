@@ -1,4 +1,5 @@
-import {parse} from 'lua-json';
+import {parse, format} from 'lua-json';
+import {luaSafe} from './luaFormat.js';
 
 // modoverrides.lua 的模组块行号索引与搜索匹配（纯逻辑，供可视化栏联动/配色/搜索用）。
 // 行号 1 基、endLine 含尾。id 列表以 parse 的顶层键为权威，行号按原文正则回查——
@@ -71,4 +72,54 @@ export function buildModNameMap(rows) {
         if (/^\d+$/.test(bare)) map[`workshop-${bare}`] = name;
     }
     return map;
+}
+
+// modConfig.configuration_options[].{name,default} → 默认配置表（同模组页 initModConfigList 语义）
+export function defaultConfigOptions(modConfig) {
+    const out = {};
+    for (const item of modConfig?.configuration_options || []) {
+        if (item?.default !== '' && item?.name !== 'null' && item?.name !== undefined) {
+            out[item.name] = item.default;
+        }
+    }
+    return out;
+}
+
+// 数字 id 记 workshop-<id>（游戏键形），本地 id 原样
+const modKey = (modid) => (/^\d+$/.test(modid) ? `workshop-${modid}` : modid);
+
+// 向 modoverrides 文本追加模组（追加语义：已存在的键跳过、绝不覆盖）；
+// 新键 = 启用 + 该模组默认配置。解析失败 → null（调用方提示、原文不动）。
+export function appendModsToOverrides(text, mods) {
+    let table;
+    try {
+        table = parse(text || 'return {}');
+    } catch {
+        return null;
+    }
+    if (!table || typeof table !== 'object') return null;
+    // lua-json 把空表解析成数组（format 又只序列化下标）——归一成普通对象再改键
+    table = {...table};
+    for (const {modid, modConfig} of mods) {
+        const key = modKey(modid);
+        if (table[key] !== undefined) continue;
+        table[key] = {enabled: true, configuration_options: defaultConfigOptions(modConfig)};
+    }
+    return format(luaSafe(table));
+}
+
+// 保证某模组启用：缺键插入 entry（含配置）；已存在只把 enabled 置 true、配置原样保留。
+// 解析失败 → null。
+export function ensureModEnabled(text, key, entry) {
+    let table;
+    try {
+        table = parse(text || 'return {}');
+    } catch {
+        return null;
+    }
+    if (!table || typeof table !== 'object') return null;
+    table = {...table};
+    const cur = table[key];
+    table[key] = cur === undefined ? {...entry} : {...cur, enabled: true};
+    return format(luaSafe(table));
 }

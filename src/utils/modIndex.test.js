@@ -1,6 +1,15 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {buildModIndex, buildModNameMap, modIdAtLine, modMatches} from './modIndex.js';
+import {parse} from 'lua-json';
+import {
+    appendModsToOverrides,
+    buildModIndex,
+    buildModNameMap,
+    defaultConfigOptions,
+    ensureModEnabled,
+    modIdAtLine,
+    modMatches,
+} from './modIndex.js';
 
 // serialize 同构的 canonical 文本：10 行，workshop-1 起于 2 行、workshop-2 起于 6 行
 const CANONICAL = [
@@ -90,4 +99,68 @@ test('buildModNameMap：带前缀/本地 modid 与脏名处理', () => {
     assert.equal('9' in map, false);
     assert.equal('8' in map, false);
     assert.deepEqual(buildModNameMap(null), {});
+});
+
+const EXISTING = [
+    'return {',
+    '    ["workshop-378160973"] = {',
+    '        ["enabled"] = false,',
+    '        ["configuration_options"] = {',
+    '            ["k"] = 99,',
+    '        },',
+    '    },',
+    '}',
+].join('\n');
+
+test('defaultConfigOptions：空 default/空名跳过，缺 modConfig → {}', () => {
+    assert.deepEqual(defaultConfigOptions({
+        configuration_options: [
+            {name: 'a', default: 'x'},
+            {name: 'b', default: ''},
+            {name: 'null', default: 'y'},
+            {default: 'z'},
+        ],
+    }), {a: 'x'});
+    assert.deepEqual(defaultConfigOptions(undefined), {});
+});
+
+test('appendModsToOverrides：数字 id 记 workshop- 键、带默认配置', () => {
+    const out = appendModsToOverrides('return {}', [{
+        modid: '378160973',
+        modConfig: {configuration_options: [{name: 'k', default: 1}]},
+    }]);
+    assert.deepEqual(parse(out), {
+        'workshop-378160973': {enabled: true, configuration_options: {k: 1}},
+    });
+});
+
+test('appendModsToOverrides：追加语义——已有模组不覆盖（enabled/配置原样）', () => {
+    const out = appendModsToOverrides(EXISTING, [{
+        modid: '378160973',
+        modConfig: {configuration_options: [{name: 'k', default: 1}]},
+    }]);
+    assert.deepEqual(parse(out)['workshop-378160973'], {
+        enabled: false,
+        configuration_options: {k: 99},
+    });
+});
+
+test('appendModsToOverrides：本地 id 原样、多模组混加、解析失败 → null', () => {
+    const out = appendModsToOverrides('return {}', [
+        {modid: '378160973', modConfig: {}},
+        {modid: 'client_mods_disabled', modConfig: {}},
+    ]);
+    const data = parse(out);
+    assert.deepEqual(Object.keys(data).sort(), ['client_mods_disabled', 'workshop-378160973']);
+    assert.equal(data['client_mods_disabled'].enabled, true);
+    assert.equal(appendModsToOverrides('return { ["x"] = ', [{modid: '1'}]), null);
+});
+
+test('ensureModEnabled：缺键插入 entry；已有键只翻 enabled 保留配置；失败 → null', () => {
+    const entry = {enabled: true, configuration_options: {a: 1}};
+    assert.deepEqual(parse(ensureModEnabled('return {}', 'workshop-1', entry)), {'workshop-1': entry});
+    const fixed = parse(ensureModEnabled(EXISTING, 'workshop-378160973', entry))['workshop-378160973'];
+    assert.equal(fixed.enabled, true);
+    assert.deepEqual(fixed.configuration_options, {k: 99});
+    assert.equal(ensureModEnabled('return { ["x"] = ', 'workshop-1', entry), null);
 });
