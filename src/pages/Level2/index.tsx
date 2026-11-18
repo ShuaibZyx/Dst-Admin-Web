@@ -5,8 +5,8 @@ import ServerIni from "./ServerIni";
 import CreateWorld from "./CreateWorld";
 import {fillLevelDefaults} from "../../utils/levelDefaults";
 import {useTranslation} from "react-i18next";
-import React, {useEffect, useMemo, useRef, useState} from "react";
-import {Alert, Button, Divider, Dropdown, Empty, Form, Input, message, Modal, Skeleton, Space, Tabs, TabsProps, Tag, Tooltip, Upload, Row, Col} from "antd";
+import React, {useEffect, useRef, useState} from "react";
+import {Alert, Button, Divider, Dropdown, Empty, Form, Input, message, Modal, Skeleton, Space, Tabs, TabsProps, Tag, Tooltip, Upload} from "antd";
 import type {MenuProps} from 'antd';
 import {EditOutlined, ImportOutlined, DownloadOutlined, SaveOutlined, PlusOutlined, AppstoreOutlined} from '@ant-design/icons';
 import type {MonacoEditorRef} from "../NewEditor2";
@@ -20,7 +20,7 @@ import LevelViewer from "./LevelViewer.tsx";
 import {getLevelListApi, createLevelApi, deleteLevelApi, updateLevelsApi, getLevelStatusApi} from "../../api/levelApi";
 import {modSubscribedApi} from "../../api/gezigeApi";
 import type {LevelData, LevelServerIni} from "../../type";
-import {cave, forest} from "../../utils/dst";
+import {forest} from "../../utils/dst";
 import Preinstall from "../Tool/Preinstall/index.jsx";
 
 // 世界标签组件
@@ -636,9 +636,9 @@ const Level2 = () => {
         }
     };
 
-    // 「创建世界」固定 tab（不可关）：完整配置台，草稿流
+    // 「创建世界」固定 tab（不可关，key 带连字符避开 uuid 合法值）：完整配置台，草稿流
     const createTabItem = {
-        key: 'create',
+        key: 'create-world',
         closable: false,
         label: t('level2.createTab'),
         children: (
@@ -690,7 +690,7 @@ const Level2 = () => {
 
     const onEdit = (targetKey: string | React.MouseEvent<Element, MouseEvent> | React.KeyboardEvent<Element>, action: 'add' | 'remove') => {
         if (action === 'add') {
-            setActiveKey('create');
+            setActiveKey('create-world');
         } else {
             remove(targetKey as string);
         }
@@ -839,7 +839,7 @@ const Level2 = () => {
                 </Space>
                 <Space size={8}>
                     {has('allowAddLevel') &&
-                        <Button icon={<PlusOutlined/>} type={"primary"} onClick={() => setActiveKey('create')}>{t('level.add')}</Button>
+                        <Button icon={<PlusOutlined/>} type={"primary"} onClick={() => setActiveKey('create-world')}>{t('level.add')}</Button>
                     }
                     <Button icon={<AppstoreOutlined/>} type={"primary"} style={{background: '#722ed1', borderColor: '#722ed1'}}
                             onClick={() => setTemplateOpen(true)}>{t('tool.preinstall.worldTemplate')}</Button>

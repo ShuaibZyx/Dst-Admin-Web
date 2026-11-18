@@ -18,11 +18,12 @@ const IA_MOD_KEY = 'workshop-1467214795';
 // 草稿不持久化（刷新即丢）；失败保留草稿可重试。
 const CreateWorld = ({dstWorldSetting, has, getExisting, onCreated, getServerIniInit, getIAEntry}) => {
     const {t} = useTranslation();
+    // 初始即 forest 模板（空文本会让 LevelViewer 误报 Lua 解析错误；type 同步预选）
     const emptyDraft = () => ({
         levelName: '',
         uuid: '',
-        type: undefined,
-        leveldataoverride: '',
+        type: 'forest',
+        leveldataoverride: forest,
         modoverrides: 'return {}',
         server_ini: getServerIniInit ? getServerIniInit() : null,
     });
@@ -30,7 +31,7 @@ const CreateWorld = ({dstWorldSetting, has, getExisting, onCreated, getServerIni
     const [pickerOpen, setPickerOpen] = useState(false);
     const [iaModReady, setIaModReady] = useState(true);
     // 当前模板原文：leveldataoverride 仍逐字等于它（未手改）才允许切 type 时换模板
-    const templateTextRef = useRef('');
+    const templateTextRef = useRef(forest);
 
     useEffect(() => {
         modSubscribedApi(IA_MOD_KEY).then(r => {
@@ -103,7 +104,7 @@ const CreateWorld = ({dstWorldSetting, has, getExisting, onCreated, getServerIni
         });
         if (ok) {
             setDraft(emptyDraft());
-            templateTextRef.current = '';
+            templateTextRef.current = forest;
         }
     };
 
@@ -112,7 +113,7 @@ const CreateWorld = ({dstWorldSetting, has, getExisting, onCreated, getServerIni
         okType: 'danger',
         onOk: () => {
             setDraft(emptyDraft());
-            templateTextRef.current = '';
+            templateTextRef.current = forest;
         },
     });
 
@@ -132,13 +133,13 @@ const CreateWorld = ({dstWorldSetting, has, getExisting, onCreated, getServerIni
             <Button icon={<RedoOutlined/>} onClick={reset}>{t('level2.create.reset')}</Button>
         </Space>
 
-        <Divider orientation="left">{t('level2.create.sectionWorldgen')}</Divider>
+        <Divider orientation="left">{t('level.leveldataoverride')}</Divider>
         <LevelViewer leveldataoverride={draft.leveldataoverride} dstWorldSetting={dstWorldSetting}
                      isMaster={!!draft.server_ini?.is_master}
                      changeValue={(v) => setDraft(d => ({...d, leveldataoverride: v}))}/>
 
         <Divider orientation="left">
-            {t('level2.create.sectionMods')}
+            {t('level.modoverrides')}
             <Button size="small" icon={<PlusOutlined/>} style={{marginLeft: 12}}
                     onClick={() => setPickerOpen(true)}>
                 {t('level2.create.addMods')}
@@ -147,7 +148,7 @@ const CreateWorld = ({dstWorldSetting, has, getExisting, onCreated, getServerIni
         <Modoverrides level={{...draft}} levelName={draft.levelName} has={has}
                       changeLevel={(_n, v) => setDraft(d => ({...d, ...v}))}/>
 
-        <Divider orientation="left">{t('level2.create.sectionServerIni')}</Divider>
+        <Divider orientation="left">{t('level.serverIni')}</Divider>
         <ServerIni level={{...draft}} levelName={draft.levelName} has={has}
                    changeLevel={(_n, v) => setDraft(d => ({...d, ...v}))}/>
 
