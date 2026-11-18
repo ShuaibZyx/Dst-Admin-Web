@@ -58,7 +58,8 @@ export default () => {
                 location: level.location || t('level.unknown'),
                 ps: level.ps,
                 Ps: level.Ps,
-                status: level.status
+                status: level.status,
+                startedAt: level.started_at
             }
             return item
         })

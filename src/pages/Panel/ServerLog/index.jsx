@@ -162,7 +162,29 @@ export default () => {
     const [currentLevelName, setCurrentLevelName] = useState(defaultLevelName)
     const editorRef = useRef()
     const currentLevel = useMemo(() => levels.find(level => level.key === currentLevelName), [levels, currentLevelName])
-    const processElapsed = currentLevel?.Ps?.elapsed || currentLevel?.ps?.elapsed
+    // 运行时长本地走秒：从不变的 startedAt 推导——时钟文本进状态流会让变更去重失效、
+    // 每 2s 触发一次全组件重渲染（"渲染涟漪"）；本地推导则只有这个标签每秒自更新
+    const startedAt = currentLevel?.startedAt
+    const [elapsedText, setElapsedText] = useState('')
+    useEffect(() => {
+        const fmt = () => {
+            if (!startedAt) {
+                setElapsedText('')
+                return
+            }
+            const s = Math.floor((Date.now() - startedAt) / 1000)
+            setElapsedText(
+                s < 60 ? `${s} 秒`
+                    : s < 3600 ? `${Math.floor(s / 60)} 分 ${s % 60} 秒`
+                        : s < 86400 ? `${Math.floor(s / 3600)} 小时 ${Math.floor((s % 3600) / 60)} 分`
+                            : `${Math.floor(s / 86400)} 天 ${Math.floor((s % 86400) / 3600)} 小时`
+            )
+        }
+        fmt()
+        const id = setInterval(fmt, 1000)
+        return () => clearInterval(id)
+    }, [startedAt])
+    const processElapsed = elapsedText
 
     // 当 levels 加载完成后，默认选择正在运行的世界，否则选择第一个世界
     useEffect(() => {
