@@ -1,6 +1,7 @@
 {
-  "level.modVisual.unparsed": "代码含非标准结构，无法可视化——请在右侧代码中编辑",
+  "level.modVisual.unparsed": "代码含非标准结构，无法可视化——请在左侧代码中编辑",
   "level.modVisual.empty": "modoverrides 为空（未启用任何模组）",
+  "level.modVisual.enabled": "启用",
   "panel.command.placeholder": "输入指令，回车或点击发送",
   "level.quickAdd.shipwrecked": "海滩",
   "level.quickAdd.volcano": "火山",

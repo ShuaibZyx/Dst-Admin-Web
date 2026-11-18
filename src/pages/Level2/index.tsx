@@ -224,25 +224,21 @@ const Leveldataoverride: React.FC<LevelItemProps> = (props) => {
 const Modoverrides: React.FC<LevelItemProps> = (props) => {
     const {theme} = useTheme();
     const editorRef = useRef<MonacoEditorRef>(null);
-    // editorRef?: React.RefObject<MonacoEditorRef>;
+    // props.level 是加载时快照（changeLevel 只写 levelListRef、不刷新 props），编辑期用本地 state
+    // 承接两个视图的每次改动——否则可视化表单读旧快照，连续改动会互相覆盖
+    const [text, setText] = useState(props.level?.modoverrides || '')
 
     useEffect(() => {
-        editorRef.current?.setValue(props.level?.modoverrides || '')
+        const value = props.level?.modoverrides || ''
+        editorRef.current?.setValue(value)
+        setText(value)
     }, [props.level?.modoverrides]);
     return (<>
-        {/* 左可视化 / 右代码：同一份 modoverrides 的两个视图，互为对照（可视化改动写回代码、代码改动重解析） */}
+        {/* 左代码 / 右可视化：同一份 modoverrides 的两个视图，互为对照（可视化改动写回代码、代码改动重解析） */}
         <Row gutter={12} style={{flexWrap: 'nowrap'}}>
-            <Col flex="380px" style={{minWidth: 300}}>
-                <ModVisualEditor
-                    value={props.level?.modoverrides || ''}
-                    onChange={next => {
-                        props.changeLevel?.(props.levelName || '', {modoverrides: next})
-                        editorRef.current?.setValue(next)
-                    }}
-                />
-            </Col>
             <Col flex="auto">
                 <React.Suspense fallback={null}><MonacoEditor2 ref={editorRef}
+                                       value={text}
                                        theme={theme === 'dark' ? 'vs-dark' : ''}
                                        style={{
                                            "height": "calc(100vh - 340px)",
@@ -251,11 +247,22 @@ const Modoverrides: React.FC<LevelItemProps> = (props) => {
                                            "width": "100%"
                                        }}
                                        onChange={value => {
+                                           setText(value)
                                            if (props.changeLevel) {
                                                props.changeLevel(props.levelName || '', {modoverrides: value})
                                            }
                                        }}
                 /></React.Suspense>
+            </Col>
+            <Col flex="380px" style={{minWidth: 300}}>
+                <ModVisualEditor
+                    value={text}
+                    onChange={next => {
+                        setText(next)
+                        props.changeLevel?.(props.levelName || '', {modoverrides: next})
+                        editorRef.current?.setValue(next)
+                    }}
+                />
             </Col>
         </Row>
     </>)

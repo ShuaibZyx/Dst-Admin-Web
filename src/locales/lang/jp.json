@@ -1,6 +1,7 @@
 {
-  "level.modVisual.unparsed": "コードが標準構造ではないため表示できません。右側のコードで編集してください",
+  "level.modVisual.unparsed": "コードが標準構造ではないため表示できません。左側のコードで編集してください",
   "level.modVisual.empty": "modoverrides は空です（有効なモッドなし）",
+  "level.modVisual.enabled": "有効",
   "panel.command.placeholder": "コマンドを入力し、Enter か送信をクリック",
   "level.quickAdd.shipwrecked": "難破",
   "level.quickAdd.volcano": "火山",

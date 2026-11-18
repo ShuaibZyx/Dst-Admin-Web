@@ -1,12 +1,11 @@
 import React, {useMemo} from 'react';
-import {Empty, Input, Switch, Typography} from 'antd';
-import {parse} from 'lua-json';
+import {Divider, Empty, Input, InputNumber, Switch, Typography} from 'antd';
+import {parse, format} from 'lua-json';
 import {luaSafe} from '../../utils/luaFormat';
-import {format} from 'lua-json';
 import {useTranslation} from 'react-i18next';
 
-// modoverrides.lua 的可视化镜像：左侧表单与右侧代码同源（value → 解析 → 表单；
-// 表单改动 → 重新序列化 → onChange）。代码含非标准结构时提示以代码为准。
+// modoverrides.lua 的可视化镜像（样式沿用模组配置抽屉：Divider 加粗标题 + 标签/控件行）。
+// 与代码视图同源：value → 解析 → 表单；表单改动 → 重新序列化 → onChange。
 const parseMods = (value) => {
     try {
         const data = parse(value || 'return {}');
@@ -33,15 +32,14 @@ const serialize = (mods) => {
     return format(luaSafe(table));
 };
 
-// 值保型：bool 走开关、数字按数字、其余文本
-const coerce = (old, raw) => {
-    if (typeof old === 'boolean') return raw === true || raw === 'true';
-    if (typeof old === 'number') {
-        const n = Number(raw);
-        return Number.isFinite(n) ? n : old;
-    }
-    return raw;
-};
+const Row = ({label, control}) => (
+    <div style={{display: 'flex', alignItems: 'center', margin: '6px 0'}}>
+        <div style={{width: '33%', flex: 'none', paddingRight: 12, textAlign: 'right'}}>
+            <Typography.Text type="secondary">{label}</Typography.Text>
+        </div>
+        <div style={{flex: 1, minWidth: 0}}>{control}</div>
+    </div>
+);
 
 export default ({value, onChange}) => {
     const {t} = useTranslation();
@@ -58,53 +56,60 @@ export default ({value, onChange}) => {
         const next = mods.map(m => (m.id === modId ? fn(m) : m));
         onChange(serialize(next));
     };
+    const patchOption = (modId, key, value) =>
+        patch(modId, mod => ({...mod, options: mod.options.map(o => (o.key === key ? {...o, value} : o))}));
 
     return (
         <div style={{maxHeight: 'calc(100vh - 480px)', overflowY: 'auto', paddingRight: 4}}>
             {mods.map(m => (
-                <div key={m.id} style={{marginBottom: 10, paddingBottom: 8, borderBottom: '1px solid rgba(128,128,128,0.2)'}}>
-                    <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8}}>
-                        <Typography.Text style={{maxWidth: '70%'}} ellipsis={{tooltip: m.id}}>{m.id}</Typography.Text>
-                        <Switch
-                            size="small"
-                            checked={m.enabled}
-                            checkedChildren={t('switch.open')}
-                            unCheckedChildren={t('switch.close')}
-                            onChange={(checked) => patch(m.id, mod => ({...mod, enabled: checked}))}
+                <React.Fragment key={m.id}>
+                    <Divider style={{margin: '12px 0 8px'}}>
+                        <span style={{fontSize: '14px', fontWeight: '600'}}>{m.id}</span>
+                    </Divider>
+                    <Row
+                        label={t('level.modVisual.enabled')}
+                        control={
+                            <Switch
+                                checked={m.enabled}
+                                checkedChildren={t('switch.open')}
+                                unCheckedChildren={t('switch.close')}
+                                onChange={(checked) => patch(m.id, mod => ({...mod, enabled: checked}))}
+                            />
+                        }
+                    />
+                    {m.enabled && m.options.map((opt) => (
+                        <Row
+                            key={opt.key}
+                            label={<Typography.Text type="secondary" ellipsis={{tooltip: opt.key}}>{opt.key}</Typography.Text>}
+                            control={
+                                typeof opt.value === 'boolean' ? (
+                                    <Switch
+                                        checked={opt.value}
+                                        checkedChildren={t('switch.open')}
+                                        unCheckedChildren={t('switch.close')}
+                                        onChange={(checked) => patchOption(m.id, opt.key, checked)}
+                                    />
+                                ) : typeof opt.value === 'number' ? (
+                                    <InputNumber
+                                        value={opt.value}
+                                        style={{width: '100%'}}
+                                        onChange={(v) => v !== null && v !== undefined && patchOption(m.id, opt.key, v)}
+                                    />
+                                ) : typeof opt.value === 'string' ? (
+                                    <Input
+                                        value={opt.value}
+                                        onChange={(e) => patchOption(m.id, opt.key, e.target.value)}
+                                    />
+                                ) : (
+                                    /* 表/数组等非标量值不做表单编辑（会改型），只读展示、到左侧代码改 */
+                                    <Typography.Text type="secondary" ellipsis={{tooltip: String(opt.value)}}>
+                                        {String(opt.value)}
+                                    </Typography.Text>
+                                )
+                            }
                         />
-                    </div>
-                    {m.enabled && m.options.length > 0 && (
-                        <div style={{marginTop: 6, display: 'flex', flexDirection: 'column', gap: 6}}>
-                            {m.options.map((opt, idx) => (
-                                <div key={opt.key} style={{display: 'flex', alignItems: 'center', gap: 8}}>
-                                    <Typography.Text type="secondary" style={{width: '40%', flex: 'none'}}
-                                                     ellipsis={{tooltip: opt.key}}>{opt.key}</Typography.Text>
-                                    {typeof opt.value === 'boolean' ? (
-                                        <Switch
-                                            size="small"
-                                            checked={opt.value}
-                                            checkedChildren={t('switch.open')}
-                                            unCheckedChildren={t('switch.close')}
-                                            onChange={(checked) => patch(m.id, mod => {
-                                                const options = mod.options.map((o, i) => (i === idx ? {...o, value: checked} : o));
-                                                return {...mod, options};
-                                            })}
-                                        />
-                                    ) : (
-                                        <Input
-                                            size="small"
-                                            value={String(opt.value)}
-                                            onChange={(e) => patch(m.id, mod => {
-                                                const options = mod.options.map((o, i) => (i === idx ? {...o, value: coerce(o.value, e.target.value)} : o));
-                                                return {...mod, options};
-                                            })}
-                                        />
-                                    )}
-                                </div>
-                            ))}
-                        </div>
-                    )}
-                </div>
+                    ))}
+                </React.Fragment>
             ))}
         </div>
     );
