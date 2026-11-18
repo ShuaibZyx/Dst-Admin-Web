@@ -194,14 +194,9 @@ export default () => {
                                             <Space>
                                                 <div>{GetLevelIcon(record)}</div>
                                                 <div>
-                                                    {pendingOps[record.uuid]?.op === 'starting' && <Tag color={'processing'} bordered={false}>{record.levelName} · {t('panel.starting')}</Tag>}
-                                                    {pendingOps[record.uuid]?.op === 'stopping' && <Tag color={'warning'} bordered={false}>{record.levelName} · {t('panel.stopping')}</Tag>}
-                                                    {!pendingOps[record.uuid] && record.status && <Tag color={'green'} bordered={false}>{record.levelName}</Tag>}
-                                                    {!pendingOps[record.uuid] && !record.status && <Tag color={'default'} bordered={false}>{record.levelName}</Tag>}
-                                                    <div style={{fontSize: 12, display: 'flex', gap: 8, flexWrap: 'wrap'}}>
-                                                        {record.status && <span>CPU {formatData(record.Ps?.cpuUage ?? 0, 1)}%</span>}
+                                                    <Tag bordered={false}>{record.levelName}</Tag>
+                                                    <div style={{fontSize: 12}}>
                                                         <span>{`${formatData((record.Ps !== undefined ? record.Ps.RSS : 0) / 1024, 2)}MB`}</span>
-                                                        {record.status && <ElapsedTag startedAt={record.startedAt}/>}
                                                     </div>
                                                 </div>
                                             </Space>
