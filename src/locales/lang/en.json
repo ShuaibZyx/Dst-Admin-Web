@@ -1,4 +1,6 @@
 {
+  "panel.c_save()": "Save",
+  "backup.snapshotBackup.c_save()": "c_save()",
   "loginTitle": "Dont Starve Together Management Panel",
   "web.login": "Login",
   "login.remember.me": "Remember Password",

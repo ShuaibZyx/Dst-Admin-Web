@@ -1,4 +1,6 @@
 {
+  "panel.c_save()": "저장",
+  "backup.snapshotBackup.c_save()": "c_save()",
   "loginTitle": "굶지마 투게더 관리 패널",
   "web.login": "로그인",
   "login.remember.me": "Remember Me",

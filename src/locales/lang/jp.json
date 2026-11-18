@@ -1,4 +1,6 @@
 {
+  "panel.c_save()": "保存",
+  "backup.snapshotBackup.c_save()": "c_save()",
   "loginTitle": "Don't Starve Together 管理パネル",
   "web.login": "ログイン",
   "login.remember.me": "Remember Me",
