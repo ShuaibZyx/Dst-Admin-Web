@@ -430,7 +430,7 @@ export default () => {
                         disabled={Object.keys(pendingOpsStore).length > 0}
                     />
                     {/* 强制恢复：卡死的启动/停止一键解锁（清锁定+清进度+强杀卡死进程，世界干净可重启） */}
-                    <Button icon={<ThunderboltOutlined/>} danger onClick={() => Modal.confirm({
+                    <Button type="primary" icon={<ThunderboltOutlined/>} danger onClick={() => Modal.confirm({
             centered: true,
             title: t('panel.recover'),
                         content: t('panel.recover.desc'),
