@@ -120,7 +120,7 @@ const LevelItem: React.FC<LevelItemProps> = ({dstWorldSetting, levelName, level,
         {
             label: t('level.leveldataoverride'),
             children: <div className={'scrollbar'} style={{
-                height: 'calc(100vh - 290px)',
+                height: 'calc(100vh - 330px)',
                 minHeight: '400px',
                 overflowY: 'auto',
             }}>
@@ -133,7 +133,7 @@ const LevelItem: React.FC<LevelItemProps> = ({dstWorldSetting, levelName, level,
         {
             label: t('level.modoverrides'),
             children: <div className={'scrollbar'} style={{
-                height: 'calc(100vh - 290px)',
+                height: 'calc(100vh - 330px)',
                 minHeight: '400px',
                 overflowY: 'auto',
             }}><Modoverrides levelName={levelName} level={level}
@@ -145,7 +145,7 @@ const LevelItem: React.FC<LevelItemProps> = ({dstWorldSetting, levelName, level,
             key: 3,
             label: t('level.serverIni'),
             children: <div className={'scrollbar'} style={{
-                height: 'calc(100vh - 290px)',
+                height: 'calc(100vh - 330px)',
                 minHeight: '400px',
                 overflowY: 'auto',
             }}><ServerIni levelName={levelName} level={level}
@@ -197,7 +197,7 @@ const Leveldataoverride: React.FC<LevelItemProps> = (props) => {
 <React.Suspense fallback={null}><MonacoEditor2 ref={editorRef}
                                theme={theme === 'dark' ? 'vs-dark' : ''}
                                style={{
-                                   "height": "calc(100vh - 340px)",
+                                   "height": "calc(100vh - 370px)",
                                    "minHeight": "300px",
                                    "width": "100%"
                                }}
@@ -789,7 +789,7 @@ const Level2 = () => {
                             {levelListRef.current.length === 0 && (<>
                                 <Empty description={t('level.empty')}/>
                             </>)}
-                            <div style={{display: 'flex', height: 'calc(100vh - 250px)', minHeight: '420px'}}>
+                            <div style={{display: 'flex', height: 'calc(100vh - 300px)', minHeight: '420px'}}>
                                 {/* 世界切换竖列（弃 tab 套 tab）：双击/右键改名沿用 LevelTabLabel */}
                                 <div style={{
                                     width: 220, flex: 'none', overflowY: 'auto',

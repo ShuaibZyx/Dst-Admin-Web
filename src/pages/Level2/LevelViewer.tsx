@@ -120,6 +120,7 @@ const Group: React.FC<GroupProps> = ({
                                          isMaster,
                                          modItems,
                                          unknownKeys,                                     }) => {
+    const {t} = useTranslation();
 
     if (!data) return null; // F2: 数据未加载时防崩溃
 
