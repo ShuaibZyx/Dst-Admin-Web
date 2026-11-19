@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useParams} from "react-router-dom";
 import {useTranslation} from "react-i18next";
+import {ListSkeleton} from "../../../components/Skeletons.jsx";
 import {Skeleton, 
     Avatar, Button,
     Card,
@@ -182,7 +183,7 @@ export default () => {
                  </Space>}
         >
 
-            <Skeleton loading={spin} active>
+            {spin ? <ListSkeleton rows={5}/> : (<>
                 <List
                     pagination={false}
                     dataSource={levels}
@@ -228,7 +229,7 @@ export default () => {
                         </List.Item>
                     )}
                 />
-            </Skeleton>
+            </>)}
 
             {/* 地图预览弹窗:每世界看自己的地图 */}
             <Modal title={(

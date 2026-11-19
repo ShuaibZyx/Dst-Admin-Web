@@ -4,13 +4,13 @@ import {
     Button,
     Card,
     Input,
-    Skeleton,
     message,
     Typography,
     Space,
     Table,
     Upload
 } from 'antd';
+import {TableSkeleton} from "../../../components/Skeletons.jsx";
 import {
     UploadOutlined,
     DownloadOutlined,
@@ -170,7 +170,7 @@ const NameList: React.FC<NameListProps> = ({title, tips, getApi, saveApi}) => {
 
     return (
         <>
-            {loading ? <Skeleton active title paragraph={{rows: 6}}/> : (<>
+            {loading ? <TableSkeleton rows={6} cols={3}/> : (<>
             {/* 原样：页面标题 + 说明 */}
             <div style={{marginBottom: 12}}>
                 <Typography.Title level={4} style={{margin: 0}}>
@@ -217,11 +217,13 @@ const NameList: React.FC<NameListProps> = ({title, tips, getApi, saveApi}) => {
 
             {/* KU ID 表格 */}
             <Table
+                className="content-fade"
                 size="small"
                 rowKey="key"
                 dataSource={rows}
                 pagination={list.length > 50 ? {
-                    pageSize: 50,
+                    // 非受控分页：默认 50/页。此前是受控 pageSize 且无切换 handler，每页条数切换无效
+                    defaultPageSize: 50,
                     showSizeChanger: true,
                     size: 'small',
                     showTotal: (n) => t('namelist.total', {n}),

@@ -5,6 +5,7 @@ import {useTranslation} from 'react-i18next';
 import {getKv, saveKv} from '../../api/clusterApi';
 import {ProCard} from "@ant-design/pro-components";
 import RemoteImportModal from '../../components/RemoteImportModal';
+import {FormSkeleton} from '../../components/Skeletons.jsx';
 
 export default function CustomCommands({onSaved}: { onSaved?: () => void }) {
     const {t} = useTranslation();
@@ -161,7 +162,7 @@ export default function CustomCommands({onSaved}: { onSaved?: () => void }) {
     };
 
     return (
-        <Skeleton loading={loading} active>
+        <>{loading ? <FormSkeleton fields={6}/> : (<>
         <div>
             <ProCard title={t('customCommands.title')} loading={loading}>
                 <Form form={form} layout="vertical">
@@ -322,5 +323,5 @@ export default function CustomCommands({onSaved}: { onSaved?: () => void }) {
                 </Form>
             </ProCard>
         </div>
-    </Skeleton>);
+    </>)}</>);
 }

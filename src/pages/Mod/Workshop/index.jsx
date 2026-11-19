@@ -8,6 +8,7 @@ import {useTranslation} from "react-i18next";
 import {addSubscriptionApi, searchMod} from '../../../api/modApi.jsx';
 import {format} from "../../../utils/dateUitls";
 import {fShortenNumber} from "../../../utils/formatNumber";
+import {GridSkeleton} from "../../../components/Skeletons.jsx";
 
 
 const {Search} = Input;
@@ -250,7 +251,7 @@ export default ({addModList, onAdded}) => {
                 />
             </div>
 
-            <Skeleton loading={searching} active>
+            {searching ? <GridSkeleton panels={3} rows={2} banner={false}/> : (<>
                 {modList.length === 0 && !searching ? (
                     <Empty
                         description={t('mod.empty')}
@@ -281,7 +282,7 @@ export default ({addModList, onAdded}) => {
                         )}
                     </>
                 )}
-            </Skeleton>
+            </>)}
         </>
     );
 };

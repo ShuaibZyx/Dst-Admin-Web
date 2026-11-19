@@ -135,17 +135,58 @@ export const ModSplitSkeleton = () => (
     </Row>
 )
 
-// 世界设置：顶部工具条 + 内容区（编辑器/表单）
+// 世界设置：左世界竖列 + 页签条 + 图标选项网格 + 底栏按钮（与真实排布同构）
 export const LevelEditorSkeleton = () => (
     <Card>
-        <div style={{display: 'flex', gap: 8, marginBottom: 12}}>
-            <Skeleton active title={false} paragraph={{rows: 1, width: ['120px']}}/>
-            <Skeleton active title={false} paragraph={{rows: 1, width: ['100px']}}/>
-        </div>
         <div style={{display: 'flex', gap: 16}}>
-            <div style={{flex: 1}}>
-                <Skeleton active title={false} paragraph={{rows: 8}}/>
+            <div style={{width: 240, flex: 'none'}}>
+                {Array.from({length: 4}).map((_, i) => (
+                    <Skeleton key={i} active title={false}
+                              paragraph={{rows: 1, width: [`${55 + (i % 2) * 20}%`]}}/>
+                ))}
+            </div>
+            <div style={{flex: 1, minWidth: 0}}>
+                <Skeleton active title={false} paragraph={{rows: 1, width: ['45%']}}/>
+                <div style={{display: 'flex', flexWrap: 'wrap', gap: 16, marginTop: 16}}>
+                    {Array.from({length: 12}).map((_, i) => (
+                        <div key={i} style={{width: 118}}>
+                            <Skeleton.Avatar active shape="square" size={64}/>
+                            <Skeleton active title={false} paragraph={{rows: 1, width: ['70%']}}/>
+                        </div>
+                    ))}
+                </div>
             </div>
         </div>
+        <div style={{display: 'flex', gap: 8, marginTop: 16}}>
+            <Skeleton.Input active size="small" style={{width: 88}}/>
+            <Skeleton.Input active size="small" style={{width: 88}}/>
+            <Skeleton.Input active size="small" style={{width: 88}}/>
+        </div>
     </Card>
+)
+
+// 行列表骨架（如添加模组弹窗：勾选框 + 图标 + 文本行）；行高压紧至 ~32px，贴近真实行观感
+export const ListSkeleton = ({rows = 6}) => (
+    <div>
+        {Array.from({length: rows}).map((_, i) => (
+            <div key={i} style={{display: 'flex', alignItems: 'center', gap: 8, padding: '2px 4px'}}>
+                <Skeleton.Avatar active shape="square" size={14}/>
+                <Skeleton.Avatar active shape="square" size={28}/>
+                <Skeleton.Input active size="small" style={{width: `${40 + (i % 3) * 12}%`, height: 12}}/>
+            </div>
+        ))}
+    </div>
+)
+
+// 详情抽屉骨架（头像+元信息 → 状态徽标行 → 页签条 → 正文段，与抽屉排布同构）
+export const DetailSkeleton = () => (
+    <div>
+        <Skeleton active avatar title paragraph={{rows: 2, width: ['60%', '45%']}}/>
+        <div style={{display: 'flex', gap: 8, margin: '12px 0'}}>
+            <Skeleton.Input active size="small" style={{width: 90}}/>
+            <Skeleton.Input active size="small" style={{width: 120}}/>
+        </div>
+        <Skeleton active title={false} paragraph={{rows: 1, width: ['30%']}}/>
+        <Skeleton active title={false} paragraph={{rows: 5}}/>
+    </div>
 )

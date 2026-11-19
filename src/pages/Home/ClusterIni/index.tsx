@@ -1,34 +1,26 @@
-import React, { useEffect, useState } from "react";
-import {SaveOutlined} from '@ant-design/icons';
+import React, { useState } from "react";
 
 import {
     Button,
-    message,
-    Skeleton,
-    Modal,
-    Tabs
+    Modal
 } from "antd";
 import type { RadioChangeEvent } from "antd/es/radio";
 
 import { useTranslation } from "react-i18next";
 
 
-import { getClusterIniApi, saveClusterIniApi } from "../../../api/levelApi";
-import type { ClusterIniFormValues, ClusterIniResponse } from "../../../type";
+import type { ClusterIniFormValues } from "../../../type";
 
 import style from '../DstEomj/index.module.css'
 import {
-    ProCard,
     ProForm,
     ProFormRadio,
     ProFormText,
     ProFormTextArea,
     ProFormDigit,
     ProFormSwitch,
-    FooterToolbar
 } from "@ant-design/pro-components";
 
-import { useParams } from "react-router-dom";
 import DstEmojiList from "../DstEomj/DstEmojiList.tsx";
 import { dstGameMod } from "../../../types/dst.ts";
 
@@ -44,99 +36,25 @@ const gameModeI18nKey: Record<string, string> = {
     customization: 'dst.gameMode.customization',
 }
 
-const ClusterIni: React.FC = () => {
+interface ClusterIniProps {
+    // 只渲染一个分区：房间设置(base)/网络设置(shard)/Steam设置(steam)——页签由 Home 平铺
+    onlyTab: 'base' | 'shard' | 'steam'
+    // 三分区共享同一个 ProForm 实例（cluster.ini 全量表单）：加载/保存都在 Home，保存按钮全量写回。
+    // 别在本组件里建 form 或拉数据——会拆散共享表单语义
+    form: any
+    onFinish: (values: ClusterIniFormValues) => Promise<boolean>
+    // 游戏模式单选联动（自定义模式输入框显隐）：状态在 Home（数据加载时也要设置）
+    choose?: string
+    onChoose?: (mode: string) => void
+}
+
+const ClusterIni: React.FC<ClusterIniProps> = ({onlyTab, form: formRef, onFinish, choose, onChoose}) => {
 
     const { t } = useTranslation()
 
-    const { cluster } = useParams<{ cluster?: string }>()
-    // const { has } = usePermission(cluster)
-    const has = () => {
-        return true
-    }
-
-    const [loading, setLoading] = useState<boolean>(false)
-    const [formRef] = ProForm.useForm<ClusterIniFormValues>()
-    const [choose, setChoose] = useState<string>("survival");
-
-    const tabPaneStyle: React.CSSProperties = {
-        height: 'calc(100vh - 300px)',
-        minHeight: '400px',
-        maxHeight: '800px',
-        overflowY: 'auto',
-    }
-    const tabContentStyle: React.CSSProperties = {
-        flex: 1,
-        minHeight: 0,
-        overflowY: 'auto',
-        paddingRight: 8,
-    }
-
-    const isKnownGameMode = (mode: string) => dstGameMod.some(item => item.name === mode)
-
     const onRadioChange = (e: RadioChangeEvent) => {
-        setChoose(e.target.value);
+        onChoose?.(e.target.value);
     }
-
-    const onFinish = async (values: ClusterIniFormValues) => {
-      try {
-        const clusterValues = { ...values }
-        if (clusterValues.customization_mode) {
-            clusterValues.game_mode = clusterValues.customization_mode
-        }
-        const body = {
-            cluster: clusterValues,
-            token: values.cluster_token
-        }
-        if (body.cluster.cluster_description) {
-            body.cluster.cluster_description = body.cluster.cluster_description.replace(/\n/g, "")
-        }
-        const resp = await saveClusterIniApi(cluster || "", body)
-        if (resp.code === 200) {
-            message.success(t('cluster.save.ok'))
-        } else {
-            message.warning(t('cluster.save.error'))
-            if (resp.msg) {
-                message.warning(resp.msg)
-            }
-        }
-        return true
-      } catch (error) {
-        console.error('save cluster ini failed:', error);
-        message.error(t('cluster.save.error'));
-        return false
-      }
-    }
-
-    useEffect(() => {
-        setLoading(true)
-        getClusterIniApi(cluster || "")
-            .then((resp: ClusterIniResponse) => {
-                if (resp.code === 200) {
-                    const serverData = resp.data.cluster
-                    let formValues: ClusterIniFormValues = {
-                        ...serverData,
-                        cluster_token: resp.data.token,
-                    }
-                    if (!isKnownGameMode(serverData.game_mode)) {
-                        formValues = {
-                            ...formValues,
-                            customization_mode: serverData.game_mode,
-                            game_mode: 'customization',
-                        }
-                    }
-                    formRef?.setFieldsValue(formValues)
-                    setChoose(formValues.game_mode)
-                } else {
-                    message.warning(t('cluster.fetch.error'))
-                }
-                setLoading(false)
-            })
-            .catch((error) => {
-                console.error('load cluster ini failed:', error);
-                message.error(t('cluster.fetch.error'));
-                setLoading(false)
-            })
-    }, [cluster, formRef, t])
 
     const [open, setOpen] = useState<boolean>(false)
 
@@ -146,29 +64,9 @@ const ClusterIni: React.FC = () => {
                 <DstEmojiList />
             </Modal>
 
-            {loading ? <Skeleton active title paragraph={{rows: 5}}/> : (
-                <ProCard
-                    className={'scrollbar'}
-                    style={{
-                        height: 'calc(100vh - 120px)',
-                        minHeight: '400px',
-                    }}
-                >
-                    <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-                        <Tabs
-                            style={{ flex: 1, minHeight: 0 }}
-                            destroyInactiveTabPane={false}
-                            // type="card"
-                            items={[
-                                {
-                                    key: 'base',
-                                    label: t('cluster.BaseSetting'),
-                                    forceRender: true,
-                                    children: (
-                                        <div style={tabPaneStyle}>
-                                            <div style={tabContentStyle}>
-                                                <ProForm
-                                                    form={formRef}
+            {onlyTab === 'base' && (
+                                <ProForm
+                                    form={formRef}
                                                     onFinish={onFinish}
                                                     grid
                                                     rowProps={{
@@ -376,20 +274,11 @@ const ClusterIni: React.FC = () => {
                                                         tooltip={t('cluster.tooltip.cluster_language')}
                                                         placeholder="zh"
                                                     />
-                                                </ProForm>
-                                            </div>
-                                        </div>
-                                    ),
-                                },
-                                ...(has() ? [{
-                                    key: 'shard',
-                                    label: t('cluster.ShardSetting'),
-                                    forceRender: true,
-                                    children: (
-                                        <div style={tabPaneStyle}>
-                                            <div style={tabContentStyle}>
-                                                <ProForm
-                                                    form={formRef}
+                                </ProForm>
+            )}
+            {onlyTab === 'shard' && (
+                                <ProForm
+                                    form={formRef}
                                                     onFinish={onFinish}
                                                     grid
                                                     rowProps={{
@@ -400,7 +289,7 @@ const ClusterIni: React.FC = () => {
                                                     }}
                                                 >
                                                     <ProFormDigit
-                                                        colProps={{ md: 12, xl: 12 }}
+                                                        colProps={{ md: 24, xl: 24 }}
                                                         label={t('cluster.master_port')}
                                                         name='master_port'
                                                         tooltip={t('cluster.tooltip.master_port')}
@@ -409,7 +298,7 @@ const ClusterIni: React.FC = () => {
                                                     />
 
                                                     <ProFormSwitch
-                                                        colProps={{ md: 12, xl: 12 }}
+                                                        colProps={{ md: 24, xl: 24 }}
                                                         label={t('cluster.shard_enabled')}
                                                         tooltip={t('cluster.tooltip.shard_enabled')}
                                                         name='shard_enabled'
@@ -421,7 +310,7 @@ const ClusterIni: React.FC = () => {
                                                     />
 
                                                     <ProFormText.Password
-                                                        colProps={{ md: 12, xl: 12 }}
+                                                        colProps={{ md: 24, xl: 24 }}
                                                         label={t('cluster.bind_ip')}
                                                         name='bind_ip'
                                                         tooltip={t('cluster.tooltip.bind_ip')}
@@ -431,7 +320,7 @@ const ClusterIni: React.FC = () => {
                                                     />
 
                                                     <ProFormText.Password
-                                                        colProps={{ md: 12, xl: 12 }}
+                                                        colProps={{ md: 24, xl: 24 }}
                                                         label={t('cluster.master_ip')}
                                                         name='master_ip'
                                                         tooltip={t('cluster.tooltip.master_ip')}
@@ -441,26 +330,17 @@ const ClusterIni: React.FC = () => {
                                                     />
 
                                                     <ProFormText
-                                                        colProps={{ md: 12, xl: 12 }}
+                                                        colProps={{ md: 24, xl: 24 }}
                                                         label={t('cluster.cluster_key')}
                                                         name='cluster_key'
                                                         tooltip={t('cluster.tooltip.cluster_key')}
                                                         placeholder={t('cluster.cluster_key')}
                                                     />
-                                                </ProForm>
-                                            </div>
-                                        </div>
-                                    ),
-                                }] : []),
-                                ...(has() ? [{
-                                    key: 'steam',
-                                    label: t('cluster.SteamSetting'),
-                                    forceRender: true,
-                                    children: (
-                                        <div style={tabPaneStyle}>
-                                            <div style={tabContentStyle}>
-                                                <ProForm
-                                                    form={formRef}
+                                </ProForm>
+            )}
+            {onlyTab === 'steam' && (
+                                <ProForm
+                                    form={formRef}
                                                     onFinish={onFinish}
                                                     grid
                                                     rowProps={{
@@ -479,7 +359,7 @@ const ClusterIni: React.FC = () => {
                                                     />
 
                                                     <ProFormSwitch
-                                                        colProps={{ md: 12, xl: 12 }}
+                                                        colProps={{ md: 24, xl: 24 }}
                                                         label={t('cluster.steam_group_only')}
                                                         name='steam_group_only'
                                                         tooltip={t('cluster.tooltip.steam_group_only')}
@@ -490,7 +370,7 @@ const ClusterIni: React.FC = () => {
                                                     />
 
                                                     <ProFormSwitch
-                                                        colProps={{ md: 12, xl: 12 }}
+                                                        colProps={{ md: 24, xl: 24 }}
                                                         label={t('cluster.steam_group_admins')}
                                                         name='steam_group_admins'
                                                         tooltip={t('cluster.tooltip.steam_group_admins')}
@@ -499,21 +379,7 @@ const ClusterIni: React.FC = () => {
                                                             unCheckedChildren: t('switch.close')
                                                         }}
                                                     />
-                                                </ProForm>
-                                            </div>
-                                        </div>
-                                    ),
-                                }] : []),
-                            ]}
-                        />
-                        <div>
-                            <Button icon={<SaveOutlined/>} type="primary" onClick={() => formRef.submit()}>
-                                {t('cluster.save')}
-                            </Button>
-                        </div>
-                    </div>
-                </ProCard>
-
+                                </ProForm>
             )}
         </div>
     )

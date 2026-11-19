@@ -6,7 +6,7 @@ import CreateWorld from "./CreateWorld";
 import {fillLevelDefaults} from "../../utils/levelDefaults";
 import {useTranslation} from "react-i18next";
 import React, {useEffect, useRef, useState} from "react";
-import {Alert, Button, Divider, Dropdown, Empty, Form, Input, message, Modal, Skeleton, Space, Tabs, TabsProps, Tag, Tooltip, Upload} from "antd";
+import {Alert, Button, Divider, Dropdown, Empty, Form, Input, message, Modal, Space, Tabs, TabsProps, Tag, Tooltip, Upload} from "antd";
 import type {MenuProps} from 'antd';
 import {CloseOutlined, EditOutlined, ImportOutlined, DownloadOutlined, SaveOutlined, PlusOutlined, AppstoreOutlined} from '@ant-design/icons';
 import {useParams} from "react-router-dom";
@@ -18,19 +18,30 @@ import {modSubscribedApi} from "../../api/gezigeApi";
 import type {LevelData, LevelServerIni} from "../../type";
 import {forest} from "../../utils/dst";
 import Preinstall from "../Tool/Preinstall/index.jsx";
+import {LevelEditorSkeleton} from "../../components/Skeletons.jsx";
 
 // 世界标签组件
 interface LevelTagsProps {
     isMaster?: boolean;
     serverPort?: number;
+    // IA 模组世界（海难/火山）：紫色「岛屿冒险」标签，hover 提示依赖的模组
+    iaMod?: boolean;
+    // 原版经典世界（森林/洞穴）：金色「经典」标签（与「岛屿冒险」对称）
+    classic?: boolean;
 }
 
-const LevelTags: React.FC<LevelTagsProps> = ({isMaster, serverPort}) => {
+const LevelTags: React.FC<LevelTagsProps> = ({isMaster, serverPort, iaMod, classic}) => {
     const {t} = useTranslation();
     return (
         <>
-            {isMaster && <Tag color="blue" bordered={false}>{t('level2.tag.master')}</Tag>}
-            {serverPort && <Tag color="green" bordered={true}>{serverPort}</Tag>}
+            {classic && <Tag color="gold" bordered={false} style={{whiteSpace: 'nowrap'}}>{t('level2.tag.classic')}</Tag>}
+            {iaMod && (
+                <Tooltip title="workshop-1467214795">
+                    <Tag color="purple" bordered={false} style={{whiteSpace: 'nowrap'}}>{t('level2.tag.iaMod')}</Tag>
+                </Tooltip>
+            )}
+            {isMaster && <Tag color="blue" bordered={false} style={{whiteSpace: 'nowrap'}}>{t('level2.tag.master')}</Tag>}
+            {serverPort && <Tag color="green" bordered={true} style={{whiteSpace: 'nowrap'}}>{serverPort}</Tag>}
         </>
     );
 };
@@ -40,8 +51,10 @@ const LevelTabLabel: React.FC<{
     levelName: string,
     isMaster?: boolean,
     serverPort?: number,
+    iaMod?: boolean,
+    classic?: boolean,
     onCommitName: (newName: string) => void,
-}> = ({levelName, isMaster, serverPort, onCommitName}) => {
+}> = ({levelName, isMaster, serverPort, iaMod, classic, onCommitName}) => {
     const {t} = useTranslation();
     const [editing, setEditing] = useState(false);
     const [draft, setDraft] = useState(levelName);
@@ -72,7 +85,7 @@ const LevelTabLabel: React.FC<{
         <Dropdown menu={{items: menuItems}} trigger={['contextMenu']}>
             <div
                 onDoubleClick={startEdit}
-                style={{cursor: 'pointer', userSelect: 'none', display: 'flex', alignItems: 'center', gap: '8px'}}
+                style={{cursor: 'pointer', userSelect: 'none', display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap'}}
             >
                 {editing ? (
                     <Input
@@ -92,9 +105,10 @@ const LevelTabLabel: React.FC<{
                         }}
                     />
                 ) : (
-                    <span>{levelName}</span>
+                    // 名称不截半行：放不下时标签组整体落到下一行（flex-wrap），名称自带断行兜底
+                    <span style={{flexShrink: 0, maxWidth: '100%', wordBreak: 'break-word'}}>{levelName}</span>
                 )}
-                <LevelTags isMaster={isMaster} serverPort={serverPort}/>
+                <LevelTags isMaster={isMaster} serverPort={serverPort} iaMod={iaMod} classic={classic}/>
             </div>
         </Dropdown>
     );
@@ -108,70 +122,71 @@ interface LevelItemProps {
     has: (permission: string) => boolean
 }
 
+// 滚动统一由本层负责（LevelViewer 不再内滚）：世界规则/世界生成/模组/端口四页签同款容器。
+// height:100% 配合 .tabs-fill 弹性链正好占满可用区；padding 吸收 antd Row gutter(16) 的负边距防横向滚动
+const tabScrollWrap = (children: React.ReactNode) => (
+    <div className={'scrollbar'} style={{
+        height: '100%',
+        padding: '0 8px',
+        overflowY: 'auto',
+        overflowX: 'hidden',
+    }}>
+        {children}
+    </div>
+);
+
 const LevelItem: React.FC<LevelItemProps> = ({dstWorldSetting, levelName, level, changeLevel, has}) => {
     const {t} = useTranslation();
+    // leveldataoverride 文本提升到本层：世界规则/世界生成两个 LevelViewer 实例共享同一份编辑状态
+    const [leveldataoverride, setLeveldataoverride] = useState<string>(level?.leveldataoverride || '')
     useEffect(() => {
-    }, [level]);
+        setLeveldataoverride(level?.leveldataoverride || '')
+    }, [level?.leveldataoverride]);
+
+    const changeValue = (value: string) => {
+        changeLevel(levelName, {leveldataoverride: value})
+        setLeveldataoverride(value)
+    }
+
+    // 扁平四页签：世界规则/世界生成（同一 leveldataoverride 的两组）| 模组设置 | 端口设置；
+    // 「模组设置」前加分隔竖线区分「世界内容 vs 文件配置」
     const items: any = [
         {
-            label: t('level.leveldataoverride'),
-            children: <div className={'scrollbar'} style={{
-                height: 'calc(100vh - 330px)',
-                minHeight: '400px',
-                overflowY: 'auto',
-            }}>
-                <Leveldataoverride dstWorldSetting={dstWorldSetting}
-                                   levelName={levelName}
-                                   level={level} changeLevel={changeLevel} has={has}/>
-            </div>,
+            label: t('level.worldSettings'),
             key: 1,
+            children: tabScrollWrap(
+                <LevelViewer leveldataoverride={leveldataoverride} dstWorldSetting={dstWorldSetting}
+                             isMaster={!!level?.server_ini?.is_master} changeValue={changeValue}
+                             onlyTab={'WORLDSETTINGS'}/>),
         },
         {
-            label: t('level.modoverrides'),
-            children: <div className={'scrollbar'} style={{
-                height: 'calc(100vh - 330px)',
-                minHeight: '400px',
-                overflowY: 'auto',
-            }}><Modoverrides levelName={levelName} level={level}
-                             changeLevel={changeLevel} has={has}/>
-            </div>,
+            label: t('level.worldGeneration'),
             key: 2,
+            children: tabScrollWrap(
+                <LevelViewer leveldataoverride={leveldataoverride} dstWorldSetting={dstWorldSetting}
+                             isMaster={!!level?.server_ini?.is_master} changeValue={changeValue}
+                             onlyTab={'WORLDGEN'}/>),
         },
         {
+            label: <span className={'tab-group-divider'}>{t('level.modoverrides')}</span>,
             key: 3,
+            children: tabScrollWrap(<Modoverrides levelName={levelName} level={level}
+                                                 changeLevel={changeLevel} has={has}/>),
+        },
+        {
             label: t('level.serverIni'),
-            children: <div className={'scrollbar'} style={{
-                height: 'calc(100vh - 330px)',
-                minHeight: '400px',
-                overflowY: 'auto',
-            }}><ServerIni levelName={levelName} level={level}
-                          changeLevel={changeLevel} has={has}/>
-            </div>,
+            key: 4,
+            children: tabScrollWrap(<ServerIni levelName={levelName} level={level}
+                                               changeLevel={changeLevel} has={has}/>),
         },
     ];
 
     return (
-        <div>
-            <Tabs items={items}/>
+        <div style={{flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column'}}>
+            <Tabs className="tabs-fill" items={items}/>
         </div>
     );
 };
-
-const Leveldataoverride: React.FC<LevelItemProps> = (props) => {
-    const [leveldataoverride, setLeveldataoverride] = useState<string>(props.level?.leveldataoverride || '')
-
-    useEffect(() => {
-        setLeveldataoverride(props.level?.leveldataoverride || '')
-    }, [props.level?.leveldataoverride]);
-
-    // 「编辑」（Lua 代码）页签已撤：世界设置只留可视化（与创建台一致）
-    return <LevelViewer leveldataoverride={leveldataoverride} dstWorldSetting={props.dstWorldSetting}
-                        isMaster={!!props.level?.server_ini?.is_master}
-                        changeValue={(value) => {
-                            props.changeLevel(props.levelName, {leveldataoverride: value})
-                            setLeveldataoverride(value)
-                        }}/>
-}
 
 
 const defaultDstWorldSetting = {
@@ -208,6 +223,27 @@ const defaultDstWorldSetting = {
 function base64ToUtf8(base64: string) {
     return new TextDecoder().decode(Uint8Array.from(atob(base64), c => c.charCodeAt(0)));
 }
+
+// IA 模组世界（海难/火山）判定：取 leveldataoverride 的 location，与 LevelViewer 的 levelType
+// 判定同源（兼容旧模板的 volcano 短名）；解析失败按非 IA 处理（quiet，不弹 Lua 错误提示）
+const isIAWorld = (leveldataoverride?: string): boolean => {
+    try {
+        const loc = (parse(leveldataoverride || '') as any)?.location || '';
+        return loc.includes('shipwrecked') || loc.includes('volcano');
+    } catch {
+        return false;
+    }
+};
+
+// 原版经典世界（森林/洞穴）判定：同源取 location，解析失败按非经典处理
+const isClassicWorld = (leveldataoverride?: string): boolean => {
+    try {
+        const loc = (parse(leveldataoverride || '') as any)?.location || '';
+        return loc === 'forest' || loc === 'cave';
+    } catch {
+        return false;
+    }
+};
 
 
 const Level2 = () => {
@@ -260,22 +296,41 @@ const Level2 = () => {
 
         // 如果修改了 server_ini，更新对应标签的 label
         if (changeValue.server_ini && itemsRef.current && itemsRef.current.length > 0) {
+            const oldLevel = oldLevels.find(l => l.levelName === levelName)
             const updatedLevel = levelListRef.current.find(l => l.levelName === levelName)
             if (!updatedLevel) {
                 return
             }
+            // is_master 变化才重建 children（LevelViewer 的 master 项显隐要跟着变）；
+            // 其余 ini 字段（端口等）只换 label，避免编辑时整棵子树重渲染
+            const masterChanged = oldLevel?.server_ini?.is_master !== updatedLevel.server_ini?.is_master
 
             const newItems = itemsRef.current.map(item => {
                 // 只更新匹配的 item
                 if (item.key === updatedLevel.uuid) {
                     const closable = (updatedLevel.uuid !== "Master" && has('allowAddLevel'))
-                    
-                    // 只更新 label，保持 children 不变以避免重新渲染
-                    return {
+                    const next: any = {
                         ...item,
                         closable: closable,
-                        label: (<LevelTabLabel levelName={levelName} isMaster={server_ini?.is_master} serverPort={server_ini?.server_port} onCommitName={(n) => applyRename(uuid, n)}/>)
+                        label: (<LevelTabLabel levelName={levelName}
+                                               isMaster={updatedLevel.server_ini?.is_master}
+                                               serverPort={updatedLevel.server_ini?.server_port}
+                                               iaMod={isIAWorld(updatedLevel.leveldataoverride)}
+                                               classic={isClassicWorld(updatedLevel.leveldataoverride)}
+                                               onCommitName={(n) => applyRename(updatedLevel.uuid, n)}/>)
                     }
+                    if (masterChanged) {
+                        next.children = (
+                            <LevelItem
+                                dstWorldSetting={dstWorldSetting}
+                                level={updatedLevel}
+                                levelName={levelName}
+                                changeLevel={changeLevel}
+                                has={has}
+                            />
+                        )
+                    }
+                    return next
                 }
                 // 其他 item 保持不变
                 return item
@@ -328,7 +383,7 @@ const Level2 = () => {
 
                         
                         return {
-                            label: (<LevelTabLabel levelName={level.levelName} isMaster={level.server_ini?.is_master} serverPort={level.server_ini?.server_port} onCommitName={(n) => applyRename(level.uuid, n)}/>),
+                            label: (<LevelTabLabel levelName={level.levelName} isMaster={level.server_ini?.is_master} serverPort={level.server_ini?.server_port} iaMod={isIAWorld(level.leveldataoverride)} classic={isClassicWorld(level.leveldataoverride)} onCommitName={(n) => applyRename(level.uuid, n)}/>),
                             children: <LevelItem
                                 dstWorldSetting={dstWorldSetting}
                                 level={level}
@@ -507,7 +562,7 @@ const Level2 = () => {
                         const closable = (!level.server_ini?.is_master && level.uuid !== "Master" && has('allowAddLevel'))
                         
                         return {
-                            label: (<LevelTabLabel levelName={level.levelName} isMaster={level.server_ini?.is_master} serverPort={level.server_ini?.server_port} onCommitName={(n) => applyRename(level.uuid, n)}/>),
+                            label: (<LevelTabLabel levelName={level.levelName} isMaster={level.server_ini?.is_master} serverPort={level.server_ini?.server_port} iaMod={isIAWorld(level.leveldataoverride)} classic={isClassicWorld(level.leveldataoverride)} onCommitName={(n) => applyRename(level.uuid, n)}/>),
                             key: level.uuid,
                             children: (
                                 <LevelItem
@@ -552,7 +607,7 @@ const Level2 = () => {
 
         
         newPanes.push({
-            label: (<LevelTabLabel levelName={levelName} isMaster={server_ini?.is_master} serverPort={server_ini?.server_port} onCommitName={(n) => applyRename(uuid, n)}/>),
+            label: (<LevelTabLabel levelName={levelName} isMaster={server_ini?.is_master} serverPort={server_ini?.server_port} iaMod={isIAWorld(leveldataoverride)} classic={isClassicWorld(leveldataoverride)} onCommitName={(n) => applyRename(uuid, n)}/>),
             children: <LevelItem
                 dstWorldSetting={dstWorldSetting}
                 level={newLevel}
@@ -713,6 +768,8 @@ const Level2 = () => {
                         levelName={level.levelName}
                         isMaster={level.server_ini?.is_master}
                         serverPort={level.server_ini?.server_port}
+                        iaMod={isIAWorld(level.leveldataoverride)}
+                        classic={isClassicWorld(level.leveldataoverride)}
                         onCommitName={(n) => applyRename(level.uuid, n)}
                     />
                 ),
@@ -730,7 +787,10 @@ const Level2 = () => {
         message.success(t('level2.rename.success', {name: trimmed}))
     }
 
-    return (<Skeleton loading={loading}>
+    if (loading) {
+        return <LevelEditorSkeleton/>;
+    }
+    return (<>
             <Tabs
                 activeKey={topTab}
                 onChange={setTopTab}
@@ -743,10 +803,10 @@ const Level2 = () => {
                             {levelListRef.current.length === 0 && (<>
                                 <Empty description={t('level.empty')}/>
                             </>)}
-                            <div style={{display: 'flex', height: 'calc(100vh - 300px)', minHeight: '420px'}}>
+                            <div className="content-fade" style={{display: 'flex', height: 'calc(100vh - 300px)', minHeight: '420px'}}>
                                 {/* 世界切换竖列（弃 tab 套 tab）：双击/右键改名沿用 LevelTabLabel */}
                                 <div style={{
-                                    width: 220, flex: 'none', overflowY: 'auto',
+                                    width: 240, flex: 'none', overflowY: 'auto',
                                     borderRight: '1px solid rgba(128, 128, 128, 0.2)', paddingRight: 4,
                                 }}>
                                     {(items || []).map((it: any) => (
@@ -771,10 +831,11 @@ const Level2 = () => {
                                         <div key={qc.key} style={{padding: '6px 8px'}}>{qc.label}</div>
                                     ))}
                                 </div>
-                                {/* 各世界内容常驻挂载、显隐切换（保留各自内层 tab 状态） */}
-                                <div style={{flex: 1, minWidth: 0, overflowY: 'auto', paddingLeft: 12}}>
+                                {/* 各世界内容常驻挂载、显隐切换（保留各自内层 tab 状态）；弹性占满、滚动只在页签内容区一层 */}
+                                <div style={{flex: 1, minWidth: 0, minHeight: 0, display: 'flex', flexDirection: 'column', paddingLeft: 12, overflow: 'hidden'}}>
                                     {(items || []).map((it: any) => (
-                                        <div key={it.key} style={{display: it.key === activeKey ? undefined : 'none'}}>
+                                        <div key={it.key}
+                                             style={{display: it.key === activeKey ? 'flex' : 'none', flexDirection: 'column', flex: 1, minHeight: 0}}>
                                             {it.children}
                                         </div>
                                     ))}
@@ -888,7 +949,7 @@ const Level2 = () => {
                 </Form.Item>
             </Form>
         </Modal>
-    </Skeleton>)
+    </>)
 }
 
 export default Level2

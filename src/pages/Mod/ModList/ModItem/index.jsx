@@ -112,8 +112,8 @@ const ModItem = (props) => {
                             setMod(props.mod)
                             Modal.confirm({
                                 title: t('mod.delete.title'),
-                                okText: 'Yes',
-                                cancelText: 'No',
+                                okText: t('panel.y'),
+                                cancelText: t('panel.n'),
                                 onOk: () => removeMod(mod.modid),
                             })
                         }

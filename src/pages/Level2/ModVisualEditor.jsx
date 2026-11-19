@@ -1,11 +1,12 @@
 import React, {useEffect, useMemo, useRef, useState} from 'react';
-import {Divider, Empty, Input, InputNumber, Switch, Tooltip, Typography} from 'antd';
-import {SearchOutlined} from '@ant-design/icons';
+import {Button, Divider, Empty, Input, InputNumber, message, Switch, Tooltip, Typography} from 'antd';
+import {PlusOutlined, SearchOutlined} from '@ant-design/icons';
 import {parse, format} from 'lua-json';
 import {luaSafe} from '../../utils/luaFormat';
-import {modMatches} from '../../utils/modIndex';
+import {appendModsToOverrides, modMatches} from '../../utils/modIndex';
 import {useTranslation} from 'react-i18next';
 import {useTheme} from '../../hooks/useTheme';
+import ModPicker from './ModPicker';
 
 // modoverrides.lua 的可视化镜像（样式沿用模组配置抽屉：Divider 加粗标题 + 标签/控件行）。
 // 与代码视图同源：value → 解析 → 表单；表单改动 → 重新序列化 → onChange。
@@ -72,6 +73,7 @@ export default ({value, onChange, nameMap = {}, activeModId = null, onSelectMod,
     const {t} = useTranslation();
     const {theme} = useTheme();
     const [query, setQuery] = useState('');
+    const [pickerOpen, setPickerOpen] = useState(false);
     const scrollRef = useRef(null);
     const cardRefs = useRef({});
     const mods = useMemo(() => parseMods(value), [value]);
@@ -82,14 +84,17 @@ export default ({value, onChange, nameMap = {}, activeModId = null, onSelectMod,
         cardRefs.current[focus.id]?.scrollIntoView({block: 'center'});
     }, [focus]);
 
-    if (mods === null) {
-        return <Empty description={t('level.modVisual.unparsed')} style={{marginTop: 24}}/>;
-    }
-    if (mods.length === 0) {
-        return <Empty description={t('level.modVisual.empty')} style={{marginTop: 24}}/>;
-    }
+    // 添加模组（世界设置/创建世界共用）：订阅池选中行追加进 modoverrides（追加语义：已有键不覆盖）
+    const handleAddMods = (rows) => {
+        const next = appendModsToOverrides(value || 'return {}', rows.map(r => ({modid: r.modid, modConfig: r.mod_config})));
+        if (next === null) {
+            message.warning(t('level2.create.modParseError'));
+            return;
+        }
+        onChange(next);
+    };
 
-    const visible = mods.filter(m => modMatches(m.id, nameMap[m.id], query));
+    const visible = mods === null ? [] : mods.filter(m => modMatches(m.id, nameMap[m.id], query));
 
     const patch = (modId, fn) => {
         const next = mods.map(m => (m.id === modId ? fn(m) : m));
@@ -98,10 +103,10 @@ export default ({value, onChange, nameMap = {}, activeModId = null, onSelectMod,
     const patchOption = (modId, key, value) =>
         patch(modId, mod => ({...mod, options: mod.options.map(o => (o.key === key ? {...o, value} : o))}));
 
-    return (
+    return (<>
         <div ref={scrollRef} style={{
             height: 'calc(100vh - 365px)', minHeight: 300,
-            overflowY: 'auto', paddingRight: 4,
+            overflowY: 'auto', overflowX: 'hidden', paddingRight: 4,
         }}>
             <div style={{
                 position: 'sticky', top: 0, zIndex: 2, padding: '4px 0 10px',
@@ -113,21 +118,38 @@ export default ({value, onChange, nameMap = {}, activeModId = null, onSelectMod,
                     placeholder={t('level.modVisual.search.placeholder')}
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
+                    suffix={
+                        <Tooltip title={t('level2.create.addMods')}>
+                            <Button type="text" size="small" icon={<PlusOutlined/>}
+                                    onClick={() => setPickerOpen(true)}/>
+                        </Tooltip>
+                    }
                 />
             </div>
-            {visible.length === 0 ? (
-                <Empty description={t('level.modVisual.search.empty')} style={{marginTop: 24}}/>
+            {mods === null ? (
+                <Empty description={t('level.modVisual.unparsed')} style={{marginTop: 24}}/>
+            ) : visible.length === 0 ? (
+                <Empty description={mods.length === 0 ? t('level.modVisual.empty') : t('level.modVisual.search.empty')}
+                       style={{marginTop: 24}}/>
             ) : visible.map(m => (
                 <div key={m.id} ref={(el) => { cardRefs.current[m.id] = el; }}
                      className={m.id === activeModId ? 'mod-card-active' : undefined}
                      style={{padding: '2px 8px'}}>
                     <Divider style={{margin: '12px 0 8px'}}>
-                        <span
-                            style={{fontSize: '14px', fontWeight: '600', cursor: 'pointer'}}
-                            onClick={() => onSelectMod?.(m.id)}
-                        >
-                            {nameMap[m.id] ? <Tooltip title={m.id}>{nameMap[m.id]}</Tooltip> : m.id}
-                        </span>
+                        {/* 长模组名最多两行截断（悬浮看全名）：不限宽会把整栏顶出横向滚动条 */}
+                        <Tooltip title={nameMap[m.id] || m.id}>
+                            <span
+                                style={{
+                                    fontSize: '14px', fontWeight: '600', cursor: 'pointer',
+                                    display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical',
+                                    whiteSpace: 'normal', wordBreak: 'break-word',
+                                    overflow: 'hidden', maxWidth: '100%', verticalAlign: 'bottom',
+                                }}
+                                onClick={() => onSelectMod?.(m.id)}
+                            >
+                                {nameMap[m.id] || m.id}
+                            </span>
+                        </Tooltip>
                     </Divider>
                     <Row
                         label={t('level.modVisual.enabled')}
@@ -179,5 +201,7 @@ export default ({value, onChange, nameMap = {}, activeModId = null, onSelectMod,
                 </div>
             ))}
         </div>
-    );
+        <ModPicker open={pickerOpen} onClose={() => setPickerOpen(false)} onAdd={handleAddMods}
+                   existingIds={mods === null ? [] : mods.map(m => m.id)}/>
+    </>);
 };

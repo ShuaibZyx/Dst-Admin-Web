@@ -20,10 +20,19 @@ export async function iaPresetApi(mode) {
     return response.data
 }
 
-// 模组订阅状态(海难/火山世界创建闸门)
+// 模组订阅状态(海难/火山世界创建闸门)。
+// 世界设置页多个 LevelViewer 实例（4 世界 × 2 页签）挂载时会批量查同一组 modId，
+// 做 30s TTL 的 Promise 缓存去重；订阅状态变化最迟 30s 后反映，失败立即失效重查
+const subCache = new Map()
+
 export async function modSubscribedApi(modId, cluster) {
-    const response = await http.get(`/api/mod/subscribed/${modId}?cluster=${cluster || ''}`)
-    return response.data
+    const key = `${cluster || ''}|${modId}`
+    const hit = subCache.get(key)
+    if (hit && hit.exp > Date.now()) return hit.promise
+    const promise = http.get(`/api/mod/subscribed/${modId}?cluster=${cluster || ''}`).then(r => r.data)
+    promise.catch(() => subCache.delete(key))
+    subCache.set(key, {exp: Date.now() + 30000, promise})
+    return promise
 }
 
 // 直连代码

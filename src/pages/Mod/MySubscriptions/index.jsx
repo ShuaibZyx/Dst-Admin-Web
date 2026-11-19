@@ -6,6 +6,8 @@ import {http} from '../../../utils/http'
 import {deleteModInfo, getModInfo, updateModApi} from '../../../api/modApi.jsx'
 import {doUpdateMod} from '../../../utils/modUpdate.js'
 import {timestampToString} from '../../../utils/dateUitls'
+import {renderBb} from '../../../utils/bbCode.jsx'
+import {TableSkeleton, DetailSkeleton} from '../../../components/Skeletons.jsx'
 
 // 我的订阅（Steam Workshop 资产库，跨存档）：表格版式。
 // 顶部工具栏（同步订阅/下载模组/更新模组）；扫描到模组后自动逐条下载到系统模组路径。
@@ -207,6 +209,15 @@ export default ({cluster, refreshKey}) => {
         )
     }
 
+    // 服务端/客户端模组标签：按 modinfo 的 client_only_mod / server_only_mod 判定；
+    // 其余（含 all_clients_require_mod 的内容模组）= 双端；未下载（无 mod_config）不显示
+    const modTypeTag = (cfg) => {
+        if (!cfg || Object.keys(cfg).length === 0) return null
+        if (cfg.client_only_mod) return <Tag color="geekblue">{t('mod.mySubs.tagClient')}</Tag>
+        if (cfg.server_only_mod) return <Tag color="orange">{t('mod.mySubs.tagServer')}</Tag>
+        return <Tag color="purple">{t('mod.mySubs.tagBoth')}</Tag>
+    }
+
     const columns = [
         {
             title: t('mod.mySubs.name'),
@@ -225,6 +236,7 @@ export default ({cluster, refreshKey}) => {
                                     : <span>{text || r.Modid}</span>}
                                 {r.downloaded && <Tag color="blue">{t('mod.mySubs.downloaded')}</Tag>}
                                 {r.enabledInCurrent && <Tag color="green">{t('mod.mySubs.enabled')}</Tag>}
+                                {modTypeTag(r.mod_config)}
                             </div>
                             {busy && <RowProgress/>}
                         </div>
@@ -241,7 +253,7 @@ export default ({cluster, refreshKey}) => {
         },
         {
             title: t('namelist.column.action'),
-            width: 340,
+            width: 180,
             render: (_, r) => {
                 const busy = busyIds.includes(r.Modid)
                 return (
@@ -258,11 +270,18 @@ export default ({cluster, refreshKey}) => {
                                 <Button size="small" danger icon={<DeleteOutlined/>} disabled={busy || !r.downloaded}/>
                             </Popconfirm>
                         </Tooltip>
-                        <Tooltip title={t('mod.mySubs.unsubscribe')}>
-                            <Popconfirm title={t('mod.mySubs.unsubscribeConfirm')} onConfirm={() => doUnsubscribe(r.Modid)}>
-                                <Button size="small" danger icon={<DisconnectOutlined/>} disabled={busy}/>
-                            </Popconfirm>
-                        </Tooltip>
+                    </Space>
+                )
+            },
+        },
+        {
+            // 低频操作独立一列，破坏性最强的「取消订阅」垫底
+            title: t('mod.mySubs.moreAction'),
+            width: 180,
+            render: (_, r) => {
+                const busy = busyIds.includes(r.Modid)
+                return (
+                    <Space>
                         <Tooltip title={t('mod.mySubs.detail')}>
                             <Button size="small" icon={<EyeOutlined/>} disabled={busy || !r.downloaded}
                                     onClick={() => setDetailRow(r)}/>
@@ -270,6 +289,11 @@ export default ({cluster, refreshKey}) => {
                         <Tooltip title={t('mod.workshop')}>
                             <Button size="small" icon={<ExportOutlined/>}
                                     onClick={() => window.open(`https://steamcommunity.com/sharedfiles/filedetails/?id=${r.Modid}`, '_blank', 'noopener,noreferrer')}/>
+                        </Tooltip>
+                        <Tooltip title={t('mod.mySubs.unsubscribe')}>
+                            <Popconfirm title={t('mod.mySubs.unsubscribeConfirm')} onConfirm={() => doUnsubscribe(r.Modid)}>
+                                <Button size="small" danger icon={<DisconnectOutlined/>} disabled={busy}/>
+                            </Popconfirm>
                         </Tooltip>
                     </Space>
                 )
@@ -280,10 +304,13 @@ export default ({cluster, refreshKey}) => {
     return (
         <div>
             {toolbar}
-            <Card>
-                <Table rowKey="Modid" loading={loading} dataSource={list || []} columns={columns}
-                       pagination={{pageSize, current: page, onChange: setPage, showSizeChanger: false}}/>
-            </Card>
+            {/* 首次加载用排版匹配的表格骨架；刷新保留表格自身 loading（数据可见不闪断） */}
+            {loading && list === null ? <TableSkeleton rows={6} cols={5}/> : (
+                <Card className="content-fade">
+                    <Table rowKey="Modid" loading={loading} dataSource={list || []} columns={columns}
+                           pagination={{pageSize, current: page, onChange: setPage, showSizeChanger: false}}/>
+                </Card>
+            )}
             <SyncModal open={open} form={form} syncing={syncing} onOk={doSync} onCancel={() => setOpen(false)} t={t}/>
             <DetailDrawer t={t} row={detailRow} cluster={cluster} onClose={() => setDetailRow(null)}/>
         </div>
@@ -306,122 +333,6 @@ const RowProgress = () => {
             style={{width: '100%', minWidth: 240, marginTop: 4}}
         />
     )
-}
-
-// 渲染 Steam 简介 BBCode：[h1]/[h2]/[h3]/[b]/[u]/[i]/[s]/[url=..]，未知标签透传为纯文本，裸链接自动成链
-const renderBb = (text) => {
-    // —— 行内：b/u/i/s/h1-3/url 样式栈 + 裸链接自动成链 ——
-    const styleOf = (stack) => {
-        const s = {}
-        for (const t of stack) {
-            if (t === 'b') s.fontWeight = 600
-            else if (t === 'u') s.textDecoration = 'underline'
-            else if (t === 'i') s.fontStyle = 'italic'
-            else if (t === 's') s.textDecoration = 'line-through'
-            else if (t === 'h1') { s.fontWeight = 700; s.fontSize = 15 }
-            else if (t === 'h2') { s.fontWeight = 700; s.fontSize = 14 }
-            else if (t === 'h3') { s.fontWeight = 600; s.fontSize = 13 }
-        }
-        return s
-    }
-    const inline = (raw) => {
-        const out = []
-        const stack = []
-        let key = 0
-        const pushText = (piece) => {
-            if (!piece) return
-            const style = styleOf(stack)
-            let urlHref = ''
-            for (let i = stack.length - 1; i >= 0; i--) {
-                if (stack[i].startsWith('url:')) { urlHref = stack[i].slice(4); break }
-            }
-            piece.split(/(https?:\/\/[^\s\]]+)/g).forEach(seg => {
-                if (!seg) return
-                const href = urlHref || (seg.startsWith('http') ? seg : '')
-                if (href) out.push(<a key={key++} href={href} target="_blank" rel="noreferrer" style={style}>{seg}</a>)
-                else out.push(<span key={key++} style={style}>{seg}</span>)
-            })
-        }
-        const re = /\[(\/?)(h1|h2|h3|b|u|i|s|url)(?:=([^\]]*))?\]/gi
-        let last = 0
-        let m = re.exec(raw)
-        while (m !== null) {
-            pushText(raw.slice(last, m.index))
-            last = re.lastIndex
-            const closing = m[1] === '/'
-            const tag = m[2].toLowerCase()
-            if (tag === 'url') {
-                if (closing) {
-                    for (let i = stack.length - 1; i >= 0; i--) {
-                        if (stack[i].startsWith('url:')) { stack.splice(i, 1); break }
-                    }
-                } else {
-                    stack.push('url:' + (m[3] ? m[3].trim() : ''))
-                }
-            } else if (closing) {
-                const i = stack.lastIndexOf(tag)
-                if (i >= 0) stack.splice(i, 1)
-            } else {
-                stack.push(tag)
-            }
-            m = re.exec(raw)
-        }
-        pushText(raw.slice(last))
-        return out
-    }
-
-    // —— 块级：[img] 图、[list]/[*] 列表、> 引用行、正文段 ——
-    const out = []
-    let key = 0
-    const pushChunk = (raw) => {
-        if (!raw) return
-        let buf = []
-        let quotes = []
-        const flushBuf = () => {
-            if (!buf.length) return
-            out.push(<div key={key++} style={{whiteSpace: 'pre-wrap', margin: '8px 0'}}>{inline(buf.join('\n'))}</div>)
-            buf = []
-        }
-        const flushQuotes = () => {
-            if (!quotes.length) return
-            out.push(
-                <div key={key++} style={{
-                    margin: '8px 0', padding: '2px 12px',
-                    borderLeft: '3px solid rgba(232, 196, 106, 0.5)',
-                    color: 'rgba(150, 150, 150, 1)',
-                }}>{inline(quotes.join('\n'))}</div>
-            )
-            quotes = []
-        }
-        for (const line of raw.split('\n')) {
-            const t = line.trimStart()
-            if (t.startsWith('> ')) { flushBuf(); quotes.push(t.slice(2)) }
-            else if (t === '>') { flushBuf(); quotes.push('') }
-            else { flushQuotes(); buf.push(line) }
-        }
-        flushBuf()
-        flushQuotes()
-    }
-    const re = /\[img\]([\s\S]*?)\[\/img\]|\[list\]([\s\S]*?)(?:\[\/list\]|$)/gi
-    let last = 0
-    let m = re.exec(text)
-    while (m !== null) {
-        pushChunk(text.slice(last, m.index))
-        last = re.lastIndex
-        if (m[1] !== undefined) {
-            out.push(<img key={key++} src={m[1].trim()} alt="" style={{maxWidth: '100%', borderRadius: 8, display: 'block', margin: '8px 0'}}/>)
-        } else {
-            const items = m[2].split(/\[\*\]/i).slice(1).map(s => s.trim()).filter(Boolean)
-            out.push(
-                <ul key={key++} style={{margin: '8px 0', paddingLeft: 20}}>
-                    {items.map((it, i) => <li key={i} style={{margin: '4px 0'}}>{inline(it)}</li>)}
-                </ul>
-            )
-        }
-        m = re.exec(text)
-    }
-    pushChunk(text.slice(last))
-    return out
 }
 
 // 详情抽屉：信息展示沿用模组设置 ModInfo 模板（图 | 名称/modid/作者 | 版本/最后更新/兼容），简介铺开，下方配置选项
@@ -474,7 +385,7 @@ const DetailDrawer = ({t, row, cluster, onClose}) => {
     const compatTags = [cfg.client_only_mod ? t('mod.mySubs.compatClientOnly') : null].filter(Boolean)
     return (
         <Drawer title={t('mod.mySubs.detailTitle')} open={!!row} onClose={onClose} width={620}>
-            <Spin spinning={loading}>
+            {loading ? <DetailSkeleton/> : (<div className="content-fade">
                 {/* 头部：图标 + 名称 + 元信息（同模组设置卡片观感；兼容记金色） */}
                 <div style={{display: 'flex', gap: 16}}>
                     {row?.Img
@@ -562,7 +473,7 @@ const DetailDrawer = ({t, row, cluster, onClose}) => {
                         ) : <Empty/>,
                     },
                 ]}/>
-            </Spin>
+            </div>)}
         </Drawer>
     )
 }

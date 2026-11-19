@@ -113,3 +113,28 @@
 .ant-list-item, .ant-card {
     animation: dstFadeIn 0.22s ease both;
 }
+
+/* 扁平页签的组分隔竖线：如「世界规则|世界生成‖模组设置|端口设置」「房间设置|网络设置|Steam设置‖名单」
+   ——放全局因 Level2 之外的页面（房间设置）也要用 */
+.tab-group-divider {
+    border-left: 1px solid rgba(128, 128, 128, 0.25);
+    padding-left: 12px;
+    margin-left: 4px;
+}
+
+/* 页签内容区恰好填满：nav 固定、内容 holder 弹性伸展——消除双层滚动与外层常驻滚动条 */
+.tabs-fill { display: flex; flex-direction: column; height: 100%; }
+.tabs-fill > .ant-tabs-nav { flex: none; }
+.tabs-fill > .ant-tabs-content-holder { flex: 1; min-height: 0; }
+.tabs-fill > .ant-tabs-content-holder > .ant-tabs-content { height: 100%; }
+.tabs-fill .ant-tabs-tabpane-active { height: 100%; }
+
+/* 分隔线标题可收缩：antd 的 inner-text 会按 min-content 撑宽（长模组名把窄栏顶出横向滚动） */
+.ant-divider-inner-text { min-width: 0; max-width: 100%; white-space: normal; }
+
+/* 骨架→数据过渡：内容淡入（替换骨架时消除瞬切的生硬感） */
+.content-fade { animation: skeletonFadeIn 0.22s ease-out; }
+@keyframes skeletonFadeIn {
+  from { opacity: 0; transform: translateY(2px); }
+  to { opacity: 1; transform: none; }
+}

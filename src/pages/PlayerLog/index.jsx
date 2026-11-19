@@ -194,8 +194,11 @@ export default ()=> {
                                     total: data.total,
                                     onChange: setCurrentPage,
                                     showSizeChanger: true,
-                                    onShowSizeChange: (current, size) => setPageSize(size),
-                                    // pageSizeOptions: [5, 10, 20 ,50, 100]
+                                    // 换每页条数回第一页：rc 回传的 current 是换前旧页码，沿用会请求越界页
+                                    onShowSizeChange: (_, size) => {
+                                        setPageSize(size)
+                                        setCurrentPage(1)
+                                    },
                                 }}
                                 headerTitle={t('player.log.title')}
                                 search={{

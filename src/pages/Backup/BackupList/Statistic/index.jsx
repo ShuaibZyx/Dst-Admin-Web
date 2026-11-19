@@ -28,7 +28,10 @@ const BackupStatistic = ({size, data}) => {
                     <Divider type={responsive ? 'horizontal' : 'vertical'}/>
                     <StatisticCard statistic={{
                         title: t('backup.backup.size'),
-                        value: data > 1 ? `${data} GB` : `${data * 1024} MB`,
+                        // 备份大小统一保留两位小数（data 单位为 GB，<1GB 转 MB 展示）
+                        value: data > 1
+                            ? `${Number(data).toFixed(2)} GB`
+                            : `${(Number(data) * 1024).toFixed(2)} MB`,
                     }}
                     />
                 </StatisticCard.Group>

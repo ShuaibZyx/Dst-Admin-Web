@@ -9,6 +9,7 @@ import {archiveApi} from '../../../api/gameApi.jsx';
 
 import style from "../../Home/DstEomj/index.module.css";
 import HiddenText from "../../Home/HiddenText/HiddenText";
+import {TableSkeleton} from "../../../components/Skeletons.jsx";
 import {dstSeason, dstSegs, getDstMod} from "../../../utils/dst.js";
 import {usePlayerListStore} from "../../../store/usePlayerListStore.tsx";
 import {useLevelsStore} from "../../../store/useLevelsStore.tsx";
@@ -116,7 +117,7 @@ export default () => {
     }
 
     // 兜底：数据未就绪时给骨架屏，避免面板首卡长时间空白
-    if (loading) return <Skeleton active style={{padding: 12}}/>
+    if (loading) return <TableSkeleton rows={5} cols={4}/>
 
     return (
         <>

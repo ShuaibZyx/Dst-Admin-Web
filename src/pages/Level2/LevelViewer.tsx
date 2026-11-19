@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo, useState} from "react";
-import {Alert, Col, message, Row, Select, Tabs} from "antd";
+import {Alert, Col, message, Row, Select} from "antd";
 import {parse, format} from "lua-json";
 import {luaSafe} from "../../utils/luaFormat";
 import './index.css';
@@ -97,7 +97,6 @@ interface GroupProps {
     onStateChange: (name: string, newValue: any) => void;
     changeValue: (value: string) => void;
     type: string;
-    isWorldGen?: boolean;
     lang: string;
     // 集群主世界(server_ini.is_master)：master_controlled 项仅主世界显示
     isMaster: boolean;
@@ -115,7 +114,6 @@ const Group: React.FC<GroupProps> = ({
                                          onStateChange,
                                          changeValue,
                                          type,
-                                         isWorldGen,
                                          lang,
                                          isMaster,
                                          modItems,
@@ -209,7 +207,7 @@ const Group: React.FC<GroupProps> = ({
                     )
                 })}
             {/* 拿不准归属的模组键：兜底"模组选项"节（只挂在世界规则页签） */}
-            {!isWorldGen && (unknownKeys || []).length > 0 && (
+            {(unknownKeys || []).length > 0 && (
                 <div style={{ overflow: 'hidden' }}>
                     <h3>{t('level.modOptions')}</h3>
                     <Row gutter={[16, 16]}>
@@ -306,7 +304,11 @@ const LevelViewEditor: React.FC<{
     dstWorldSetting: any;
     changeValue: (value: string) => void;
     isMaster?: boolean;
-}> = ({leveldataoverride, dstWorldSetting, changeValue, isMaster}) => {
+    // 只渲染一个页签组：'WORLDSETTINGS'（世界规则）| 'WORLDGEN'（世界生成）。
+    // 扁平化后页签由外层（LevelItem/CreateWorld）平铺，本组件不再自绘 Tabs；
+    // 滚动也统一由外层容器负责
+    onlyTab: 'WORLDSETTINGS' | 'WORLDGEN';
+}> = ({leveldataoverride, dstWorldSetting, changeValue, isMaster, onlyTab}) => {
 
     const {t} = useTranslation();
     const {i18n} = useTranslation();
@@ -436,7 +438,7 @@ const LevelViewEditor: React.FC<{
     }, [leveldataoverrideObject, catalogKeySet]);
 
 
-    const groupFor = (type: string, groups: any, tab: 'WORLDGEN' | 'WORLDSETTINGS', isWorldGen?: boolean) => (
+    const groupFor = (type: string, groups: any, tab: 'WORLDGEN' | 'WORLDSETTINGS') => (
         <Group
             leveldataoverride={leveldataoverride}
             data={groups}
@@ -449,7 +451,6 @@ const LevelViewEditor: React.FC<{
             }}
             changeValue={changeValue}
             type={type}
-            isWorldGen={isWorldGen}
             lang={lang}
             isMaster={!!isMaster}
             modItems={modItemsFor[tab]}
@@ -457,44 +458,24 @@ const LevelViewEditor: React.FC<{
         />
     );
 
-    const shipwreckedItems = [
-        {label: t("level.worldSettings"), children: groupFor('shipwrecked', shipwreckedWorldSettingsGroup, 'WORLDSETTINGS'), key: '1'},
-        {label: t("level.worldGeneration"), children: groupFor('shipwrecked', shipwreckedWorldGenGroup, 'WORLDGEN', true), key: '2'},
-    ];
-
-    const volcanoItems = [
-        {label: t("level.worldSettings"), children: groupFor('volcano', volcanoWorldSettingsGroup, 'WORLDSETTINGS'), key: '1'},
-        {label: t("level.worldGeneration"), children: groupFor('volcano', volcanoWorldGenGroup, 'WORLDGEN', true), key: '2'},
-    ];
-
-    const forestItems = [
-        {label: t("level.worldSettings"), children: groupFor('forest', forestWorldSettingsGroup, 'WORLDSETTINGS'), key: '1'},
-        {label: t("level.worldGeneration"), children: groupFor('forest', forestWorldGenGroup, 'WORLDGEN'), key: '2'},
-    ];
-
-    const caveItems = [
-        {label: t("level.worldSettings"), children: groupFor('cave', cavesWorldSettingsGroup, 'WORLDSETTINGS'), key: 3},
-        {label: t("level.worldGeneration"), children: groupFor('cave', cavesWorldGenGroup, 'WORLDGEN', true), key: 4},
-    ];
+    // 四世界目录按页签取组；IA 世界（海难/火山）未订阅 IA 模组时只出提示不出选项
+    const worldGroups: Record<string, Record<'WORLDSETTINGS' | 'WORLDGEN', any>> = {
+        forest: {WORLDSETTINGS: forestWorldSettingsGroup, WORLDGEN: forestWorldGenGroup},
+        cave: {WORLDSETTINGS: cavesWorldSettingsGroup, WORLDGEN: cavesWorldGenGroup},
+        shipwrecked: {WORLDSETTINGS: shipwreckedWorldSettingsGroup, WORLDGEN: shipwreckedWorldGenGroup},
+        volcano: {WORLDSETTINGS: volcanoWorldSettingsGroup, WORLDGEN: volcanoWorldGenGroup},
+    };
+    const needsIA = levelType === 'shipwrecked' || levelType === 'volcano';
 
     return (
         <>
-            <div className={'scrollbar'} style={{
-                "height": "calc(100vh - 380px)",
-                "minHeight": "300px",
-                overflowY: 'auto',
-            }}>
-                {levelType === 'forest' && <Tabs items={forestItems}/>}
-                {levelType === 'cave' && <Tabs items={caveItems}/>}
-                {levelType === 'shipwrecked' && (iaModReady ? <Tabs items={shipwreckedItems}/> :
-                    <Alert message={t('level.ia.modRequired')} type="warning" showIcon/>)}
-                {levelType === 'volcano' && (iaModReady ? <Tabs items={volcanoItems}/> :
-                    <Alert message={t('level.ia.modRequired')} type="warning" showIcon/>)}
-                {levelType && levelType !== 'forest' && levelType !== 'cave' && levelType !== 'shipwrecked' && levelType !== 'volcano' && (
-                    <Alert style={{marginBottom: '4px'}} message={`${t("level.warning.not.support.view")} ${levelType}`}
-                           type="info" showIcon closable/>
-                )}
-            </div>
+            {needsIA && !iaModReady && <Alert message={t('level.ia.modRequired')} type="warning" showIcon/>}
+            {levelType && !needsIA && levelType !== 'forest' && levelType !== 'cave' && (
+                <Alert style={{marginBottom: '4px'}} message={`${t("level.warning.not.support.view")} ${levelType}`}
+                       type="info" showIcon closable/>
+            )}
+            {levelType && worldGroups[levelType] && (!needsIA || iaModReady) &&
+                groupFor(levelType, worldGroups[levelType][onlyTab], onlyTab)}
         </>
     );
 }

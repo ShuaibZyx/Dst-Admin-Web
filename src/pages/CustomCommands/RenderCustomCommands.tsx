@@ -6,6 +6,7 @@ import ItemsManager from '../TooManyItemsPlus/ItemsManager';
 import CustomCommands from './index';
 import {getKv} from '../../api/clusterApi';
 import {ProCard} from "@ant-design/pro-components";
+import {GridSkeleton} from "../../components/Skeletons.jsx";
 
 // 自定义指令：指令网格 + 抽屉内编辑（原"自定义指令/自定义指令-编辑"两个 tab 合并）
 export default function RenderCustomCommands() {
@@ -80,7 +81,7 @@ export default function RenderCustomCommands() {
     };
 
     return (
-        <Skeleton loading={loading} active>
+        <>{loading ? <GridSkeleton panels={2} rows={2} banner={false}/> : (<>
         <div>
             <div style={{display: 'flex', justifyContent: 'flex-end', marginBottom: 12}}>
                 <Button icon={<EditOutlined/>} onClick={() => setEditOpen(true)}>
@@ -101,5 +102,5 @@ export default function RenderCustomCommands() {
                 }}/>
             </Drawer>
         </div>
-    </Skeleton>);
+    </>)}</>);
 }

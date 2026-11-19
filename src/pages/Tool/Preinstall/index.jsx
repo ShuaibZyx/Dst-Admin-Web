@@ -1,4 +1,4 @@
-import {Col, Row, Avatar, Alert, Button, Form, Space, message, Spin, Skeleton} from "antd";
+import {Col, Row, Avatar, Alert, Button, Form, Space, message, Spin} from "antd";
 import {SaveOutlined} from '@ant-design/icons';
 import {
     CheckCard,
@@ -8,6 +8,7 @@ import {useParams} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 
 import {usePreinstallApi} from "../../../api/preinstallApi.jsx";
+import {GridSkeleton} from "../../../components/Skeletons.jsx";
 
 export default ({reload}) => {
     const {t} = useTranslation()
@@ -50,8 +51,8 @@ export default ({reload}) => {
 
     return (
         <>
-            <Skeleton loading={loading}>
-                <Spin spinning={spin} tip={t('tool.preinstall.replacing')}>
+            {loading ? <GridSkeleton panels={3} rows={2} banner={false}/> : (
+                <Spin className="content-fade" spinning={spin} tip={t('tool.preinstall.replacing')}>
                     <Form form={form} layout="vertical">
                         <Form.Item name="template">
                             <CheckCard.Group
@@ -90,11 +91,11 @@ export default ({reload}) => {
 
                     <div style={{display: 'flex', justifyContent: 'flex-end'}}>
                         <Space size={8}>
-                            <Button icon={<SaveOutlined/>} type="primary" onClick={() => save()}>{t('cluster.save')}</Button>
+                            <Button icon={<SaveOutlined/>} type="primary" onClick={() => save()}>{t('tool.preinstall.confirm')}</Button>
                         </Space>
                     </div>
                 </Spin>
-            </Skeleton>
+            )}
         </>
     )
 }

@@ -29,9 +29,7 @@ export default () => {
             })
             .catch(error => {
                 console.error('无法加载配置文件', error);
-            }).finally(() => {
-            setLoading(false)
-        })
+            })
     }, []);
 
     return (

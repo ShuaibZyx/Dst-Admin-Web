@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import {FormSkeleton} from "../../../components/Skeletons.jsx";
 import {SaveOutlined} from '@ant-design/icons';
 import {
     Button,
@@ -219,7 +220,7 @@ export default () => {
                     labelAlign={'left'}
                     form={form}
                 >
-                    {loading ? <Skeleton active title paragraph={{rows: 5}}/> : (<>                        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8}}>
+                    {loading ? <FormSkeleton fields={5}/> : (<>                        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8}}>
                             <OneClickInstall disabled={data.container_mode || !parentWatch} downloading={!!installStatus.installing} onFinished={loadInstallStatus}/>
                             <Space size={16} wrap>
                                 {lang === 'es' && (

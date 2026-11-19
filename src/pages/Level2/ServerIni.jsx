@@ -20,8 +20,11 @@ const ServerIni = (props) => {
 
     return (
         <Form
+            labelWrap
             labelCol={{
-                span: 3,
+                // 4 栏：容纳 label + tooltip 问号图标（3 栏时图标被控件压住）；
+                // labelWrap 让超长 label（Steam 主服务器端口）换行收纳图标，不压控件
+                span: 4,
             }}
             wrapperCol={{
                 span: 18,

@@ -2,8 +2,9 @@ import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 
-import {Alert, Button, Form, InputNumber, message, Skeleton, Switch} from "antd";
+import {Button, Form, InputNumber, message, Switch} from "antd";
 import {getBackupSnapshotsSettingApi, saveBackupSnapshotsSettingApi} from "../../../api/backupApi.jsx";
+import {FormSkeleton} from "../../../components/Skeletons.jsx";
 
 
 export default () => {
@@ -44,16 +45,9 @@ export default () => {
     }
 
     return (<>
-        <Alert
-            message={t('backup.tips2')}
-            type="warning" showIcon closable/>
-        <br/>
-        <Alert
-            message={t('backup.tips3')}
-            type="info" showIcon closable/>
-        <br/>
-        {loading ? <Skeleton active title paragraph={{rows: 4}}/> : (
+        {loading ? <FormSkeleton fields={4}/> : (
             <Form
+                className="content-fade"
                 form={form}
                 labelCol={{
                     span: 3,

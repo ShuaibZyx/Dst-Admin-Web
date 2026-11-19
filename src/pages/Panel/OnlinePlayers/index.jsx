@@ -10,6 +10,7 @@ import {Image, Skeleton, Col, Button, Space, Spin, Select, List, Tag, Row} from 
 import {dstRoles} from '../../../utils/dst';
 import style from "../../Home/DstEomj/index.module.css";
 import HiddenText from "../../Home/HiddenText/HiddenText";
+import {ListSkeleton} from "../../../components/Skeletons.jsx";
 import {useLevelsStore} from "../../../store/useLevelsStore.tsx";
 import {usePlayerListStore} from "../../../store/usePlayerListStore.tsx";
 import {getAllOnlinePlayersApi, getOnlinePlayersApi} from "../../../api/onlinPlayerApi";
@@ -97,7 +98,7 @@ const Online = () => {
 
             {!notHasLevels && (
                 <Spin spinning={spin}>
-                    <Skeleton loading={loading} active>
+                    {loading ? <ListSkeleton rows={5}/> : (<>
                         <List
                             pagination={{
                                 position: "bottom",
@@ -134,7 +135,7 @@ const Online = () => {
                                 </List.Item>
                             )}
                         />
-                    </Skeleton>
+                    </>)}
                 </Spin>
             )}
 

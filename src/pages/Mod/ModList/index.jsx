@@ -6,7 +6,7 @@ import {useTranslation} from "react-i18next";
 import {LoadingOutlined, OrderedListOutlined, SaveOutlined, SyncOutlined, ExportOutlined} from "@ant-design/icons";
 import {format} from "lua-json";
 
-import {updateModinfosApi, deleteModInfo} from '../../../api/modApi.jsx';
+import {updateModinfosApi} from '../../../api/modApi.jsx';
 import {doUpdateMod} from '../../../utils/modUpdate.js';
 import ModItem from "./ModItem/index.jsx";
 import ModConfigOptions from "../ModConfigOptions/index.jsx";
@@ -175,42 +175,36 @@ export default ({modList, setModList,defaultConfigOptionsRef, modConfigOptionsRe
     }
 
     const removeMod = (modId) => {
-        // 先删模组文件与库记录（全量清扫）；失败则整个不动、条目保留可重试
-        return deleteModInfo(cluster, modId).then(resp => {
-            if (resp.code !== 200) {
-                message.warning(resp.msg || t('mod.delete.error'))
-                return false
-            }
-            // 文件已清，再退订：从所有 level 的 modoverrides 摘掉并重写 dedicated_server_mods_setup.lua
-            const newModList = modList.filter(mod => mod.modid !== modId)
-            const modoverrides = formatModOverride(newModList)
-            if (modoverrides === "return { error }") {
-                message.warning(t('mod.parse.error'))
-                return false
-            }
-            const newLevels = levelsRef.current.map(item => ({...item, modoverrides}))
-            return updateLevelsApi({levels: newLevels})
-                .then(resp2 => {
-                    if (resp2.code === 200) {
-                        defaultConfigOptionsRef.current.delete(modId)
-                        delete modConfigOptionsRef.current[modId]
-                        modListRef.current = newModList
-                        setModList([...newModList])
-                        setMod(current => current?.modid === modId ? (newModList[0] || {}) : current)
-                        message.success(t('mod.delete.ok'))
-                        reFlushLevels(cluster)
-                        return true
-                    } else {
-                        message.warning(t('level.save.error'))
-                        message.warning(resp2.msg)
-                        return false
-                    }
-                })
-        }).catch(error => {
-            console.log(error)
-            message.error(t('mod.delete.error'))
+        // 仅从当前世界（集群各 level）的 modoverrides 摘除该模组——不删模组文件/库记录，
+        // 文件级删除归「我的订阅」的删除按钮
+        const newModList = modList.filter(mod => mod.modid !== modId)
+        const modoverrides = formatModOverride(newModList)
+        if (modoverrides === "return { error }") {
+            message.warning(t('mod.parse.error'))
             return false
-        })
+        }
+        const newLevels = levelsRef.current.map(item => ({...item, modoverrides}))
+        return updateLevelsApi({levels: newLevels})
+            .then(resp => {
+                if (resp.code === 200) {
+                    defaultConfigOptionsRef.current.delete(modId)
+                    delete modConfigOptionsRef.current[modId]
+                    modListRef.current = newModList
+                    setModList([...newModList])
+                    setMod(current => current?.modid === modId ? (newModList[0] || {}) : current)
+                    message.success(t('mod.delete.ok'))
+                    reFlushLevels(cluster)
+                    return true
+                } else {
+                    message.warning(t('level.save.error'))
+                    message.warning(resp.msg)
+                    return false
+                }
+            }).catch(error => {
+                console.log(error)
+                message.error(t('mod.delete.error'))
+                return false
+            })
     }
 
     // 下载当前存档模组

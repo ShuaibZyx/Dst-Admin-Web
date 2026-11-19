@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import {TableSkeleton} from "../../../components/Skeletons.jsx";
-import {Skeleton, Alert, Button, Input, message, Modal, Popconfirm, Space, Table} from 'antd';
-import {DeleteOutlined, DownloadOutlined, EditOutlined, ReloadOutlined, UndoOutlined} from '@ant-design/icons';
+import {Button, Dropdown, Input, message, Modal, Popconfirm, Space, Table, Tag, Tooltip} from 'antd';
+import {DeleteOutlined, DownloadOutlined, EditOutlined, FileZipOutlined, FolderOpenOutlined, UndoOutlined} from '@ant-design/icons';
 import React, {useEffect, useRef, useState} from 'react';
 import {useParams} from "react-router-dom";
 import axios from 'axios';
@@ -14,6 +14,8 @@ import {
     renameBackupApi,
     restoreBackupApi
 } from '../../../api/backupApi.jsx';
+import {openFolder} from '../../../api/saveApi.jsx';
+import {formatSize} from '../../../utils/fileSize.js';
 import BackupStatistic from "./Statistic/index.jsx";
 import CreateBackUpBtn from "../../Panel/OpBtnGroup/CreateBackUpBtn.jsx";
 
@@ -34,19 +36,24 @@ const Backup = ({showStatistic}) => {
     const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 
     const [backupData, setBackupData] = useState([])
+    // 备份目录（展示在列表上方，同存档管理的存档目录行）
+    const [backupDir, setBackupDir] = useState('')
 
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [deleteBackup, setDeleteBackup] = useState({});
 
     const [confirmLoading, setConfirmLoading] = useState(false);
 
-    const inputRef = useRef("");
+    // 名称列内联重命名（双击 / 右键→重命名）
+    const [renaming, setRenaming] = useState(null);   // 正在重命名的 fileName
+    const [renameDraft, setRenameDraft] = useState('');
 
     const updateBackupData = () => {
         getBackupApi(cluster)
             .then(data => {
-                const backupList = data.data || []
+                const resp = data.data || {}
+                const backupList = resp.backups || []
+                setBackupDir(resp.dir || '')
                 // eslint-disable-next-line no-plusplus
                 for (let i = 0; i < backupList.length; i++) {
                     backupList[i].key = i
@@ -114,26 +121,27 @@ const Backup = ({showStatistic}) => {
             })
     }
 
-    const renameBackupItem = (value) => {
-        setConfirmLoading(true);
-        const data = {
-            fileName: value.fileName,
-            newName: `${inputRef.current.input.value}.zip`
-        }
-        renameBackupApi(cluster, data)
+    // 内联重命名：双击名称 / 右键→重命名进入编辑，Enter/失焦提交、Esc 取消
+    const startRename = (record) => {
+        setRenaming(record.fileName)
+        setRenameDraft(record.fileName.replace(/\.zip$/i, ''))
+    }
+
+    const commitRename = (record) => {
+        const name = renameDraft.trim()
+        setRenaming(null)
+        if (!name || `${name}.zip` === record.fileName) return
+        renameBackupApi(cluster, {fileName: record.fileName, newName: `${name}.zip`})
             .then(data => {
                 if (data.code === 200) {
-                    setTimeout(() => {
-                        message.success(t("backup.rename.ok"))
-                        updateBackupData()
-                    }, 1000);
+                    message.success(t("backup.rename.ok"))
+                    updateBackupData()
+                } else {
+                    message.error(data.msg || t("backup.rename.error"))
                 }
-            }).catch(error => {
+            }).catch(() => {
             message.error(t("backup.rename.error"))
-        }).finally(() => {
-            setConfirmLoading(false);
-            setIsEditModalOpen(false)
-        });
+        })
     }
 
     const restoreArchive = (fileName) => {
@@ -150,35 +158,79 @@ const Backup = ({showStatistic}) => {
 
     const columns = [
         {
-            title: t('backup.fileName'),
+            title: t('backup.column.name'),
             dataIndex: 'fileName',
             key: 'fileName',
-            render: (text) => <span>{text}</span>,
-            editable: true,
+            // 文件式条目：zip 小图标 + 名称；双击 / 右键→重命名（编辑功能收纳进名称列）
+            render: (text, record) => (
+                <Dropdown
+                    trigger={['contextMenu']}
+                    menu={{
+                        items: [{key: 'rename', icon: <EditOutlined/>, label: t('backup.rename')}],
+                        onClick: ({key, domEvent}) => {
+                            domEvent.stopPropagation()
+                            if (key === 'rename') startRename(record)
+                        },
+                    }}
+                >
+                    <div onDoubleClick={() => startRename(record)}
+                         style={{display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer', userSelect: 'none'}}>
+                        <FileZipOutlined style={{color: '#faad14', flexShrink: 0}}/>
+                        {renaming === record.fileName ? (
+                            <Input
+                                size="small"
+                                autoFocus
+                                value={renameDraft}
+                                style={{flex: 1, minWidth: 0}}
+                                onChange={e => setRenameDraft(e.target.value)}
+                                onClick={e => e.stopPropagation()}
+                                onPressEnter={e => e.target.blur()}
+                                onBlur={() => commitRename(record)}
+                                onKeyDown={e => {
+                                    if (e.key === 'Escape') {
+                                        setRenaming(null)
+                                        setRenameDraft('')
+                                    }
+                                }}
+                            />
+                        ) : (
+                            <Space size={6}>
+                                {text}
+                                {/* 快照备份产生的归档：文件名以 (snapshot) 开头，加 tag 标注 */}
+                                {text.startsWith('(snapshot)') && <Tag color="blue">{t('backup.snapshotTag')}</Tag>}
+                            </Space>
+                        )}
+                    </div>
+                </Dropdown>
+            ),
         },
         {
-            title: t('backup.fileSize'),
+            title: t('backup.column.location'),
+            key: 'location',
+            ellipsis: true,
+            // 完整路径 = 备份目录 + 文件名（分隔符随服务端目录风格）
+            render: (_, record) => (
+                <span>{backupDir ? `${backupDir}${backupDir.includes('\\') ? '\\' : '/'}${record.fileName}` : record.fileName}</span>
+            ),
+        },
+        {
+            // 表头居中（align 驱动）、数值右对齐（块级容器内右对齐）；不提供点击排序
+            title: t('backup.column.size'),
             dataIndex: 'fileSize',
+            width: 100,
             align: 'center',
             key: 'fileSize',
-            render: (fileSize) => <span>{`${(fileSize / 1024 / 1024).toFixed(2)} MB`}</span>,
-            sorter: (a, b) => b.fileSize - a.fileSize,
-        },
-        {
-            title: t('backup.createTime'),
-            dataIndex: 'createTime',
-            align: 'center',
-            key: 'createTime',
-            render: (createTime) => <span>{new Date(createTime).toLocaleString()}</span>,
-            sorter: (a, b) => b.createTime - a.createTime,
+            render: (fileSize) => <div style={{textAlign: 'right'}}>{formatSize(fileSize)}</div>,
         },
         {
             title: t('backup.action'),
             key: 'action',
+            width: 210,
             align: 'center',
+            // 重命名已收入名称列（双击/右键）；除「恢复」外按钮均图标化
             render: (_, record) => (
-                <Space size={2} style={{ justifyContent: 'center', display: 'flex', width: '100%' }}>
-                    <Button variant="text" color="primary" icon={<UndoOutlined/>} onClick={() => {
+                <Space size={8}>
+                    <Button size="small" icon={<UndoOutlined/>} onClick={() => {
                         Modal.confirm({
                             title: t('backup.restore.title'),
                             content: (
@@ -192,23 +244,28 @@ const Backup = ({showStatistic}) => {
                             cancelText: t('panel.n'),
                             onOk: () => restoreArchive(record.fileName),
                         });
-                    }}>
-                        {t('backup.restore')}
-                    </Button>
+                    }}>{t('backup.restore')}</Button>
 
-                    <Button icon={<EditOutlined/>} variant="text" color="primary" onClick={() => {
-                        setIsEditModalOpen(true);
-                        setDeleteBackup(record)
-                    }}>{t('backup.edit')}</Button>
+                    <Tooltip title={t('backup.download')}>
+                        <Button size="small" icon={<DownloadOutlined/>} onClick={() => {
+                            window.location.href = `/api/game/backup/download?fileName=${record.fileName}`;
+                        }}/>
+                    </Tooltip>
 
-                    <Button icon={<DownloadOutlined/>} variant="text" color="primary" onClick={() => {
-                        window.location.href = `/api/game/backup/download?fileName=${record.fileName}`;
-                    }}>{t('backup.download')}</Button>
+                    <Tooltip title={t('backup.file')}>
+                        <Button size="small" icon={<FolderOpenOutlined/>} onClick={() => {
+                            openFolder('backup', record.fileName).then(r => {
+                                if (r.code !== 200) message.warning(r.msg)
+                            }).catch(() => message.warning(t('backup.restore.error')))
+                        }}/>
+                    </Tooltip>
 
-                    <Button icon={<DeleteOutlined/>} variant="text" color="danger" onClick={() => {
-                        setIsDeleteModalOpen(true);
-                        setDeleteBackup(record)
-                    }}>{t('backup.delete')}</Button>
+                    <Tooltip title={t('backup.delete')}>
+                        <Button danger size="small" icon={<DeleteOutlined/>} onClick={() => {
+                            setIsDeleteModalOpen(true);
+                            setDeleteBackup(record)
+                        }}/>
+                    </Tooltip>
                 </Space>
             ),
         },
@@ -221,32 +278,8 @@ const Backup = ({showStatistic}) => {
             <Button icon={<DeleteOutlined/>} type="primary" danger disabled={selectedRowKeys.length === 0} onClick={deleteSelectBackup}>
                 {t('backup.batchDelete')}
             </Button>
-            <Button icon={<ReloadOutlined/>} onClick={updateBackupData}>
-                {t('backup.refresh')}
-            </Button>
         </Space>
 
-    )
-
-    const EditModal = () => (
-        <Modal title={t('backup.edit.title')}
-               open={isEditModalOpen}
-               confirmLoading={confirmLoading}
-               getContainer={false}
-               onOk={() => {
-                   renameBackupItem(deleteBackup)
-               }}
-               onCancel={() => {
-                   setIsEditModalOpen(false)
-               }}>
-            <br/>
-            <div>{t('backup.cur.filename')}: </div>
-            <div>
-                {deleteBackup.fileName}
-            </div>
-            <br/>
-            <Input allowClear placeholder={t('backup.newBackupName')} ref={inputRef}/>
-        </Modal>
     )
 
     const DeletetModal = () => (
@@ -265,50 +298,36 @@ const Backup = ({showStatistic}) => {
         </Modal>
     )
 
-    const backupDataSize = (backupData
+    // 备份总大小（单位 GB，展示格式化交给 BackupStatistic 统一处理）
+    const backupDataSize = backupData
         .map(backup => backup.fileSize)
         // eslint-disable-next-line no-restricted-globals
-        .reduce((prev, curr) => !isNaN(Number(curr)) ? prev + curr : prev, 0) / 1024 / 1024 / 1024).toFixed(4)
+        .reduce((prev, curr) => !isNaN(Number(curr)) ? prev + curr : prev, 0) / 1024 / 1024 / 1024
 
-    const [currentPage, setCurrentPage] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
     const [data, setData] = useState([]);
-    const startIndex = (currentPage - 1) * pageSize;
-    const endIndex = startIndex + pageSize;
-
-    const dataSource = data.slice(startIndex, endIndex);
 
     return (
         <>
-            {loading ? <Skeleton active title paragraph={{rows: 6}}/> : <>
+            {loading ? <TableSkeleton rows={6} cols={4}/> : <>
             <DeletetModal/>
-            <div style={{
-                paddingBottom: 12
-            }}>
-                <Alert message={t('backup.tips1')} type="info" showIcon/>
-            </div>
+            {/* 备份目录（同存档管理的存档目录行） */}
+            {backupDir && <div style={{marginBottom: 8, opacity: 0.65, fontSize: 12}}>{t('backup.dir')}: {backupDir}</div>}
 
             {showStatistic && <BackupStatistic size={backupData.length} data={backupDataSize}/>}
             <HeaderTitle/>
             <Table
                 ref={actionRef}
+                rowKey="fileName"
+                className="content-fade"
                 rowSelection={rowSelection}
+                size="small"
                 scroll={{
                     x: 600,
                 }}
                 columns={columns}
-                dataSource={dataSource}
-                pagination={{
-                    current: currentPage,
-                    pageSize,
-                    total: data.length,
-                    onChange: setCurrentPage,
-                    showSizeChanger: true,
-                    onShowSizeChange: (current, size) => setPageSize(size),
-                }}
+                dataSource={data}
+                pagination={false}
             />
-
-            <EditModal/>
             </>}
         </>
     )

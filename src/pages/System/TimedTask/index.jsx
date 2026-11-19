@@ -401,7 +401,11 @@ export default () => {
                         total: data.length,
                         onChange: setCurrentPage,
                         showSizeChanger: true,
-                        onShowSizeChange: (current, size) => setPageSize(size),
+                        // 换每页条数回第一页：rc 回传的 current 是换前旧页码，沿用会停在越界页看到空表
+                        onShowSizeChange: (_, size) => {
+                            setPageSize(size)
+                            setCurrentPage(1)
+                        },
                     }}
                 />
             <AddJobTaskModal isModalOpen={isOpenAddJobTask} setIsModalOpen={setIsOpenAddJobTask}/>
