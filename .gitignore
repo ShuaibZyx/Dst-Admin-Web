@@ -25,7 +25,5 @@ dist-ssr
 
 # 临时草稿/诊断产物(图标提取、CDP 截图、翻译中间件等)
 .tmp-*
-.codegraph/
-.codegraph
 .superpowers
 *.log
