@@ -7,6 +7,7 @@ import {useTranslation} from "react-i18next";
 import i18n from "../../locales/i18n.tsx";
 import {modSubscribedApi} from "../../api/gezigeApi";
 import modWorldOptions from "../../types/modWorldOptions.json";
+import {isMasterLevel} from "../../utils/masterLevel";
 
 // ---- 图集：name -> 面板图片 URL（缓存击穿参数必须保留，图集换图后旧缓存会顶死） ----
 const ATLAS_URL: Record<string, string> = {
@@ -104,6 +105,9 @@ interface GroupProps {
     modItems: Record<string, Array<[string, ModOption]>>;
     // 不在任何注册表里的文件键（仅世界规则页签渲染"模组选项"补充节）
     unknownKeys?: string[];
+    // 创建世界：草稿是全新世界，不显示「非默认值」标记（该标记只对已建世界的
+    // 「我改过哪些项」有意义；模板自带的预设值不是用户改的，标黄会误导）
+    hideChangeMarker?: boolean;
     // 全量写回用：该世界两个页签的目录默认值
 }
 
@@ -117,7 +121,8 @@ const Group: React.FC<GroupProps> = ({
                                          lang,
                                          isMaster,
                                          modItems,
-                                         unknownKeys,                                     }) => {
+                                         unknownKeys,
+                                         hideChangeMarker,                                 }) => {
     const {t} = useTranslation();
 
     if (!data) return null; // F2: 数据未加载时防崩溃
@@ -191,12 +196,15 @@ const Group: React.FC<GroupProps> = ({
                                                         (item.desc && Object.entries(item.desc).map(([k, v]) => ({value: k, label: v})))
                                                         || GENERIC_OPTIONS
                                                     }
-                                                    currentValue={leveldataoverrideObject[item.key]}
+                                                    // 文件缺该键时回退到目录默认值：否则下拉框 value=undefined 空白，
+                                                    // 且 undefined !== defaultValue 会被误判成「已变更」标黄
+                                                    currentValue={leveldataoverrideObject[item.key] ?? item.defaultValue}
                                                     defaultValue={item.defaultValue}
                                                     name={item.key}
                                                     leveldataoverride={leveldataoverride}
                                                     onStateChange={onStateChange}
                                                     changeValue={changeValue}
+                                                    hideChangeMarker={hideChangeMarker}
                                                 />
                                             </div>
                                         </div>
@@ -246,6 +254,8 @@ interface ItemProps {
     leveldataoverride: string,
     onStateChange: (name: string, newValue: any) => void;
     changeValue: (value: string) => void;
+    // 创建世界：不显示「非默认值」标记
+    hideChangeMarker?: boolean;
 }
 
 const Item: React.FC<ItemProps> = ({
@@ -255,7 +265,8 @@ const Item: React.FC<ItemProps> = ({
                                        name,
                                        leveldataoverride,
                                        onStateChange,
-                                       changeValue,                                   }) => {
+                                       changeValue,
+                                       hideChangeMarker,                               }) => {
     const {t} = useTranslation();
     const [isDefault, setIsDefault] = useState(true);
 
@@ -284,7 +295,7 @@ const Item: React.FC<ItemProps> = ({
         }
     }
 
-    const selectClassName = isDefault ? "" : "selected";
+    const selectClassName = (isDefault || hideChangeMarker) ? "" : "selected";
     return (
         <div>
             <Select
@@ -308,7 +319,9 @@ const LevelViewEditor: React.FC<{
     // 扁平化后页签由外层（LevelItem/CreateWorld）平铺，本组件不再自绘 Tabs；
     // 滚动也统一由外层容器负责
     onlyTab: 'WORLDSETTINGS' | 'WORLDGEN';
-}> = ({leveldataoverride, dstWorldSetting, changeValue, isMaster, onlyTab}) => {
+    // 创建世界：草稿是全新世界，不显示「非默认值」标记
+    hideChangeMarker?: boolean;
+}> = ({leveldataoverride, dstWorldSetting, changeValue, isMaster, onlyTab, hideChangeMarker}) => {
 
     const {t} = useTranslation();
     const {i18n} = useTranslation();
@@ -403,6 +416,10 @@ const LevelViewEditor: React.FC<{
         }
     }, []);
 
+    // 「主世界」语义见 utils/masterLevel.ts：IA 成对世界里森林/海难是各自主世界，
+    // 与 server.ini 的集群主分片是两件事。overlay 集群里海难 is_master=false 但仍该显示 master 项。
+    const masterLevel = isMasterLevel(levelType, isMaster);
+
     // 该世界应显示的模组项（已按 世界∧master∧(模组可用∨文件已有)∧目录去重 过滤）
     const visibleModOptions = useMemo(() => {
         const obj = leveldataoverrideObject || {};
@@ -410,11 +427,11 @@ const LevelViewEditor: React.FC<{
         for (const [k, e] of Object.entries(MOD_TABLE)) {
             if (worldKeySet.has(k)) continue;                 // 当前世界静态目录已有（海难/火山的 IA 项）
             if (!(k in obj) && !modAvail[e.modId]) continue;  // 模组不可用且文件也没写 → 不显示
-            if (!modOptionVisible(e, levelType || '', !!isMaster)) continue;
+            if (!modOptionVisible(e, levelType || '', masterLevel)) continue;
             out.push([k, e]);
         }
         return out;
-    }, [leveldataoverrideObject, worldKeySet, modAvail, levelType, isMaster]);
+    }, [leveldataoverrideObject, worldKeySet, modAvail, levelType, masterLevel]);
 
     // 按页签/分类归组
     const modItemsFor = useMemo(() => {
@@ -452,9 +469,10 @@ const LevelViewEditor: React.FC<{
             changeValue={changeValue}
             type={type}
             lang={lang}
-            isMaster={!!isMaster}
+            isMaster={masterLevel}
             modItems={modItemsFor[tab]}
             unknownKeys={tab === 'WORLDSETTINGS' ? unknownKeys : undefined}
+            hideChangeMarker={hideChangeMarker}
         />
     );
 

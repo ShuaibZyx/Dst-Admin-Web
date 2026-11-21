@@ -4,6 +4,7 @@ import Modoverrides from "./Modoverrides";
 import ServerIni from "./ServerIni";
 import CreateWorld from "./CreateWorld";
 import {fillLevelDefaults} from "../../utils/levelDefaults";
+import {isMasterLevelWorld} from "../../utils/masterLevel";
 import {useTranslation} from "react-i18next";
 import React, {useEffect, useRef, useState} from "react";
 import {Alert, Button, Divider, Dropdown, Empty, Form, Input, message, Modal, Space, Tabs, TabsProps, Tag, Tooltip, Upload} from "antd";
@@ -34,14 +35,16 @@ const LevelTags: React.FC<LevelTagsProps> = ({isMaster, serverPort, iaMod, class
     const {t} = useTranslation();
     return (
         <>
-            {classic && <Tag color="gold" bordered={false} style={{whiteSpace: 'nowrap'}}>{t('level2.tag.classic')}</Tag>}
+            {/* marginInlineEnd 归零：antd Tag 自带 8px 右外边距，与外层 flex gap:8px 叠成 16px，
+                导致 tag 之间比「名称↔首个 tag」宽一倍；间距统一由外层 gap 控制 */}
+            {classic && <Tag color="gold" bordered={false} style={{whiteSpace: 'nowrap', marginInlineEnd: 0}}>{t('level2.tag.classic')}</Tag>}
             {iaMod && (
                 <Tooltip title="workshop-1467214795">
-                    <Tag color="purple" bordered={false} style={{whiteSpace: 'nowrap'}}>{t('level2.tag.iaMod')}</Tag>
+                    <Tag color="purple" bordered={false} style={{whiteSpace: 'nowrap', marginInlineEnd: 0}}>{t('level2.tag.iaMod')}</Tag>
                 </Tooltip>
             )}
-            {isMaster && <Tag color="blue" bordered={false} style={{whiteSpace: 'nowrap'}}>{t('level2.tag.master')}</Tag>}
-            {serverPort && <Tag color="green" bordered={true} style={{whiteSpace: 'nowrap'}}>{serverPort}</Tag>}
+            {isMaster && <Tag color="blue" bordered={false} style={{whiteSpace: 'nowrap', marginInlineEnd: 0}}>{t('level2.tag.master')}</Tag>}
+            {serverPort && <Tag color="green" bordered={true} style={{whiteSpace: 'nowrap', marginInlineEnd: 0}}>{serverPort}</Tag>}
         </>
     );
 };
@@ -313,7 +316,7 @@ const Level2 = () => {
                         ...item,
                         closable: closable,
                         label: (<LevelTabLabel levelName={levelName}
-                                               isMaster={updatedLevel.server_ini?.is_master}
+                                               isMaster={isMasterLevelWorld(updatedLevel.leveldataoverride, updatedLevel.server_ini?.is_master)}
                                                serverPort={updatedLevel.server_ini?.server_port}
                                                iaMod={isIAWorld(updatedLevel.leveldataoverride)}
                                                classic={isClassicWorld(updatedLevel.leveldataoverride)}
@@ -383,7 +386,7 @@ const Level2 = () => {
 
                         
                         return {
-                            label: (<LevelTabLabel levelName={level.levelName} isMaster={level.server_ini?.is_master} serverPort={level.server_ini?.server_port} iaMod={isIAWorld(level.leveldataoverride)} classic={isClassicWorld(level.leveldataoverride)} onCommitName={(n) => applyRename(level.uuid, n)}/>),
+                            label: (<LevelTabLabel levelName={level.levelName} isMaster={isMasterLevelWorld(level.leveldataoverride, level.server_ini?.is_master)} serverPort={level.server_ini?.server_port} iaMod={isIAWorld(level.leveldataoverride)} classic={isClassicWorld(level.leveldataoverride)} onCommitName={(n) => applyRename(level.uuid, n)}/>),
                             children: <LevelItem
                                 dstWorldSetting={dstWorldSetting}
                                 level={level}
@@ -562,7 +565,7 @@ const Level2 = () => {
                         const closable = (!level.server_ini?.is_master && level.uuid !== "Master" && has('allowAddLevel'))
                         
                         return {
-                            label: (<LevelTabLabel levelName={level.levelName} isMaster={level.server_ini?.is_master} serverPort={level.server_ini?.server_port} iaMod={isIAWorld(level.leveldataoverride)} classic={isClassicWorld(level.leveldataoverride)} onCommitName={(n) => applyRename(level.uuid, n)}/>),
+                            label: (<LevelTabLabel levelName={level.levelName} isMaster={isMasterLevelWorld(level.leveldataoverride, level.server_ini?.is_master)} serverPort={level.server_ini?.server_port} iaMod={isIAWorld(level.leveldataoverride)} classic={isClassicWorld(level.leveldataoverride)} onCommitName={(n) => applyRename(level.uuid, n)}/>),
                             key: level.uuid,
                             children: (
                                 <LevelItem
@@ -607,7 +610,7 @@ const Level2 = () => {
 
         
         newPanes.push({
-            label: (<LevelTabLabel levelName={levelName} isMaster={server_ini?.is_master} serverPort={server_ini?.server_port} iaMod={isIAWorld(leveldataoverride)} classic={isClassicWorld(leveldataoverride)} onCommitName={(n) => applyRename(uuid, n)}/>),
+            label: (<LevelTabLabel levelName={levelName} isMaster={isMasterLevelWorld(leveldataoverride, server_ini?.is_master)} serverPort={server_ini?.server_port} iaMod={isIAWorld(leveldataoverride)} classic={isClassicWorld(leveldataoverride)} onCommitName={(n) => applyRename(uuid, n)}/>),
             children: <LevelItem
                 dstWorldSetting={dstWorldSetting}
                 level={newLevel}
@@ -766,7 +769,7 @@ const Level2 = () => {
                 label: (
                     <LevelTabLabel
                         levelName={level.levelName}
-                        isMaster={level.server_ini?.is_master}
+                        isMaster={isMasterLevelWorld(level.leveldataoverride, level.server_ini?.is_master)}
                         serverPort={level.server_ini?.server_port}
                         iaMod={isIAWorld(level.leveldataoverride)}
                         classic={isClassicWorld(level.leveldataoverride)}

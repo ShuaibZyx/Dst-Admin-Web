@@ -394,7 +394,7 @@
   "level2.rename.success": "World name changed to: {{name}}",
   "level2.rename": "Rename",
   "level2.tag.master": "Master",
-  "level2.tag.iaMod": "Island Adventures",
+  "level2.tag.iaMod": "Islands",
   "level2.tag.classic": "Classic",
   "level2.modPicker.added": "Added",
   "level2.upload.invalidType": "Please upload a JSON file",

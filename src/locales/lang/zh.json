@@ -395,7 +395,7 @@
   "level2.rename.success": "世界名称已修改为: {{name}}",
   "level2.rename": "重命名",
   "level2.tag.master": "主",
-  "level2.tag.iaMod": "岛屿冒险",
+  "level2.tag.iaMod": "岛屿",
   "level2.tag.classic": "经典",
   "level2.modPicker.added": "已添加",
   "level2.upload.invalidType": "请上传 JSON 文件",

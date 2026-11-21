@@ -145,10 +145,10 @@ const CreateWorld = ({dstWorldSetting, has, getExisting, onCreated, getServerIni
                         <div style={{flexShrink: 0, maxWidth: '100%', wordBreak: 'break-word'}}>{t(o.labelKey)}</div>
                         {o.ia ? (
                             <Tooltip title={IA_MOD_KEY}>
-                                <Tag color="purple" bordered={false} style={{whiteSpace: 'nowrap'}}>{t('level2.tag.iaMod')}</Tag>
+                                <Tag color="purple" bordered={false} style={{whiteSpace: 'nowrap', marginInlineEnd: 0}}>{t('level2.tag.iaMod')}</Tag>
                             </Tooltip>
                         ) : (
-                            <Tag color="gold" bordered={false} style={{whiteSpace: 'nowrap'}}>{t('level2.tag.classic')}</Tag>
+                            <Tag color="gold" bordered={false} style={{whiteSpace: 'nowrap', marginInlineEnd: 0}}>{t('level2.tag.classic')}</Tag>
                         )}
                     </div>
                 ))}
@@ -163,7 +163,7 @@ const CreateWorld = ({dstWorldSetting, has, getExisting, onCreated, getServerIni
                 label: t('level.worldSettings'),
                 children: tabScrollWrap(
                     <LevelViewer leveldataoverride={draft.leveldataoverride} dstWorldSetting={dstWorldSetting}
-                                 isMaster={!!draft.server_ini?.is_master}
+                                 isMaster={!!draft.server_ini?.is_master} hideChangeMarker
                                  changeValue={(v) => setDraft(d => ({...d, leveldataoverride: v}))}
                                  onlyTab={'WORLDSETTINGS'}/>),
             },
@@ -172,7 +172,7 @@ const CreateWorld = ({dstWorldSetting, has, getExisting, onCreated, getServerIni
                 label: t('level.worldGeneration'),
                 children: tabScrollWrap(
                     <LevelViewer leveldataoverride={draft.leveldataoverride} dstWorldSetting={dstWorldSetting}
-                                 isMaster={!!draft.server_ini?.is_master}
+                                 isMaster={!!draft.server_ini?.is_master} hideChangeMarker
                                  changeValue={(v) => setDraft(d => ({...d, leveldataoverride: v}))}
                                  onlyTab={'WORLDGEN'}/>),
             },
